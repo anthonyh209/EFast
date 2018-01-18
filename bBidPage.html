@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
     <title>Buyer Bid page -> leads to confirm/reject page</title>
 </head>
 
@@ -15,6 +17,20 @@ The system should confirm to both the winner and seller of an auction its outcom
 
 <p>Once a bid ends, the user will be either confirmed or rejected based on the outcome of the bid</p>
 
+<form class="form-inline">
+    <div class="form-group">
+        <label for="email">Email address:</label>
+        <input type="email" class="form-control" id="email">
+    </div>
+    <div class="form-group">
+        <label for="pwd">Password:</label>
+        <input type="password" class="form-control" id="pwd">
+    </div>
+    <div class="checkbox">
+        <label><input type="checkbox"> Remember me</label>
+    </div>
+    <button type="submit" class="btn btn-default">Submit</button>
+</form>
 
 </body>
 </html>
