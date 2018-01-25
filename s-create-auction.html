@@ -1,22 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Create an Auction</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    -->
+
 </head>
 
 <!--Sellers can create auctions for particular items, setting suitable conditions and
 features of the items including the item description, categorisation, starting price,
 reserve price and end date.-->
+<nav class="navbar navbar-light bg-light" style="margin-bottom: 15px">
+    <a class="navbar-brand" href="#" style="margin-left: 15%">
+        <img src="eFast.png" width="100" height="30" alt="">
+    </a>
+</nav>
 
+<body style="background-color: #F0EEEC">
 
-<body>
+    <div style="width: 70%; margin: 0 auto; float: none; margin-bottom: 20px; ">
+        <div class="card">
+            <div class="card-header">
+                Specify details of your product
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Title of your product</h5>
+                <div class="form-group">
+                    <label>Use words people would search for when looking for your item</label>
+                    <input class="form-control" aria-describedby="titleHolder" placeholder="Enter title">
+                    <small class="form-text text-muted">Be descriptive not creative!</small>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Photo</h5>
+                <p class="card-text">Upload a photo of your item and improve user confidence by adding an associating picture</p>
+                <a href="#" class="btn btn-primary">Upload a picture</a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Item specific</h5>
+                <p class="card-text">Select specific details about your item to help buyers find it quickly</p>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">Item condition &nbsp;</label>
+                    </div>
+                    <select class="custom-select" id="inputGroupSelect01">
+                        <option selected>Condition...</option>
+                        <option value="1">New with sealed box</option>
+                        <option value="2">New with opened box</option>
+                        <option value="3">New with defects</option>
+                        <option value="4">Used</option>
+                    </select>
+                </div>
 
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">Category &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</label>
+                    </div>
+                    <select class="custom-select" id="inputGroupSelect01">
+                        <option selected>Category...</option>
+                        <option value="1">Category 1</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Description</h5>
+                <p class="card-text">Add any further details about your item including unique features or defects/flaws</p>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Item description</span>
+                    </div>
+                    <textarea class="form-control" aria-label="With textarea" style="height: 100%"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Auction details</h5>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Start Price</h5>
+                                <p class="card-text">Please provide the starting price of your item</p>
+                                <div class="input-group-prepend">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">$</span>
+                                        </div>
+                                        <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Duration</h5>
+                                <p class="card-text">Please set the duration of your auction</p>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <label class="input-group-text" for="inputGroupSelect01">Duration</label>
+                                    </div>
+                                    <select class="custom-select" id="inputGroupSelect01">
+                                        <option selected>Duration...</option>
+                                        <option value="1">Duration 1</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-<h1>Hello, this is the sellers create an auction  page.</h1>
+            </div>
 
-<p>Create an auction here</p>
-
-
+        </div>
+<div class="spacer" style="height: 20px"></div>
+    
+<p style="font-size: 0.7em">Please make sure that all fields are correctly filled and that all information provided reflect the actual current physical state of the item. Be aware that buyers have the right to request refunds during a 2 weeks time-frame upon receive of the auctioned item. Note that wrong information might lead to negative reviews. </p>
+<div class="spacer" style="height: 20px"></div>
+<button type="button" class="btn btn-primary btn-danger btn-lg btn-block">List item as new auction</button>
+<div class="spacer" style="height: 50px"></div>
 </body>
+
 </html>
