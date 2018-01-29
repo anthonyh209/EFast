@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Buyer Home</title>
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap" rel="stylesheet">
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -25,9 +25,15 @@
             <div class="container-fluid">
 
             <div class="navbar-header">
-            <a class="navbar-brand" href="#">eFAKE</a>
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="b-home.html"><img width="100" src="efast.png"></a>
             </div>
 
+            <div class="collapse navbar-collapse" id="myNavbar">
 
             <ul class="nav navbar-nav">
             <li class="dropdown">
@@ -53,19 +59,17 @@
 
 
             <ul class="nav navbar-nav navbar-right">
-            <li><a href="#"><span class="glyphicon glyphicon-user"></span> Your Profile</a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-user"></span>Your Profile</a></li>
             </ul>
 
+            </div>
             </div>
 
         </div>
 
         <div class="row">
 
-            <!--<ul class="nav navbar-nav">-->
-                <!--<li><a href="#">Link</a></li>-->
-                <!--<li><a href="#">Link</a></li>-->
-            <!--</ul>-->
+            <div class="collapse navbar-collapse" id="myNavbar">
 
             <div class="scrollmenu">
 
@@ -84,6 +88,8 @@
                 <a href="#partners">Partners</a>
                 <a href="#people">People</a>
                 <a href="#work">Work</a>
+
+            </div>
 
             </div>
 
@@ -117,6 +123,10 @@
 
 </style>
 
+
+<br>
+<br>
+<br>
 
 <div id="myCarousel" class="carousel slide" data-ride="carousel">
         <!-- Indicators -->
@@ -163,6 +173,104 @@
             <span class="sr-only">Next</span>
         </a>
 </div>
+
+
+
+
+
+
+<div class="container-fluid">
+    <div class="jumbotron">
+        <h1>View upcoming auctions and bid away!</h1>
+        <p><strong>eFast</strong> is an online auction system which allows users to buy and sell items. </p>
+    </div>
+
+</div>
+
+
+
+
+
+<!--<div class="container-fluid">-->
+
+<!--<div class="img" style="background-image:url('img/homeandgarden.jpg');"></div>-->
+<!--<div class="img" style="background-image:url('img/fashion.jpg');"></div>-->
+<!--<div class="img" style="background-image:url('img/office.jpg');"></div>-->
+
+<!--</div>-->
+
+
+<div class="container-fluid">
+    <h1 class="text-center">HUNDEREDS OF DIFFERENT ITEMS</h1>
+    <div align="center" class="tg-wrap">
+        <table class="tg">
+
+            <tr>
+                <th align="center" class="tg-32ig">
+                    <img src="img/homeandgarden.jpg" class="img-responsive" alt="logo" align="center" width="400" height="auto"></a>
+                </th>
+                <th align="center" class="tg-fefd">
+                    <img src="img/fashion.jpg" class="img-responsive" alt="logo" align="center" width="400" height="auto"></a>
+                </th>
+                <th align="center" class="tg-fefd">
+                    <img src="img/outdoor.jpg" class="img-responsive" alt="logo" align="center" width="400" height="auto"></a>
+                </th>
+            </tr>
+
+            <tr>
+                <td align="center" class="tg-fefd">
+                    <img src="img/office.jpg" class="img-responsive" alt="logo" align="center" width="400" height="auto"></a>
+                </td>
+                <td align="center" class="tg-fefd">
+                    <img src="img/healthandbeauty.jpg" class="img-responsive" alt="logo" align="center" width="400" height="auto"></a>
+                </td>
+                <td align="center" class="tg-fefd">
+                    <img src="img/techimage.jpg" class="img-responsive" alt="logo" align="center" width="400" height="auto"></a>
+                </td>
+
+            </tr>
+
+
+        </table>
+    </div>
+</div>
+
+
+
+<style>
+    .img-responsive {
+        border-style:1px solid green;
+        opacity: 0.3;
+        -webkit-transition: opacity .1s ease-in-out;
+        -moz-transition: opactiy .1s ease-in-out;
+        -ms-transition: opacity .1s ease-in-out;
+        -o-transition: opacity .1s ease-in-out;
+        transition: opacity .1s ease-in-out;
+    }
+
+    .img-responsive:hover{
+        opacity: 1;
+        -webkit-transition: opacity .1s ease-in-out;
+        -moz-transition: opactiy .1s ease-in-out;
+        -ms-transition: opacity .1s ease-in-out;
+        -o-transition: opacity .1s ease-in-out;
+        transition: opacity .1s ease-in-out;
+    }
+
+    .jumbotron{
+        background-color: transparent;
+    }
+
+</style>
+
+
+
+
+
+
+
+
+
 
 
 
