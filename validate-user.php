@@ -13,12 +13,13 @@ header('Access-Control-Allow-Origin:*');
 //picking up parameters from post
 $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
-$test_id=$request->test_id;
+$email=$request->email;
+$pass=$request->pass;
 
 //Define database connection parameters
     $hn = 'localhost';
-    $un = 'username-of-database-here'; //username of database here
-    $pwd = 'password-for-database-here'; //password for database here
+    $un = 'root'; //username of database here
+    $pwd = ''; //password for database here
     $db = 'efake'; //name for database here
     $cs = 'utf8';
 
@@ -36,7 +37,7 @@ $pdo = new PDO($dsn, $un, $pwd, $opt);
 
 //Attempt to query tests table and retrieve set of text files associated with tests_id
 try{
-    $stmt = $pdo->query('SELECT TEST_COLUMN1, TEST_COLUMN2, TEST_COLUMN3, TEST_COLUMN4, TEST_COLUMN5 FROM tests_test WHERE ID_TEST = \'' .$test_id. '\'');
+    $stmt = $pdo->query('SELECT FNAME, LNAME FROM user WHERE EMAIL = \'' .$email. '\' AND PASS = \'' .$pass. '\'');
 
     while($row = $stmt -> fetch(PDO::FETCH_OBJ))
     {
