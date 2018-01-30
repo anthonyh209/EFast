@@ -3,38 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
 </head>
 <body>
 
-<h1>Hello, this is the login page. </h1>
+
 
 
 <div>
 <form action="login.php">
-
-
     <div class="container">
-        <label><b>Username</b></label>
-        <input type="text" placeholder="Enter Username" name="uname" required>
+
+        <div align="center">
+            <img src="eFast.png" width="auto" height="100" alt="">
+        </div>
+
+        <br>
+        <br>
+
+        <h2 class="form-signin-heading">Welcome Back!</h2>
+
+        <label><b>Email</b></label>
+        <input type="text" placeholder="Enter Email" name="email" id="email" required>
 
         <label><b>Password</b></label>
-        <input type="password" placeholder="Enter Password" name="psw" required>
+        <input type="password" placeholder="Enter Password" name="password" id="password" required>
 
         <button type="submit">Login</button>
+
+
         <label>
             <input type="checkbox" checked="checked"> Remember me
         </label>
+
+        <button type="button" onclick="window.location='./register.html';" >Sign up here</button>
+
     </div>
 
-    <div class="container" style="background-color:#f1f1f1">
-        <button type="button" class="cancelbtn">Cancel</button>
-        <span class="psw">Forgot <a href="#">password?</a></span>
-    </div>
 </form>
-</div>
-
-<div class="container" style="background-color:#f1f1f1">
-    <button type="button" >Sign up here</button>
 </div>
 
 
@@ -42,11 +49,6 @@
 
 <style>
 
-
-    /* Bordered form */
-    form {
-        border: 3px solid #f1f1f1;
-    }
 
     /* Full-width inputs */
     input[type=text], input[type=password] {
@@ -60,7 +62,7 @@
 
     /* Set a style for all buttons */
     button {
-        background-color: #2cd4dd;
+        background-color: #2cbdc6;
         color: white;
         padding: 14px 20px;
         margin: 8px 0;
@@ -71,31 +73,13 @@
 
     /* Add a hover effect for buttons */
     button:hover {
-        opacity: 0.8;
+        background-color: #2badb6;
     }
 
-    /* Extra style for the cancel button (red) */
-    .cancelbtn {
-        width: auto;
-        padding: 10px 18px;
-        background-color: #f44336;
-    }
-
-    /* Center the avatar image inside this container */
-    .imgcontainer {
-        text-align: center;
-        margin: 24px 0 12px 0;
-    }
-
-    /* Avatar image */
-    img.avatar {
-        width: 40%;
-        border-radius: 50%;
-    }
 
     /* Add padding to containers */
     .container {
-        padding: 16px;
+        padding: 150px;
     }
 
     /* The "Forgot password" text */
@@ -115,19 +99,8 @@
         }
     }
 
-    container{
-        padding: 80px 120px;
-    }
-
 
 </style>
-
-
-
-
-
-
-
 
 
 
