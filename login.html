@@ -1,44 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-
-</head>
+    <!DOCTYPE html>
+    <html lang="en">
+    
+    <head>
+        <meta charset="UTF-8">
+        <title>Login</title>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+    
+        <!-- Custom CSS -->
+    
+    
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        -->
+    
+    </head>
 <body>
 
-
-
-
-<div>
-<form action="login.php">
-    <div class="container">
+<div class="container" style="padding: 20%">
+<form>
+    
 
         <div align="center">
-            <img src="eFast.png" width="auto" height="100" alt="">
+            <img src="eFast.png" width="auto" height="80" alt="">
         </div>
 
         <br>
         <br>
 
         <h2 class="form-signin-heading">Welcome Back!</h2>
-
-        <label><b>Email</b></label>
-        <input type="text" placeholder="Enter Email" name="email" id="email" required>
-
-        <label><b>Password</b></label>
-        <input type="password" placeholder="Enter Password" name="password" id="password" required>
-
-        <button type="submit">Login</button>
-
-
-        <label>
-            <input type="checkbox" checked="checked"> Remember me
-        </label>
-
-        <button type="button" onclick="window.location='./register.html';" >Sign up here</button>
-
+        <div id="spacer" style="height: 20px"></div>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon1">@</span>
+            </div>
+            <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+          </div>
+        <div>
+                <div class="form-group">
+                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                      </div>
+                      <div id="spacer" style="height: 20px"></div>
+        <button type="submit" class="btn btn-primary btn-lg btn-block btn-sm">Login</button>
+    </div>
+    <div id="spacer" style="height: 20px"></div>
+    <div>
+        <button type="button" class="btn btn-primary btn-lg btn-block btn-sm" onclick="window.location='./register.html';" >Sign up here</button>
+    </div>
     </div>
 
 </form>
@@ -49,62 +61,7 @@
 
 <style>
 
-
-    /* Full-width inputs */
-    input[type=text], input[type=password] {
-        width: 100%;
-        padding: 12px 20px;
-        margin: 8px 0;
-        display: inline-block;
-        border: 1px solid #ccc;
-        box-sizing: border-box;
-    }
-
-    /* Set a style for all buttons */
-    button {
-        background-color: #2cbdc6;
-        color: white;
-        padding: 14px 20px;
-        margin: 8px 0;
-        border: none;
-        cursor: pointer;
-        width: 100%;
-    }
-
-    /* Add a hover effect for buttons */
-    button:hover {
-        background-color: #2badb6;
-    }
-
-
-    /* Add padding to containers */
-    .container {
-        padding: 150px;
-    }
-
-    /* The "Forgot password" text */
-    span.psw {
-        float: right;
-        padding-top: 16px;
-    }
-
-    /* Change styles for span and cancel button on extra small screens */
-    @media screen and (max-width: 300px) {
-        span.psw {
-            display: block;
-            float: none;
-        }
-        .cancelbtn {
-            width: 100%;
-        }
-    }
-
-
 </style>
-
-
-
-
 
 </body>
 
