@@ -7,6 +7,7 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
     <script src="js/jquery.js"></script>
+    <script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
 
 </head>
@@ -76,7 +77,7 @@ reserve price and end date.-->
 The system will manage the auction until the set end time and award the item to the highest bidder.
 The system should confirm to both the winner and seller of an auction its outcome.-->
 
-<body>
+<body onload = "check_bid_history()">
     <div style="padding-right: 3%; padding-left: 3%">
 
         <button type="button" class="btn btn-primary btn-sm">Back to search results</button>
@@ -92,7 +93,7 @@ The system should confirm to both the winner and seller of an auction its outcom
                 <div class="row">
                     <div class="col-4">
                         <div class="card" style="height: 100%">
-                            <img src="..." alt="..." class="img-thumbnail" style="height: 100%">
+                            <img src="img/fashion.jpg" alt="..." class="img-thumbnail" style="height: 100%">
                         </div>
                     </div>
                     <div class="col-8">
@@ -135,7 +136,7 @@ The system should confirm to both the winner and seller of an auction its outcom
                 <a class="nav-link" data-toggle="tab" href="#menu1">Product Details</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#menu2">Bids History</a>
+                <a class="nav-link" data-toggle="tab" href="#bid_history">Bids History</a>
             </li>
         </ul>
 
@@ -152,13 +153,44 @@ The system should confirm to both the winner and seller of an auction its outcom
                 <h3>Menu 1</h3>
                 <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
             </div>
-            <div id="menu2" class="container tab-pane fade">
+            <div id="bid_history" class="container tab-pane fade">
                 <br>
-                <h3>Menu 2</h3>
-                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem
-                    aperiam.</p>
+                <h3>Bids History</h3>
+                <p>Start of bidding at </p>
             </div>
         </div>
+
+<script>
+    function check_bid_history(){
+        id_auction = "AU_000001"; //should have global scope & should be populated on load of page - HARDCODED for now
+        var xhttp;
+        xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                old_counter = this.responseText;
+                alert(old_counter);
+            }
+        };
+        xhttp.open("GET", "get-auction-counter.php?id_auction="+id_auction, true);
+        xhttp.send();
+
+        setInterval(function(){     //tells the page to call get-auction-counter.php every 3 seconds
+            var xhttp;
+            xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    new_counter = this.responseText;
+                    alert(new_counter);
+                    //include code which compares old_counter with new_counter, and if different, update old_counter in JS
+                    //and refresh the bid history tab with latest bid history
+                }
+            };
+            xhttp.open("GET", "get-auction-counter.php?id_auction="+id_auction, true);
+            xhttp.send();
+            }, 3000);
+    }
+</script>
+
 
 </body>
 

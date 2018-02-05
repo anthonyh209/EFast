@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>The XMLHttpRequest Object</h1>
+
+<p id="demo">Let AJAX change this text.</p>
+
+<button type="button" onclick="loadDoc()">Change Content</button>
+
+<script>
+    function loadDoc() {
+        var xhttp;
+        if (window.XMLHttpRequest) {
+            // code for modern browsers
+            xhttp = new XMLHttpRequest();   //creates a new XMLHttpRequest object
+        } else {
+            // code for IE6, IE5
+            xhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xhttp.onreadystatechange = function() { //onreadystatechange defines a function to be called when the readyState property changes
+            if (this.readyState == 4 && this.status == 200) {   //readyState holds the status of the XMLHttpRequest (0: request not initialized; 1: server connection established; 2: request received; 3: processing request; 4: request finished and response is ready
+                                                                //status returns the status-number of a request (200: "OK", etc)
+                document.getElementById("demo").innerHTML = this.responseText;  //Returns the response data as a string
+            }
+        };
+        xhttp.open("GET", "ajax_info.txt", true);   //open specifies the request "open(method,url,async,user,pw)" - (method: the request type GET or POST; url: the file location; async: true (asynchronous) or false (synchronous)
+        xhttp.send();   //Sends the request to the server
+    }
+</script>
+
+</body>
+</html>
+
+----------------------------------------------------------------------------------------
+AJAX Request
+GET request
+You may get a cached result. To avoid this, add a unique ID to the URL:
+
+<script>
+xhttp.open("GET", "demo_get.asp?t=" + Math.random(), true);
+xhttp.send();
+</script>
+
+If you want to send information with the GET method, add the information to the URL:
+<script>
+    xhttp.open("GET", "demo_get2.asp?fname=Henry&lname=Ford", true);
+    xhttp.send();
+</script>
+
+POST request:
+To POST data like an HTML form, add an HTTP header with setRequestHeader(). Specify the data you want to send in the send() method
+<script>
+    xhttp.open("POST", "ajax_test.asp", true);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");    //setRequestHeader adds a label/value pair to the header to be sent ("setRequestHeader(header,value)" - header: specifies the header name; value: specifies the header value
+    xhttp.send("fname=Henry&lname=Ford");
+</script>
+
+Asynchronous - True or False?
+The async parameter of the open() method should be set to true. By sending asynchronously, the JavaScript does not have to wait for the server response.
+
+To execute a synchronous request, change the third parameter in the open() method to false:
+<script>
+    xhttp.open("GET", "ajax_info.txt", false);
+</script>
+Sometimes async = false are used for quick testing.
+Not recommended because the JavaScript will stop executing until the server response is ready.
+
+--------------------------------------------------------------------------
+
+AJAX - Server Response
+The status property and the statusText property holds the status of the XMLHttpRequest object.
+status (200: "OK"; 403: "Forbidden"; 404: "Page not found", etc)
+statusText (Returns the status-text e.g. "OK" or "Not Found")
+
+Using a Callback Function
+A callback function is a function passed as a parameter to another function.
+If you have more than one AJAX task in a website, you should create one function for executing the XMLHttpRequest object, and one callback function for each AJAX task.
+The function call should contain the URL and what function to call when the response is ready.
+
+<script>
+    loadDoc("url-1", myFunction1);
+
+    loadDoc("url-2", myFunction2);
+
+    function loadDoc(url, cFunction) {
+        var xhttp;
+        xhttp=new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                cFunction(this);
+            }
+        };
+        xhttp.open("GET", url, true);
+        xhttp.send();
+    }
+
+    function myFunction1(xhttp) {
+        // action goes here
+    }
+    function myFunction2(xhttp) {
+        // action goes here
+    }
+</script>
+
+Server Response Properties
+responseText      -  get the response data as a String
+responseXML       -  get the response data as XML data
+
+Server Response Methods
+getResponseHeader() - Returns specific header information from the server resource
+getAllResponseHeaders()  - Returns all the header information from the server resource
+
+The responseText Property
+The responseText property returns the server response as a JavaScript string, and you can use it accordingly.
+<script>
+    document.getElementById("demo").innerHTML = xhttp.responseText;
+</script>
+
+The responseXML Property
+The XML HttpRequest object has an in-built XML parser.
+The responseXML property returns the server response as an XML DOM object.
+Using this property you can parse the response as an XML DOM object.
+
+----------------------------------------------------------------------------------------------------------
+
+AJAX PHP Example
+
+When a user types a character in the input field, a function called "showHint()" is executed.
+The function is triggered by the onkeyup event.
+
+<html>
+<head>
+    <script>
+        function showHint(str) {
+            if (str.length == 0) {
+                document.getElementById("txtHint").innerHTML = "";
+                return;
+            } else {
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        document.getElementById("txtHint").innerHTML = this.responseText;
+                    }
+                };
+                xmlhttp.open("GET", "gethint.php?q=" + str, true);
+                xmlhttp.send();
+            }
+        }
+    </script>
+</head>
+<body>
+
+<p><b>Start typing a name in the input field below:</b></p>
+<form>
+    First name: <input type="text" onkeyup="showHint(this.value)">
+</form>
+<p>Suggestions: <span id="txtHint"></span></p>
+</body>
+</html>
+
+First, check if the input field is empty (str.length == 0). If it is, clear the content of the txtHint placeholder and exit the function.
+
+However, if the input field is not empty, do the following:
+
+1.Create an XMLHttpRequest object
+2.Create the function to be executed when the server response is ready
+3.Send the request off to a PHP file (gethint.php) on the server
+4.Notice that q parameter is added gethint.php?q="+str
+5.The str variable holds the content of the input field
+
+----------------------------------------------------------------------------------------------
+
+AJAX Database Example
+
+The source code in "getcustomer.asp" runs a query against a database, and returns the result in an HTML table.
+The server file could easily be rewritten in PHP, or some other server languages.
+
+<!DOCTYPE html>
+<html>
+<style>
+    table,th,td {
+        border : 1px solid black;
+        border-collapse: collapse;
+    }
+    th,td {
+        padding: 5px;
+    }
+</style>
+<body>
+
+<h1>The XMLHttpRequest Object</h1>
+
+<form action="">
+    <select name="customers" onchange="showCustomer(this.value)">
+        <option value="">Select a customer:</option>
+        <option value="ALFKI">Alfreds Futterkiste</option>
+        <option value="NORTS ">North/South</option>
+        <option value="WOLZA">Wolski Zajazd</option>
+    </select>
+</form>
+<br>
+<div id="txtHint">Customer info will be listed here...</div>
+
+<script>
+    function showCustomer(str) {
+        var xhttp;
+        if (str == "") {
+            document.getElementById("txtHint").innerHTML = "";
+            return;
+        }
+        xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("txtHint").innerHTML = this.responseText;
+            }
+        };
+        xhttp.open("GET", "getcustomer.asp?q="+str, true);
+        xhttp.send();
+    }
+</script>
+
+</body>
+</html>
