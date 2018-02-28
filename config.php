@@ -11,7 +11,7 @@ $con=mysqli_connect("efastdbs.mysql.database.azure.com", "efast@efastdbs", "Gv3-
 // Check connection
 if (mysqli_connect_errno())
 {
-    echo "Failed to connect to MySQL: " . mysqli_connect_error();
+    echo "Failed to connect to the efast database: " . mysqli_connect_error();
 }else{
     echo "Hello";
 }

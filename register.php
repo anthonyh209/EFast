@@ -49,8 +49,10 @@
 
 
         <div>
-            <button type="button" class="cancelbtn" onclick="window.location='./login.html';" >Cancel</button>
-            <button type="submit" class="signupbtn">Sign Up</button>
+            <button type="button" class="cancelbtn" onclick="window.location='login.php';" >Cancel</button>
+<!--             <button type="submit" class="signupbtn">Sign Up</button>
+ -->            <input type='submit' name='submit' value='submit' id="submit" />
+
         </div>
 
 
@@ -125,6 +127,20 @@
     }
 
 </style>
+
+<?php
+
+
+
+
+?>
+
+
+
+
+
+
+
 
 </body>
 </html>
