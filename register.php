@@ -13,7 +13,7 @@
 
 
 
-<form action="register.php">
+<form action="register.php" method="post">
     <div class="container">
 
         <div align="center">
@@ -41,9 +41,11 @@
         <label><b>Repeat Password</b></label>
         <input type="password" placeholder="Repeat Password" name="password-repeat" id="password-repeat" required>
 
-        <input type="radio" name="role" value="buyer"> Buyer<br>
-        <input type="radio" name="role" value="seller"> Seller<br>
-        <input type="radio" name="role" value="admin"> Administrator<br>
+        <input type="radio" name="radio" value="ROLE_01"> Buyer<br>
+        <input type="radio" name="radio" value="ROLE_02"> Seller<br>
+        <input type="radio" name="radio" value="ROLE_03"> Administrator<br>
+
+
         <br>
         <br>
 
@@ -130,10 +132,79 @@
 
 <?php
 
+if (isset($_POST['submit'])) {
+
+    $firstname = $_POST['firstname'];
+    $lastname= $_POST['lastname'];
+    $email = $_POST['email'];
+    $role = $_POST['radio'];
+
+    $password = $_POST['password'];
+    $rpassword = $_POST['password-repeat'];
+
+
+if ($password == $rpassword){
+
+
+
+        $conn=mysqli_connect("efastdbs.mysql.database.azure.com", "efast@efastdbs", "Gv3-LST-nZU-JyP", "efast_main");
+
+
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+
+        //Inserting data into the tables
+        $sql = "INSERT INTO user (FNAME, LNAME, EMAIL, PASS, ID_ROLE) VALUES ('$firstname', '$lastname', '$email','$password','$role')";
+
+
+    if ($conn->query($sql) === TRUE) {
+
+        $last_id = mysqli_insert_id($conn);
+        // -> that is the last inserted ID: $last_id;
+
+        $sql2 = "INSERT INTO user WHERE ID = $last_id (ID_USER) VALUES ('$last_id')";
+
+        if(mysqli_query($conn, $sql2)){
+            echo '<script type="text/javascript"> window.location = "./login.php" </script>';
+        }
+
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+
+
+
+} else{
+
+    echo "Passwords do not match";
+
+}
+
+} //if post submit
+
 
 
 
 ?>
+
+
+
+<!--NEW.ID_USER = CONCAT('ID_', SUBSTRING('00000', LENGTH((-->
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
