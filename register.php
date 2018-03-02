@@ -130,6 +130,7 @@
 
 </style>
 
+<?php include 'config.php'; ?>
 <?php
 
 // when the form is submitted this is triggered
@@ -149,16 +150,6 @@ if (isset($_POST['submit'])) {
     if ($password == $rpassword){
 
 
-            //connecting to the DB
-            $conn=mysqli_connect("efastdbs.mysql.database.azure.com", "efast@efastdbs", "Gv3-LST-nZU-JyP", "efast_main");
-
-
-            // Check connection
-            if ($conn->connect_error) {
-                die("Connection failed: " . $conn->connect_error);
-            }
-
-
             //Inserting data into the tables
             $sql = "INSERT INTO user (FNAME, LNAME, EMAIL, PASS, ID_ROLE) VALUES ('$firstname', '$lastname', '$email','$password','$role')";
 
@@ -168,8 +159,6 @@ if (isset($_POST['submit'])) {
             } else {
                 echo "Error: " . $sql . "<br>" . $conn->error;
             }
-
-
 
     } else {
         echo "Passwords do not match";
