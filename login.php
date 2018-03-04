@@ -46,11 +46,11 @@
             <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1">@</span>
             </div>
-            <input type="text" class="form-control" name="email" id="email" placeholder="Enter email" aria-label="Username" aria-describedby="basic-addon1" class="form" >
+            <input type="text" class="form-control" name="email" id="email" placeholder="Enter email" aria-label="Username" aria-describedby="basic-addon1" class="form" required >
         </div>
         <div>
             <div>
-                <input type="text" class="form-control" id="password" name="password" placeholder="Password" >
+                <input type="text" class="form-control" id="password" name="password" placeholder="Password" required >
             </div>
             <div id="spacer" style="height: 20px"></div>
             <!-- <button type="submit" class="btn btn-primary btn-lg btn-block btn-sm">Login</button> -->
@@ -84,6 +84,7 @@ if(isset($_POST["submit"]))
 {
 
 
+
     $email = $_POST['email'];
     $password = $_POST['password'];
 
@@ -101,7 +102,9 @@ if(isset($_POST["submit"]))
         $role = $row['ID_ROLE'];
     }
 
-    if ($role == 'ROLE_01') {    // or how do you store role value
+
+
+    if ($role == 'ROLE_01') {    // redirecting to correct homepage
         echo "<script> location.href='./b-home.html'; </script>";
     } elseif ($role == 'ROLE_02') {
         echo "<script> location.href='./s-home.html'; </script>";
