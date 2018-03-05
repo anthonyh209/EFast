@@ -1,3 +1,23 @@
+<?php
+ session_start();
+
+
+
+
+
+
+
+
+ ?>
+
+
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,7 +35,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
 
-            <a class="navbar-brand" href="b-home.html">
+            <a class="navbar-brand" href="b-home.php">
                 <img width="100" src="efast.png">
             </a>
 
@@ -59,11 +79,11 @@
 
     <div class="collapse navbar-collapse">
         <ul class="navbar-nav ml-auto">
-                <li><a href="b-myprofile.html"><img height="30px" src="img/user1.png">Your Profile</a></li>
+            <li><a href="b-myprofile.html"><img height="30px" src="img/user1.png"> <?php echo "Hi "; echo  $_SESSION['first_name'] ;     ?> </a></li>
         </ul>
     </div>
 
-    <button style="margin-left: 10px" type="button" onclick="window.location='login.php';" class="btn btn-outline-danger btn-sm ">Logout</button>
+    <button style="margin-left: 10px" type="button" onclick="window.location='logout.php';" class="btn btn-outline-danger btn-sm ">Logout</button>
 
 
 </nav>

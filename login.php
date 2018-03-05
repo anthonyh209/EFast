@@ -56,7 +56,7 @@
             <!-- <button type="submit" class="btn btn-primary btn-lg btn-block btn-sm">Login</button> -->
             <input type='submit' name='submit' value='submit' id="submit" />
         </div>
-        <div id="spacer" style="height: 20px"></div>
+        <div id="spacer2" style="height: 20px"></div>
         <div>
             <button type="button" class="btn btn-primary btn-lg btn-block btn-sm" onclick="window.location='./register.html';">Sign up here</button>
         </div>
@@ -64,6 +64,10 @@
     </form>
 
 </div>
+
+
+
+
 
 
 
@@ -75,11 +79,8 @@
 </html>
 
 
-
+<?php include 'config.php'; ?>
 <?php
-
-$con=mysqli_connect("efastdbs.mysql.database.azure.com", "efast@efastdbs", "Gv3-LST-nZU-JyP", "efast_main");
-
 if(isset($_POST["submit"]))
 {
 
@@ -91,10 +92,11 @@ if(isset($_POST["submit"]))
     $query = "SELECT * FROM user WHERE EMAIL = '$email' ";
 
 
-    $result = mysqli_query($con, $query);
+    $result = mysqli_query($conn, $query);
 
     while($row = mysqli_fetch_assoc($result)) {
 
+        $userID = $row['ID_USER'];
         $db_pass = $row['PASS'];
         $first_name = $row['FNAME'];
         $last_name = $row['LNAME'];
@@ -102,17 +104,45 @@ if(isset($_POST["submit"]))
         $role = $row['ID_ROLE'];
     }
 
+    $userID = $userID;
+    $first_name =$first_name;
+    $last_name = $last_name;
+    $role = $role;
+
+    session_start();
 
 
-    if ($role == 'ROLE_01') {    // redirecting to correct homepage
-        echo "<script> location.href='./b-home.html'; </script>";
-    } elseif ($role == 'ROLE_02') {
-        echo "<script> location.href='./s-home.html'; </script>";
-    } elseif ($role == 'ROLE_03') {
-        echo "<script> location.href='./a-home.html'; </script>";
-    }
+        // if valid
+        $_SESSION['userID'] = $userID;
+        $_SESSION['username'] = $email;
+        $_SESSION['first_name'] = $first_name;
+        $_SESSION['last_name'] = $last_name;
+        $_SESSION['role'] = $role;
+
+
+        setcookie('userID', $userID,   time() + (60 * 60 * 24 * 30));
+        setcookie('username', $email,  time() + (60 * 60 * 24 * 30));
+        setcookie('first_name', $first_name,  time() + (60 * 60 * 24 * 30));
+        setcookie('last_name', $last_name,  time() + (60 * 60 * 24 * 30));
+        setcookie('role', $role,  time() + (60 * 60 * 24 * 30));
+
+        // Now logged in
+            if ($role == 'ROLE_01') {    // redirecting to correct homepage
+                echo "<script> location.href='b-home.php'; </script>";
+            } elseif ($role == 'ROLE_02') {
+                echo "<script> location.href='s-home.php'; </script>";
+            } elseif ($role == 'ROLE_03') {
+              echo "<script> location.href='./a-home.html'; </script>";
+              } else { echo "<div align='center'>
+               <p><strong>Please enter a valid username and password</strong></p>
+                </div>";
+            }
+
+
 
 }
+
+
 ?>
 
 
