@@ -7,15 +7,11 @@
  */
 
 
-$con=mysqli_connect("efastdbs.mysql.database.azure.com", "efast@efastdbs", "Gv3-LST-nZU-JyP", "efast_main");
+$conn=mysqli_connect("efastdbs.mysql.database.azure.com", "efast@efastdbs", "Gv3-LST-nZU-JyP", "efast_main");
+
 // Check connection
-if (mysqli_connect_errno())
-{
-    echo "Failed to connect to the efast database: " . mysqli_connect_error();
-}else{
-    echo "Hello";
-}
+  if (mysqli_connect_errno()){
+      echo 'Failed to connect to the MySQL server: '. mysqli_connect_error();
+  }
 
-
-mysqli_close($con);
 ?>

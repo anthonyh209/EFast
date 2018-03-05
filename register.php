@@ -130,58 +130,39 @@
 
 </style>
 
+<?php include 'config.php'; ?>
 <?php
 
+// when the form is submitted this is triggered
 if (isset($_POST['submit'])) {
 
+    //gathering the data from the form
     $firstname = $_POST['firstname'];
     $lastname= $_POST['lastname'];
     $email = $_POST['email'];
     $role = $_POST['radio'];
 
+
     $password = $_POST['password'];
     $rpassword = $_POST['password-repeat'];
 
-
-if ($password == $rpassword){
-
-
-
-        $conn=mysqli_connect("efastdbs.mysql.database.azure.com", "efast@efastdbs", "Gv3-LST-nZU-JyP", "efast_main");
+    //Checking if the passwords match
+    if ($password == $rpassword){
 
 
-        // Check connection
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-        }
+            //Inserting data into the tables
+            $sql = "INSERT INTO user (FNAME, LNAME, EMAIL, PASS, ID_ROLE) VALUES ('$firstname', '$lastname', '$email','$password','$role')";
 
-
-        //Inserting data into the tables
-        $sql = "INSERT INTO user (FNAME, LNAME, EMAIL, PASS, ID_ROLE) VALUES ('$firstname', '$lastname', '$email','$password','$role')";
-
-
-    if ($conn->query($sql) === TRUE) {
-
-        $last_id = mysqli_insert_id($conn);
-        // -> that is the last inserted ID: $last_id;
-
-        $sql2 = "INSERT INTO user WHERE ID = $last_id (ID_USER) VALUES ('$last_id')";
-
-        if(mysqli_query($conn, $sql2)){
-            echo '<script type="text/javascript"> window.location = "./login.php" </script>';
-        }
+            // if the query is correct -> redirect to login page
+            if ($conn->query($sql) === TRUE) {
+                   echo '<script type="text/javascript"> window.location = "./login.php" </script>';
+            } else {
+                echo "Error: " . $sql . "<br>" . $conn->error;
+            }
 
     } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        echo "Passwords do not match";
     }
-
-
-
-} else{
-
-    echo "Passwords do not match";
-
-}
 
 } //if post submit
 
@@ -190,9 +171,6 @@ if ($password == $rpassword){
 
 ?>
 
-
-
-<!--NEW.ID_USER = CONCAT('ID_', SUBSTRING('00000', LENGTH((-->
 
 
 
