@@ -11,7 +11,26 @@
 header('Access-Control-Allow-Origin:*');
 
 //picking up parameters from post
-$id_auction=$_REQUEST["id_auction"];
+$id_auction="";
+if (isset($_REQUEST['id_auction'])) {
+    $id_auction=$_REQUEST["id_auction"];
+} else {
+    echo("NOT SETTING!!!!");
+}
+$id_buyer="";
+if (isset($_REQUEST['id_user'])) {
+    $id_buyer=$_REQUEST["id_user"];
+}
+$datetime="";
+if (isset($_REQUEST['time'])) {
+    $datetime=$_REQUEST["time"];
+}
+$price="";
+if (isset($_REQUEST['price'])) {
+    $price=$_REQUEST["price"];
+}
+
+
 
 //Define database connection parameters
     $hn = 'efastdbs.mysql.database.azure.com';
@@ -32,17 +51,11 @@ $opt = array(
 $pdo = new PDO($dsn, $un, $pwd, $opt);
 
 
-//Attempt to query tests table and retrieve set of text files associated with tests_id
+//Attempt to insert bid table
 try{
-    $stmt = $pdo->query('SELECT PRICE, TIME FROM bid WHERE ID_AUCTION = \'' .$id_auction. '\'');
+    $stmt = $pdo->query('INSERT INTO bid (ID_BUYER, ID_AUCTION, PRICE, TIME)
+VALUES ( \'' . $id_buyer . '\', \'' . $id_auction . '\' , \'' . $price. '\' , \'' . $datetime . '\')');
 
-    while($row = $stmt -> fetch(PDO::FETCH_OBJ))
-    {
-        //Assign each row of data to associative array
-        $data[] = $row;
-    }
-
-    echo json_encode($data);
 
 }
 catch(PDOException $e)

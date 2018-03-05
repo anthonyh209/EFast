@@ -77,7 +77,7 @@ reserve price and end date.-->
 The system will manage the auction until the set end time and award the item to the highest bidder.
 The system should confirm to both the winner and seller of an auction its outcome.-->
 
-<body onload = "check_bid_history()">
+<body onload = "load_bid_page()">
     <div style="padding-right: 3%; padding-left: 3%">
 
         <button type="button" class="btn btn-primary btn-sm">Back to search results</button>
@@ -98,7 +98,7 @@ The system should confirm to both the winner and seller of an auction its outcom
                     </div>
                     <div class="col-8">
                         <div class="card text-left">
-                            <div class="card-header">
+                            <div id="item_title" class="card-header">
                                 Some crappy watch no one wants to bid on (title)
                             </div>
                             <div class="card-block" style="padding: 20px">
@@ -109,14 +109,14 @@ The system should confirm to both the winner and seller of an auction its outcom
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">$</span>
                                         </div>
-                                        <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+                                            <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" id="bid_price">
                                         <span class="input-group-btn">
-                                            <button class="btn btn-primary" type="button">Submit bid!</button>
+                                            <button class="btn btn-primary" type="button" onclick="sendBid()" >Submit bid!</button>
                                         </span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-footer text-muted">
+                            <div id="remaining_time" class="card-footer text-muted">
                                 Remaining Time
                             </div>
                         </div>
@@ -144,31 +144,73 @@ The system should confirm to both the winner and seller of an auction its outcom
         <div class="tab-content">
             <div id="home" class="container tab-pane active">
                 <br>
-                <h3>HOME</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
+                <h3 id="item_title2"> ITEM_TITLE</h3>
+                <p id="item_description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
                     magna aliqua.</p>
             </div>
             <div id="menu1" class="container tab-pane fade">
                 <br>
-                <h3>Menu 1</h3>
-                <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                <h3>Product Details</h3>
+                <p id="item_details">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
             </div>
             <div id="bid_history" class="container tab-pane fade">
                 <br>
                 <h3>Bids History</h3>
-                <p>Start of bidding at </p>
+                <p id="item_startprice">Start of bidding at </p>
+                <p id="bidders"></p>
             </div>
         </div>
 
 <script>
+    function load_bid_page(){
+        load_auction_details();
+        check_bid_history();
+    }
+
+    function load_auction_details(){
+        var id_auction = "AU_000001"; //should have global scope & should be populated on load of page - HARDCODED for now
+        var xhttp;
+        xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                response = JSON.parse(this.responseText);
+                document.getElementById("item_title").innerHTML =  response[0].TITLE;
+                document.getElementById("item_title2").innerHTML =  response[0].TITLE;
+                document.getElementById("item_description").innerHTML =  response[0].DESCRIPTION;
+                string_details = "Category: " + response[0].CATEGORY + "<br>" + "Condition: " + response[0].STATE;
+                document.getElementById("item_details").innerHTML = string_details;
+                var start_date = new Date(response[0].START_TIMESTAMP*1000);
+                start_date = start_date.toUTCString();
+                document.getElementById("item_startprice").innerHTML += "£" + response[0].START_PRICE + " on " + start_date;
+                var expirationtime = response[0].EXPIRATION_TIME;
+
+                setInterval(function(){
+                    var remainingEpoch = expirationtime - (Date.now()/1000);
+                    var remainingDays = Math.floor(remainingEpoch/86400);
+                    var remainingHours = Math.floor((remainingEpoch % 86400)/3600);
+                    var remainingMinutes = Math.floor(((remainingEpoch & 86400) % 3600)/60);
+                    var remainingSeconds = (((remainingEpoch & 86400) % 3600)%60);
+                    document.getElementById("remaining_time").innerHTML = "Remaining Time: " + remainingDays + " Days " + remainingHours + " Hours " + remainingMinutes + " Minutes " + remainingSeconds + " Seconds";
+                },1000);
+
+            }
+        };
+        xhttp.open("GET", "load-bid-page.php?id_auction="+id_auction, true);
+        xhttp.send();
+
+    }
+
+
     function check_bid_history(){
-        id_auction = "AU_000001"; //should have global scope & should be populated on load of page - HARDCODED for now
+        var id_auction = "AU_000001"; //should have global scope & should be populated on load of page - HARDCODED for now
         var xhttp;
         xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 old_counter = this.responseText;
-                alert(old_counter);
+                old_counter = JSON.parse(old_counter);
+                old_counter = old_counter[0].COUNTER;
+
             }
         };
         xhttp.open("GET", "get-auction-counter.php?id_auction="+id_auction, true);
@@ -180,15 +222,59 @@ The system should confirm to both the winner and seller of an auction its outcom
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
                     new_counter = this.responseText;
-                    alert(new_counter);
-                    //include code which compares old_counter with new_counter, and if different, update old_counter in JS
-                    //and refresh the bid history tab with latest bid history
+                    new_counter = JSON.parse(new_counter);
+                    new_counter = new_counter[0].COUNTER;
+                    if (new_counter != old_counter){
+                        document.getElementById("bidders").innerHTML +=  "SOMEONE HAS MADE A BID!!!"
+                        old_counter = new_counter
+                    }
+                    //create function which queries for bid history and refreshes 'bidders'
                 }
             };
             xhttp.open("GET", "get-auction-counter.php?id_auction="+id_auction, true);
             xhttp.send();
             }, 3000);
     }
+
+    function sendBid(){
+        //load session variables for DOM hidden input elements to send via PHP for bidding
+        var id_auction = "AU_000001"; //dummy placeholders
+        var id_user = "ID_000485"; //dummy placeholders
+
+        //TAKEN FROM GITHUB -- TO ACKNOWLEDGE THIS WAS TAKEN FROM (https://gist.github.com/ophentis/3943464)
+        //for converting JS Date object into MySQL datetime format
+        Date.prototype.toMysqlFormat = function() {
+            function twoDigits(d) {
+                if(0 <= d && d < 10) return '0' + d.toString();
+                if(-10 < d && d < 0) return '-0' + (-1*d).toString();
+                return d.toString();
+            }
+
+            return this.getUTCFullYear() + "-" + twoDigits(1 + this.getUTCMonth()) + "-" + twoDigits(this.getUTCDate()) + " " + twoDigits(this.getUTCHours()) + ":" + twoDigits(this.getUTCMinutes()) + ":" + twoDigits(this.getUTCSeconds());
+        };
+
+        var present_timestamp = new Date().toMysqlFormat();
+
+        var bid_price = document.getElementById("bid_price").value;
+
+
+        var xhttp;
+        xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                response = this.responseText;
+                //clear out textfield, refresh bid history, and create pop up with confirmation of bid
+                alert(response);
+            }
+        };
+        var parameters = "id_auction="+id_auction+"&id_user="+id_user+"&time="+present_timestamp+"&price="+bid_price;
+        alert(parameters);
+        xhttp.open("POST", "send-bid.php/?"+parameters, true);
+        xhttp.send();
+
+
+    }
+
 </script>
 
 

@@ -11,16 +11,14 @@
 header('Access-Control-Allow-Origin:*');
 
 //picking up parameters from post
-$postdata = file_get_contents("php://input");
-$request = json_decode($postdata);
-$id_auction=$request->id_auction;
+$id_auction=$_REQUEST["id_auction"];
 
 //Define database connection parameters
-    $hn = 'localhost';
-    $un = 'root'; //username of database here
-    $pwd = ''; //password for database here
-    $db = 'efake'; //name for database here
-    $cs = 'utf8';
+$hn = 'efastdbs.mysql.database.azure.com';
+$un = 'efast@efastdbs'; //username of database here
+$pwd = 'Gv3-LST-nZU-JyP'; //password for database here
+$db = 'efast_main'; //name for database here
+$cs = 'utf8';
 
 //Set up the PDO parameters
 $dsn = "mysql:host=" . $hn . ";port=3306;dbname=" . $db . ";charset=" . $cs;
@@ -44,9 +42,7 @@ try{
         $data[] = $row;
     }
 
-    echo '<script>';
-    echo 'old_counter = ' . json_encode($data) . ';';
-    echo '</script>';
+    echo json_encode($data);
 
 }
 catch(PDOException $e)
