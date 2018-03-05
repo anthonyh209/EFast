@@ -1,5 +1,5 @@
 <<?php 
 
-echo Hello world
+echo "<script> location.href='login.php'; </script>";
  ?>
 
