@@ -156,8 +156,8 @@ The system should confirm to both the winner and seller of an auction its outcom
             <div id="bid_history" class="container tab-pane fade">
                 <br>
                 <h3>Bids History</h3>
-                <p id="item_startprice">Start of bidding at </p>
-                <p id="bidders"></p>
+                <p id="starting_bid">Start of bidding at </p>
+                <p id="bid_history_log"> </p>
             </div>
         </div>
 
@@ -181,7 +181,7 @@ The system should confirm to both the winner and seller of an auction its outcom
                 document.getElementById("item_details").innerHTML = string_details;
                 var start_date = new Date(response[0].START_TIMESTAMP*1000);
                 start_date = start_date.toUTCString();
-                document.getElementById("item_startprice").innerHTML += "£" + response[0].START_PRICE + " on " + start_date;
+                document.getElementById("starting_bid").innerHTML += "£" + response[0].START_PRICE + " on " + start_date;
                 var expirationtime = response[0].EXPIRATION_TIME;
 
                 setInterval(function(){
@@ -201,7 +201,7 @@ The system should confirm to both the winner and seller of an auction its outcom
     }
 
 
-    function check_bid_history(){
+    function check_bid_history(){ // it loads a global variable counter for keeping track of how many bids have been made and refreshes the bid history on initial load of page
         var id_auction = "AU_000001"; //should have global scope & should be populated on load of page - HARDCODED for now
         var xhttp;
         xhttp = new XMLHttpRequest();
@@ -210,7 +210,7 @@ The system should confirm to both the winner and seller of an auction its outcom
                 old_counter = this.responseText;
                 old_counter = JSON.parse(old_counter);
                 old_counter = old_counter[0].COUNTER;
-
+                refreshBidHistory();
             }
         };
         xhttp.open("GET", "get-auction-counter.php?id_auction="+id_auction, true);
@@ -225,10 +225,9 @@ The system should confirm to both the winner and seller of an auction its outcom
                     new_counter = JSON.parse(new_counter);
                     new_counter = new_counter[0].COUNTER;
                     if (new_counter != old_counter){
-                        document.getElementById("bidders").innerHTML +=  "SOMEONE HAS MADE A BID!!!"
+                        refreshBidHistory();
                         old_counter = new_counter
                     }
-                    //create function which queries for bid history and refreshes 'bidders'
                 }
             };
             xhttp.open("GET", "get-auction-counter.php?id_auction="+id_auction, true);
@@ -262,16 +261,39 @@ The system should confirm to both the winner and seller of an auction its outcom
         xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-                response = this.responseText;
                 //clear out textfield, refresh bid history, and create pop up with confirmation of bid
-                alert(response);
+                document.getElementById("bid_price").value = "";
+                //still need to refresh bid history and create pop up
+                refreshBidHistory();
             }
         };
         var parameters = "id_auction="+id_auction+"&id_user="+id_user+"&time="+present_timestamp+"&price="+bid_price;
-        alert(parameters);
         xhttp.open("POST", "send-bid.php/?"+parameters, true);
         xhttp.send();
+    }
 
+    function refreshBidHistory(){
+        var id_auction = "AU_000001"; //should have global scope & should be populated on load of page - HARDCODED for now
+        var xhttp;
+        xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                //populate the bid history html
+                var bid_history_string = "";
+                var bid_datetime ="";
+                response = JSON.parse(this.responseText);
+                old_counter = response.length;
+                for (i = 0; i < response.length; i++){
+                    bid_datetime = new Date(response[i].TIME*1000);
+                    bid_datetime = bid_datetime.toUTCString();
+                    bid_history_string = bid_history_string += "<br />Bid of £" + response[i].PRICE + " declared at " + bid_datetime;
+                }
+                document.getElementById("bid_history_log").innerHTML = bid_history_string;
+
+            }
+        };
+        xhttp.open("GET", "retrieve-bid-history.php?id_auction="+id_auction, true);
+        xhttp.send();
 
     }
 
