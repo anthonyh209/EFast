@@ -34,7 +34,7 @@ $pdo = new PDO($dsn, $un, $pwd, $opt);
 
 //Attempt to query tests table and retrieve set of text files associated with tests_id
 try{
-    $stmt = $pdo->query('SELECT PRICE, UNIX_TIMESTAMP(TIME) AS TIME FROM bid WHERE ID_AUCTION = \'' .$id_auction. '\'');
+    $stmt = $pdo->query('SELECT PRICE, UNIX_TIMESTAMP(TIME) AS TIME FROM bid WHERE ID_AUCTION = \'' .$id_auction. '\' ORDER BY PRICE ASC');
 
     while($row = $stmt -> fetch(PDO::FETCH_OBJ))
     {

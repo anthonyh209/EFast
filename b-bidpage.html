@@ -102,7 +102,7 @@ The system should confirm to both the winner and seller of an auction its outcom
                                 Some crappy watch no one wants to bid on (title)
                             </div>
                             <div class="card-block" style="padding: 20px">
-                                <h4 class="card-title">Current highest bid: $5</h4>
+                                <h4 class="card-title" id="highest_bid">Current highest bid: $5</h4>
                                 <div id="spacer" style="height: 20px"></div>
                                 <div class="input-group-prepend">
                                     <div class="input-group mb-3">
@@ -281,14 +281,17 @@ The system should confirm to both the winner and seller of an auction its outcom
                 //populate the bid history html
                 var bid_history_string = "";
                 var bid_datetime ="";
+                var highest_bid = ""; //REMEMBER TO TEST WHETHER ASECNDING ORDER OF PRICE WORKS
                 response = JSON.parse(this.responseText);
                 old_counter = response.length;
                 for (i = 0; i < response.length; i++){
                     bid_datetime = new Date(response[i].TIME*1000);
                     bid_datetime = bid_datetime.toUTCString();
                     bid_history_string = bid_history_string += "<br />Bid of £" + response[i].PRICE + " declared at " + bid_datetime;
+                    highest_bid = response[i].PRICE;
                 }
                 document.getElementById("bid_history_log").innerHTML = bid_history_string;
+                document.getElementById("highest_bid").innterHTML = "Current highest bid: £"+highest_bid;
 
             }
         };

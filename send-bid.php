@@ -51,6 +51,7 @@ $opt = array(
 $pdo = new PDO($dsn, $un, $pwd, $opt);
 
 
+
 //Attempt to insert bid table
 try{
     $stmt = $pdo->query('INSERT INTO bid (ID_BUYER, ID_AUCTION, PRICE, TIME)
