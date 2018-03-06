@@ -51,6 +51,19 @@ $opt = array(
 $pdo = new PDO($dsn, $un, $pwd, $opt);
 
 
+//Attempt to insert bid table
+try{
+    $stmt = $pdo->query('INSERT INTO bid (ID_BUYER, ID_AUCTION, PRICE, TIME)
+VALUES ( \'' . $id_buyer . '\', \'' . $id_auction . '\' , \'' . $price. '\' , \'' . $datetime . '\')');
+
+
+}
+catch(PDOException $e)
+{
+    echo $e -> getMessage();
+}
+
+
 
 //Attempt to insert bid table
 try{
