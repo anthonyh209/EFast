@@ -30,14 +30,14 @@ if (isset($_REQUEST['price'])) {
     $price=$_REQUEST["price"];
 }
 
-
+$valid="";
 
 //Define database connection parameters
-    $hn = 'efastdbs.mysql.database.azure.com';
-    $un = 'efast@efastdbs'; //username of database here
-    $pwd = 'Gv3-LST-nZU-JyP'; //password for database here
-    $db = 'efast_main'; //name for database here
-    $cs = 'utf8';
+$hn = 'efastdbs.mysql.database.azure.com';
+$un = 'efast@efastdbs'; //username of database here
+$pwd = 'Gv3-LST-nZU-JyP'; //password for database here
+$db = 'efast_main'; //name for database here
+$cs = 'utf8';
 
 //Set up the PDO parameters
 $dsn = "mysql:host=" . $hn . ";port=3306;dbname=" . $db . ";charset=" . $cs;
@@ -50,13 +50,19 @@ $opt = array(
 //Create a PDO instance (connect to the database)
 $pdo = new PDO($dsn, $un, $pwd, $opt);
 
+try {
+    $sql = 'CALL CheckBidIsLargest(?,?,@valid)';
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(1,$id_auction);
+    $stmt->bindParam(2,$price);
 
-//Attempt to insert bid table
-try{
-    $stmt = $pdo->query('INSERT INTO bid (ID_BUYER, ID_AUCTION, PRICE, TIME)
-VALUES ( \'' . $id_buyer . '\', \'' . $id_auction . '\' , \'' . $price. '\' , \'' . $datetime . '\')');
+    $stmt->execute();
+    $stmt->closeCursor();
 
-
+    $r = $pdo->query("SELECT @valid")->fetch(PDO::FETCH_ASSOC);
+    if ($r){
+        $valid=$r['@valid'];
+    }
 }
 catch(PDOException $e)
 {
@@ -64,29 +70,51 @@ catch(PDOException $e)
 }
 
 
+if ($valid == 0){ //0 means valid. 1 means invalid.
 
-//Attempt to insert bid table
-try{
-    $stmt = $pdo->query('INSERT INTO bid (ID_BUYER, ID_AUCTION, PRICE, TIME)
+    //Attempt to insert bid table
+    try{
+        $stmt = $pdo->query('INSERT INTO bid (ID_BUYER, ID_AUCTION, PRICE, TIME)
 VALUES ( \'' . $id_buyer . '\', \'' . $id_auction . '\' , \'' . $price. '\' , \'' . $datetime . '\')');
 
 
-}
-catch(PDOException $e)
-{
-    echo $e -> getMessage();
-}
+    }
+    catch(PDOException $e)
+    {
+        echo $e -> getMessage();
+    }
+
+
+
+//Attempt to insert bid table
+    try{
+        $stmt = $pdo->query('INSERT INTO bid (ID_BUYER, ID_AUCTION, PRICE, TIME)
+VALUES ( \'' . $id_buyer . '\', \'' . $id_auction . '\' , \'' . $price. '\' , \'' . $datetime . '\')');
+
+
+    }
+    catch(PDOException $e)
+    {
+        echo $e -> getMessage();
+    }
 
 //Attempt to update COUNTER column in auction table
-try{
-    $stmt = $pdo->query('UPDATE auction SET COUNTER = COUNTER + 1 WHERE ID_AUCTION = \'' .$id_auction. '\'');
+    try{
+        $stmt = $pdo->query('UPDATE auction SET COUNTER = COUNTER + 1 WHERE ID_AUCTION = \'' .$id_auction. '\'');
 
 
+    }
+    catch(PDOException $e)
+    {
+        echo $e -> getMessage();
+    }
+
+
+} else {
+    echo "Your proposed bid is not the current highest bid for the auction. Another buyer may have just posted a larger bid. Please review bid history.";
 }
-catch(PDOException $e)
-{
-    echo $e -> getMessage();
-}
+
+
 
 
 

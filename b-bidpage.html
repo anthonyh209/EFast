@@ -261,9 +261,15 @@ The system should confirm to both the winner and seller of an auction its outcom
         xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-                //clear out textfield, refresh bid history, and create pop up with confirmation of bid
-                document.getElementById("bid_price").value = "";
-                //still need to refresh bid history and create pop up
+                if (this.responseText != ""){
+                    //create pop up for informing user that his bid is not currently highest - Pop up can be prettier
+                    alert(this.responseText);
+                } else {
+                    //clear out textfield and create pop up with confirmation of bid  - !!!! Pop up can be prettier
+                    document.getElementById("bid_price").value = "";
+                    alert("Congratualtions! Your bid was successful!")
+                }
+                //refresh bid history no matter whether bid was successful
                 refreshBidHistory();
             }
         };
