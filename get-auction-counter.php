@@ -34,7 +34,7 @@ $pdo = new PDO($dsn, $un, $pwd, $opt);
 
 //Attempt to query tests table and retrieve set of text files associated with tests_id
 try{
-    $stmt = $pdo->query('SELECT COUNTER FROM auction WHERE ID_AUCTION = \'' .$id_auction. '\'');
+    $stmt = $pdo->query('SELECT COUNTER, EXPIRED FROM auction WHERE ID_AUCTION = \'' .$id_auction. '\'');
 
     while($row = $stmt -> fetch(PDO::FETCH_OBJ))
     {

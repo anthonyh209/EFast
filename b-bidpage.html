@@ -174,6 +174,7 @@ The system should confirm to both the winner and seller of an auction its outcom
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 response = JSON.parse(this.responseText);
+                start_price = response[0].START_PRICE; // used as global variable to hold Starting price
                 document.getElementById("item_title").innerHTML =  response[0].TITLE;
                 document.getElementById("item_title2").innerHTML =  response[0].TITLE;
                 document.getElementById("item_description").innerHTML =  response[0].DESCRIPTION;
@@ -207,9 +208,12 @@ The system should confirm to both the winner and seller of an auction its outcom
         xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-                old_counter = this.responseText;
-                old_counter = JSON.parse(old_counter);
-                old_counter = old_counter[0].COUNTER;
+                response = JSON.parse(this.responseText);
+                old_counter = response[0].COUNTER;
+                var expired_flag = response[0].EXPIRED;
+                if (expired_flag == 1){
+                    alert("Auction has expired. Please return to Home page.") //!! to return page to Home page
+                }
                 refreshBidHistory();
             }
         };
@@ -221,13 +225,17 @@ The system should confirm to both the winner and seller of an auction its outcom
             xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
-                    new_counter = this.responseText;
-                    new_counter = JSON.parse(new_counter);
-                    new_counter = new_counter[0].COUNTER;
+                    response = JSON.parse(this.responseText);
+                    new_counter = response[0].COUNTER;
+                    var expired_flag = response[0].EXPIRED;
+                    if (expired_flag == 1){
+                        alert("Auction has expired. Please return to Home page.") //!! to return page to Home page
+                    }
                     if (new_counter != old_counter){
                         refreshBidHistory();
                         old_counter = new_counter
                     }
+
                 }
             };
             xhttp.open("GET", "get-auction-counter.php?id_auction="+id_auction, true);
@@ -290,15 +298,18 @@ The system should confirm to both the winner and seller of an auction its outcom
                 var highest_bid = "";
                 response = JSON.parse(this.responseText);
                 old_counter = response.length;
-                for (i = 0; i < response.length; i++){
-                    bid_datetime = new Date(response[i].TIME*1000);
-                    bid_datetime = bid_datetime.toUTCString();
-                    bid_history_string = bid_history_string += "<br />Bid of £" + response[i].PRICE + " declared at " + bid_datetime;
-                    highest_bid = response[i].PRICE;
+                if (old_counter == 0){ //Checks if a bid has been made. If no bid, then starting price is highest, otherwise populate bid history
+                    document.getElementById("highest_bid").innerHTML = "Current highest bid: £"+start_price;
+                } else {
+                    for (i = 0; i < response.length; i++){
+                        bid_datetime = new Date(response[i].TIME*1000);
+                        bid_datetime = bid_datetime.toUTCString();
+                        bid_history_string = bid_history_string += "<br />Bid of £" + response[i].PRICE + " declared at " + bid_datetime;
+                        highest_bid = response[i].PRICE;
+                    }
+                    document.getElementById("bid_history_log").innerHTML = bid_history_string;
+                    document.getElementById("highest_bid").innerHTML = "Current highest bid: £"+highest_bid;
                 }
-                document.getElementById("bid_history_log").innerHTML = bid_history_string;
-                document.getElementById("highest_bid").innerHTML = "Current highest bid: £"+highest_bid;
-
             }
         };
         xhttp.open("GET", "retrieve-bid-history.php?id_auction="+id_auction, true);
