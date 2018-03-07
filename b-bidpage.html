@@ -169,6 +169,7 @@ The system should confirm to both the winner and seller of an auction its outcom
 
     function load_auction_details(){
         var id_auction = "AU_000001"; //should have global scope & should be populated on load of page - HARDCODED for now
+        var id_user = "ID_000485"; //dummy placeholders
         var xhttp;
         xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
@@ -196,7 +197,7 @@ The system should confirm to both the winner and seller of an auction its outcom
 
             }
         };
-        xhttp.open("GET", "load-bid-page.php?id_auction="+id_auction, true);
+        xhttp.open("GET", "load-bid-page.php?id_auction="+id_auction+"&id_user="+id_user, true);
         xhttp.send();
 
     }

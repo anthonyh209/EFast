@@ -12,6 +12,7 @@ header('Access-Control-Allow-Origin:*');
 
 //picking up parameters from post
 $id_auction=$_REQUEST["id_auction"];
+$id_user=$_REQUEST["id_user"];
 
 //Define database connection parameters
     $hn = 'efastdbs.mysql.database.azure.com';
@@ -30,6 +31,14 @@ $opt = array(
 
 //Create a PDO instance (connect to the database)
 $pdo = new PDO($dsn, $un, $pwd, $opt);
+
+try{
+    $stmt = $pdo->query('INSERT INTO traffic (ID_AUCTION, ID_USER) VALUES ( \'' . $id_auction . '\', \'' . $id_user . '\' )');
+}
+catch(PDOException $e)
+{
+    echo $e -> getMessage();
+}
 
 
 //Attempt to query tests table and retrieve set of text files associated with tests_id
