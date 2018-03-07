@@ -33,7 +33,7 @@ $opt = array(
 $pdo = new PDO($dsn, $un, $pwd, $opt);
 
 try{
-    $stmt = $pdo->query('INSERT INTO traffic (ID_AUCTION, ID_USER) VALUES ( \'' . $id_auction . '\', \'' . $id_user . '\' )');
+    $stmt = $pdo->query('INSERT INTO traffic (ID_AUCTION, ID_USER, DATETIME) VALUES ( \'' . $id_auction . '\', \'' . $id_user . '\', Now() )');
 }
 catch(PDOException $e)
 {
