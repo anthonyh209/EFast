@@ -24,30 +24,30 @@ This is the buyers search items page -> leads to the auction of a particular ite
 There will be a link to the item's auction is chosen from a list (Bid for items page-->
 
 <body>
-<!---->
-<!--<nav class="navbar navbar-expand-lg navbar-light bg-light">-->
-<!---->
-<!--    <a class="navbar-brand" href="b-home.php">-->
-<!--        <img width="100" src="efast.png">-->
-<!--    </a>-->
-<!---->
-<!--    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"-->
-<!--            aria-expanded="false" aria-label="Toggle navigation">-->
-<!--        <span class="navbar-toggler-icon"></span>-->
-<!--    </button>-->
-<!---->
-<!---->
-<!---->
-<!--    <div class="collapse navbar-collapse">-->
-<!--        <ul class="navbar-nav ml-auto">-->
-<!--            <li><a href="b-myprofile.html"><img height="30px" src="img/user1.png"> --><?php //echo "Hi "; echo  $_SESSION['first_name'] ; echo " "; echo   $_SESSION['last_name'] ;   ?><!-- </a></li>-->
-<!--        </ul>-->
-<!--    </div>-->
-<!---->
-<!--    <button style="margin-left: 10px" type="button" onclick="window.location='logout.php';" class="btn btn-outline-danger btn-sm ">Logout</button>-->
-<!---->
-<!---->
-<!--</nav>-->
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+    <a class="navbar-brand" href="b-home.php">
+        <img width="100" src="efast.png">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+            aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+
+
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ml-auto">
+            <li><a href="b-myprofile.html"><img height="30px" src="img/user1.png"> <?php echo "Hi "; echo  $_SESSION['first_name'] ; echo " "; echo   $_SESSION['last_name'] ;   ?> </a></li>
+        </ul>
+    </div>
+
+    <button style="margin-left: 10px" type="button" onclick="window.location='logout.php';" class="btn btn-outline-danger btn-sm ">Logout</button>
+
+
+</nav>
 
 
 
@@ -145,7 +145,7 @@ There will be a link to the item's auction is chosen from a list (Bid for items 
                                 ?>
 
                                 <tr>
-                                    <form action="" method="post">
+                                    <form action="logout.php" method="post">
                                     <td><img src="http://dummyimage.com/60x60/666/ffffff&text=No+Image" class="img-rounded"></td>
                                     <td>   <?php     echo $title; ?> </td>
                                     <td>     <?php   echo $description; ?> </td>
@@ -172,7 +172,7 @@ There will be a link to the item's auction is chosen from a list (Bid for items 
                                              $ExecQuery3 = MySQLi_query($conn, $Query3);
 
                                              if (mysqli_num_rows($ExecQuery3)== 0) {
-                                                 $currentBid = "No bid made";
+                                                 $currentBid = 'No bid made';
                                                  ?>
 
                                                  <td> <?php echo $currentBid; ?> </td>
@@ -197,7 +197,7 @@ There will be a link to the item's auction is chosen from a list (Bid for items 
                                         ?>
 
 
-                                    <td> <input type="submit"> </td>
+                                    <td> <input type="submit" id="submit2 "> </td>
                                     </form>
                                 </tr>
 
@@ -226,11 +226,6 @@ There will be a link to the item's auction is chosen from a list (Bid for items 
         </div>
     </div>
 </div>
-
-
-
-
-
 
 
 
