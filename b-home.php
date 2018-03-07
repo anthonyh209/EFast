@@ -13,11 +13,6 @@
 
 
 
-
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,6 +22,17 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <script src="js/jquery.js"></script>
     <script src="js/bootstrap.bundle.js"></script>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script type="text/javascript">
+        function getStates(value){
+            $.post("mypage.php", {partialState:value}, function(data){
+                $("#results").html(data);
+            });
+        }
+    </script>
+
 
 </head>
 
@@ -46,16 +52,18 @@
 
             <div class="col-md-auto">
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <form class="form-inline my-2 my-lg-0">
-                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+
+                    <form action="b-item-search.php" method="post" class="form-inline my-2 my-lg-0">
+<!--                        <input class="form-control mr-sm-2" type="search" name="search" id="search" placeholder="Search" aria-label="Search">-->
+                        <input type="text" placeholder="Search" id="search" name="search" onkeyup="getStates(this.value)">
                         <ul class="navbar-nav mr-auto">
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
                                    aria-expanded="false">
-                                    Search by Catagory
+                                    Search by Category
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="#">BOOKS</a>
+                                    <a class="dropdown-item" href="www.google.com">BOOKS</a>
                                     <a class="dropdown-item" href="#">MOVIES</a>
                                     <a class="dropdown-item" href="#">ELECTRONICS</a>
                                     <a class="dropdown-item" href="#">HOME</a>
@@ -64,12 +72,10 @@
                                     <a class="dropdown-item" href="#">FOOD</a>
                                     <a class="dropdown-item" href="#">BEAUTY</a>
                                     <a class="dropdown-item" href="#">VEHICLE</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">Something else here</a>
                                 </div>
                             </li>
                         </ul>
-                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                        <input class="btn btn-outline-success my-2 my-sm-0" type='submit' id="submit" name="submit">
                     </form>
 
 
@@ -79,7 +85,7 @@
 
     <div class="collapse navbar-collapse">
         <ul class="navbar-nav ml-auto">
-            <li><a href="b-myprofile.html"><img height="30px" src="img/user1.png"> <?php echo "Hi "; echo  $_SESSION['first_name'] ;     ?> </a></li>
+            <li><a href="b-myprofile.html"><img height="30px" src="img/user1.png"> <?php echo "Hi "; echo  $_SESSION['first_name'] ; echo " "; echo   $_SESSION['last_name'] ;   ?> </a></li>
         </ul>
     </div>
 
@@ -87,6 +93,10 @@
 
 
 </nav>
+
+
+
+<div id="results"></div>
 
 
 
@@ -218,81 +228,13 @@
 
 
 
+<!--contain for the RECOMMENDED ITEMS  items -->
 
 <div class="container-fluid" >
     <div class="jumbotron">
         <h1 align="center">Items we reccomend for you, based on your bid history.</h1>
     </div>
-
-
-
-    <table id="mytable" class="table table-bordred table-striped">
-
-        <thead>
-
-
-        <th>Item Image</th>
-        <th>Item Name</th>
-        <th>Item Description</th>
-        <th>Current Bid</th>
-        <th>Auction End Date</th>
-        <th>           </th>
-
-        </thead>
-        <tbody>
-
-        <tr>
-            <td><img src="http://dummyimage.com/60x60/666/ffffff&text=No+Image" class="img-rounded"></td>
-            <td>muffins</td>
-            <td>tasty blueberry muffins</td>
-            <td>£10</td>
-            <td> in 2 hours  </td>
-            <td><button class="btn btn-success btn-md">Go to bid   </button></td>
-        </tr>
-
-        <tr>
-            <td><img src="http://dummyimage.com/60x60/666/ffffff&text=No+Image" class="img-rounded"></td>
-            <td>muffins</td>
-            <td>tasty blueberry muffins</td>
-            <td>£7</td>
-            <td> in 1 hour  </td>
-            <td><button class="btn btn-success btn-md"></button></td>
-        </tr>
-
-        <tr>
-            <td><img src="http://dummyimage.com/60x60/666/ffffff&text=No+Image" class="img-rounded"></td>
-            <td>muffins</td>
-            <td>tasty blueberry muffins</td>
-            <td>£3</td>
-            <td>in 5 hours </td>
-            <td><button class="btn btn-success btn-md"></button></td>
-        </tr>
-
-
-        <tr>
-            <td><img src="http://dummyimage.com/60x60/666/ffffff&text=No+Image" class="img-rounded"></td>
-            <td>muffins</td>
-            <td>tasty blueberry muffins</td>
-            <td>£4</td>
-            <td> in 8 hours </td>
-            <td><button class="btn btn-success btn-md"></button></td>
-        </tr>
-
-        <tr>
-            <td><img src="http://dummyimage.com/60x60/666/ffffff&text=No+Image" class="img-rounded"></td>
-            <td>muffins</td>
-            <td>tasty blueberry muffins</td>
-            <td>£10</td>
-            <td> in 32 hours </td>
-            <td><button class="btn btn-success btn-md"></button></td>
-
-        </tr>
-
-        </tbody>
-
-    </table>
-
-
+    <p>GET CODE FROM THE B-TEM-SEARCH PAGE</p>
 
 
 </div>
@@ -332,7 +274,6 @@
 
 
 
-<body>
-
+</body>
 
 </html>
