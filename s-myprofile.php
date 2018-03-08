@@ -439,7 +439,7 @@ $dispatchfeescore = round($dispatchfeescore,1);
         ?>
                 <div class="clearfix"></div>
                 <ul class="pagination pull-right">
-                    <li class="disabled"><a href="#"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+                    <li class="disabled"><a href="s-myprofile.php?page=1"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
 <?php
     $sql = "SELECT COUNT(*) AS total FROM rating";
     $result6 = $conn->query($sql);
@@ -452,17 +452,13 @@ $dispatchfeescore = round($dispatchfeescore,1);
     ?>
                     <?php if ($_GET["page"] = 1){$j = 1;}  // the GET_page doesnt give me the right page number...
                     elseif ($_GET["page"]= $total_pages) {$j = $total_pages;}
-                    else {$j = $_GET["page"]+1;}
-                    echo $_GET["page"];
-                    echo $j; ?>
+                    else {$j = $_GET["page"]+1;} ?>
 
                     <li><?php echo "<a href='s-myprofile.php?page=".$j."'>"?><span class="glyphicon glyphicon-chevron-right"></span></a></li> <!-- need to fix this link -->
     </ul>
 
             </div>
         </div>
-    </div>
-
 <!-- Example numbered list:
 
         <div class="clearfix"></div>
@@ -499,9 +495,9 @@ $dispatchfeescore = round($dispatchfeescore,1);
 
                         <th>Item Name</th>
                         <th>Item Description</th>
-                        <th>Auction End Date</th>
+                        <th>Time Remaining</th>
                         <th>Most Recent Bid</th>
-                        <th> Views</th>
+                        <th>Views</th>
                         <th>Cancel Auction</th>
                         </thead>
                         <tbody>
@@ -524,13 +520,47 @@ $sql9 = "SELECT PRICE FROM bid WHERE ID_AUCTION= '$currentauction' ORDER BY TIME
 $result9 = $conn->query($sql9);
 $row9 = $result9->fetch_assoc();
 $most_recent_bid = $row9['PRICE'];
+$now = date('Y-m-d H:i:s');
+$expiration_datetime = $row7["EXPIRATION_TIME"];
+
+    $diff=strtotime($expiration_datetime)-strtotime($now);
+    if($diff>0) {
+
+// immediately convert to days
+        $temp = $diff / 86400; // 60 sec/min*60 min/hr*24 hr/day=86400 sec/day
+
+// days
+        $days = floor($temp);
+        $temp = 24 * ($temp - $days);
+// hours
+        $hours = floor($temp);
+        $temp = 60 * ($temp - $hours);
+// minutes
+        $minutes = floor($temp);
+        $temp = 60 * ($temp - $minutes);
+// seconds
+        $seconds = floor($temp);
+
+        if ($days > 0) {
+            $timeremaining = "{$days} days {$hours} hours";
+        } elseif (hours > 0) {
+            $timeremaining = "{$hours} hours {$minutes}";
+        } elseif (minutes > 0) {
+            $timeremaining = "{$minutes} minutes {$seconds} seconds";
+        } elseif (seconds > 0) {
+            $timeremaining = "{$seconds} seconds";
+        }
+    }
+    else {$timeremaining = "Auction Complete";}
+
+
 ?>
 
 
                     <tr>
                         <td><?php echo $row7["TITLE"]?></td>
                         <td><?php echo $row7["DESCRIPTION"]?></td>
-                        <td><?php echo $row7["EXPIRATION_TIME"]?></td>
+                        <td><?php echo $timeremaining?></td>
                         <td><?php echo $most_recent_bid?></td>
                         <td><?php echo $total_views?></td>
                         <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
@@ -546,24 +576,13 @@ $most_recent_bid = $row9['PRICE'];
 
                 </table>
 
-                <div class="clearfix"></div>
-                <ul class="pagination pull-right">
-                    <li class="disabled"><a href="#"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
-                    <li class="active"><a href="#">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">4</a></li>
-                    <li><a href="#">5</a></li>
-                    <li><a href="#"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
-                </ul>
-
             </div>
 
         </div>
     </div>
 </div>
 
-
+<!-- This section is the delete auction confirmation - but this isn't in the required features -->
 
 <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
     <div class="modal-dialog">
@@ -574,7 +593,7 @@ $most_recent_bid = $row9['PRICE'];
             </div>
             <div class="modal-body">
 
-                <div class="alert alert-danger"><span class="glyphicon glyphicon-warning-sign"></span> Are you sure you want to delete this bid?</div>
+                <div class="alert alert-danger"><span class="glyphicon glyphicon-warning-sign"></span> Are you sure you want to cancel this auction?</div>
 
             </div>
             <div class="modal-footer ">
@@ -592,9 +611,4 @@ $most_recent_bid = $row9['PRICE'];
 
 </html>
 
-
-<?php
-
-// } else { echo Error
-?>
 
