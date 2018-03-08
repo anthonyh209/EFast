@@ -419,19 +419,24 @@ $dispatchfeescore = round($dispatchfeescore,1);
             <div class="review-block">
         <?php
         while($row = $rs_result->fetch_assoc()) {
+            $review_timestamp = $row["TIME_STAMP"];
+            $review_timestamp = date("j F Y", strtotime($review_timestamp));
             ?>
             <hr/>
             <div class="row">
                 <div class="col-sm-3">
-                    <div class="review-block-name"><a><?php echo $row["FNAME"]; echo $row["LNAME"]?></a></div>
-                    <div class="review-block-date"><?php echo $row["TIME_STAMP"]?><br/>1 day ago</div>
+                    <div class="review-block-name"><a><?php echo $row['FNAME']; echo " "; echo $row["LNAME"]?></a></div>
+                    <div class="review-block-date"><?php echo $review_timestamp?></div>
                 </div>
-                <div class="col-sm-9">
+                <div class="col-sm-6">
                     <div class="review-block-title"><b><?php echo $row["COMMENT_HEADLINE"]?></b></div>
                     <div class="review-block-description"> <?php echo $row["COMMENT"]?></div>
-                    <div class="review-criteria"><a> Authenticity: <?php echo $row["AUTHENTICITY"]?>/5 Responsiveness:
-                            <?php echo $row["RESPONSIVENESS"]?>/5 Dispatch Time: <?php echo $row["DISPATCH_TIME"]?>/5
-                            Dispatch Fees: <?php echo $row["DISPATCH_FEE"]?>/5</a> </div>
+                </div>
+                <div class=""col-sm-3">
+                <div class="review-criteria1"><a> Authenticity: <?php echo $row["AUTHENTICITY"]?>/5</a></div>
+                <div class="review-criteria2"><a>Responsiveness: <?php echo $row["RESPONSIVENESS"]?>/5</a></div>
+                <div class="review-criteria3"><a>Dispatch Time: <?php echo $row["DISPATCH_TIME"]?>/5</a></div>
+                <div class="review-criteria4"><a>Dispatch Fees: <?php echo $row["DISPATCH_FEE"]?>/5</a></div>
                 </div>
             </div>
             <?php
