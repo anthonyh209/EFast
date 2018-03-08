@@ -24,15 +24,6 @@
     <script src="js/bootstrap.bundle.js"></script>
 
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-    <script type="text/javascript">
-        function getStates(value){
-            $.post("mypage.php", {partialState:value}, function(data){
-                $("#results").html(data);
-            });
-        }
-    </script>
-
 
 </head>
 
@@ -55,7 +46,10 @@
 
                     <form action="b-item-search.php" method="post" class="form-inline my-2 my-lg-0">
 <!--                        <input class="form-control mr-sm-2" type="search" name="search" id="search" placeholder="Search" aria-label="Search">-->
-                        <input type="text" placeholder="Search" id="search" name="search" onkeyup="getStates(this.value)">
+                        <div class="search-box">
+                            <input type="text" autocomplete="off" placeholder="Search" id="search" name="search" />
+                            <div class="result"></div>
+                        </div>
                         <ul class="navbar-nav mr-auto">
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
@@ -95,8 +89,118 @@
 </nav>
 
 
+<style type="text/css">
+    /* Formatting search box */
+    .search-box{
+        width: 300px;
+        position: relative;
+        display: inline-block;
+        font-size: 14px;
+    }
+    .search-box input[type="text"]{
+        height: 32px;
+        padding: 5px 10px;
+        border: 1px solid #CCCCCC;
+        font-size: 14px;
+    }
+    .result{
+        background-color: white;
+        position: absolute;
+        z-index: 999;
+        top: 100%;
+        left: 0;
+    }
+    .search-box input[type="text"], .result{
+        width: 100%;
+        box-sizing: border-box;
+    }
+    /* Formatting result items */
+    .result p{
+        margin: 0;
+        padding: 7px 10px;
+        border: 1px solid #20b5dd;
+        border-top: none;
+        cursor: pointer;
+    }
+    .result p:hover{
+        background: #f2f2f2;
+    }
+</style>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.search-box input[type="text"]').on("keyup input", function(){
+            /* Get input value on change */
+            var inputVal = $(this).val();
+            var resultDropdown = $(this).siblings(".result");
+            if(inputVal.length){
+                $.get("backend-search.php", {term: inputVal}).done(function(data){
+                    // Display the returned data in browser
+                    resultDropdown.html(data);
+                });
+            } else{
+                resultDropdown.empty();
+            }
+        });
 
-<div id="results"></div>
+        // Set search input value on click of result item
+        $(document).on("click", ".result p", function(){
+            $(this).parents(".search-box").find('input[type="text"]').val($(this).text());
+            $(this).parent(".result").empty();
+        });
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--for the horizontal bar when the catagories need to be implemented -> has to be another row-->
+<!--<div class="row">-->
+<!---->
+<!--    <div class="collapse navbar-collapse" id="myNavbar">-->
+<!---->
+<!--        <div class="scrollmenu">-->
+<!---->
+<!--            <a href="#home">Home</a>-->
+<!--            <a href="#news">News</a>-->
+<!--            <a href="#contact">Contact</a>-->
+<!--            <a href="#about">About</a>-->
+<!--            <a href="#support">Support</a>-->
+<!--            <a href="#blog">Blog</a>-->
+<!--            <a href="#tools">Tools</a>-->
+<!--            <a href="#base">Base</a>-->
+<!--            <a href="#custom">Custom</a>-->
+<!--            <a href="#more">More</a>-->
+<!--            <a href="#logo">Logo</a>-->
+<!--            <a href="#friends">Friends</a>-->
+<!--            <a href="#partners">Partners</a>-->
+<!--            <a href="#people">People</a>-->
+<!--            <a href="#work">Work</a>-->
+<!---->
+<!--        </div>-->
+<!---->
+<!--    </div>-->
+<!---->
+<!--</div>-->
+
+
 
 
 
@@ -117,19 +221,19 @@
     </ol>
     <div class="carousel-inner">
         <div class="carousel-item active">
-            <img class="d-block w-100" src="img/healthandbeauty.jpg" alt="First slide">
+            <img class="d-block w-100" src="img/healthandbeauty.jpg" alt="First slide" height="600">
             <div class="carousel-caption d-none d-md-block">
                 <h5>HEALTH AND BEAUTY</h5>
             </div>
         </div>
         <div class="carousel-item">
-            <img class="d-block w-100" src="img/homeandgarden.jpg" alt="Second slide">
+            <img class="d-block w-100" src="img/homeandgarden.jpg" alt="Second slide" height="600">
             <div class="carousel-caption d-none d-md-block">
                 <h5>HOME AND GARDEN</h5>
             </div>
         </div>
         <div class="carousel-item">
-            <img class="d-block w-100" src="img/outdoor.jpg" alt="Third slide">
+            <img class="d-block w-100" src="img/outdoor.jpg" alt="Third slide" height="600">
             <div class="carousel-caption d-none d-md-block">
                 <h5>SPORTS AND OUTDOOR</h5>
             </div>

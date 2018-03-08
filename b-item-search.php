@@ -10,12 +10,15 @@ session_start()
 <head>
     <meta charset="UTF-8">
     <title>Item Search</title>
+<!--    <link href="css/bootstrap.min.css" rel="stylesheet">-->
+<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
+<!--    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+<!--    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>-->
+<!--    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>-->
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.bundle.js"></script>
 </head>
 
 <!--Buyers can search the system for particular kinds of item being auctioned and can browse and
@@ -24,6 +27,9 @@ This is the buyers search items page -> leads to the auction of a particular ite
 There will be a link to the item's auction is chosen from a list (Bid for items page-->
 
 <body>
+
+
+
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
 
@@ -36,7 +42,38 @@ There will be a link to the item's auction is chosen from a list (Bid for items 
         <span class="navbar-toggler-icon"></span>
     </button>
 
+    <div class="col-md-auto">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
+            <form action="b-item-search.php" method="post" class="form-inline my-2 my-lg-0">
+                <!--                        <input class="form-control mr-sm-2" type="search" name="search" id="search" placeholder="Search" aria-label="Search">-->
+                <input type="text" placeholder="Search" id="search" name="search" onkeyup="getStates(this.value)">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                           aria-expanded="false">
+                            Search by Category
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="www.google.com">BOOKS</a>
+                            <a class="dropdown-item" href="#">MOVIES</a>
+                            <a class="dropdown-item" href="#">ELECTRONICS</a>
+                            <a class="dropdown-item" href="#">HOME</a>
+                            <a class="dropdown-item" href="#">CHILDREN</a>
+                            <a class="dropdown-item" href="#">SPORTS</a>
+                            <a class="dropdown-item" href="#">FOOD</a>
+                            <a class="dropdown-item" href="#">BEAUTY</a>
+                            <a class="dropdown-item" href="#">VEHICLE</a>
+                        </div>
+                    </li>
+                </ul>
+                <input class="btn btn-outline-success my-2 my-sm-0" type='submit' id="submit" name="submit">
+            </form>
+
+
+
+        </div>
+    </div>
 
     <div class="collapse navbar-collapse">
         <ul class="navbar-nav ml-auto">
@@ -48,7 +85,6 @@ There will be a link to the item's auction is chosen from a list (Bid for items 
 
 
 </nav>
-
 
 
 <style>
@@ -71,7 +107,7 @@ There will be a link to the item's auction is chosen from a list (Bid for items 
         }
 
 
-    </style>
+</style>
 
 
 
@@ -87,6 +123,42 @@ There will be a link to the item's auction is chosen from a list (Bid for items 
 
 
                     <table id="mytable" class="table table-bordred table-striped">
+
+
+
+
+
+                        <?php include 'config.php'; ?>
+                        <?php
+
+                        if(isset($_POST["submit"])) {
+
+
+
+                            $itemToSearch = $_POST['search'];
+
+                            if ($itemToSearch == null){
+
+                                ?>
+
+
+                                <div class="container-fluid" >
+                                    <div class="jumbotron">
+                                        <h1 align="center">Search returned no result</h1>
+                                    </div>
+                                    <p>Please try again...</p>
+
+
+                                </div>
+
+                                <?php
+                                exit($status);
+
+                            }
+
+                            ?>
+
+
 
                         <thead>
 
@@ -109,12 +181,10 @@ There will be a link to the item's auction is chosen from a list (Bid for items 
                         <tbody>
 
 
-                        <?php include 'config.php'; ?>
-                        <?php
 
-                        if(isset($_POST["submit"])) {
 
-                            $itemToSearch = $_POST['search'];
+                            <?php
+
 
                             $Query = 'SELECT * FROM item WHERE TITLE LIKE "%'.$itemToSearch.'%" ';
 
@@ -142,6 +212,20 @@ There will be a link to the item's auction is chosen from a list (Bid for items 
                                     $idauction = $row['ID_AUCTION'];
                                     $startprice = $row['START_PRICE'];
 
+                                    $Query3 = "SELECT MAX(PRICE) AS max_price FROM bid WHERE ID_AUCTION = '$idauction' ";
+
+                                    $ExecQuery3 = MySQLi_query($conn, $Query3);
+
+
+                                    while ($row = mysqli_fetch_array($ExecQuery3)) {
+
+                                        $currentBid = $row['max_price'];
+
+
+
+
+
+
                                 ?>
 
                                 <tr>
@@ -161,43 +245,18 @@ There will be a link to the item's auction is chosen from a list (Bid for items 
 
                                     <td> <?php echo $exptime; ?> </td>
                                     <td> <?php echo $startprice; ?> </td>
+                                     <td><?php if (isset($currentBid)){
+                                                    echo $currentBid;
+                                                    } else{
+                                         echo "No bid made yet";
+                                         }
 
 
-
-                                        <?php
-
-
-                                            $Query3 = "SELECT MAX(PRICE) AS max_price FROM bid WHERE ID_AUCTION = '$idauction' ";
-
-                                             $ExecQuery3 = MySQLi_query($conn, $Query3);
-
-                                             if (mysqli_num_rows($ExecQuery3)== 0) {
-                                                 $currentBid = 'No bid made';
-                                                 ?>
-
-                                                 <td> <?php echo $currentBid; ?> </td>
-
-                                                 <?php
-
-                                                 } else {
-
-                                                 while ($row = mysqli_fetch_array($ExecQuery3)) {
-
-                                                     $currentBid = $row['max_price'];
-
-                                                     ?>
-
-                                                     <td><?php echo $currentBid; ?></td>
-
-                                                     <?php
-
-                                                 }
-                                             }
-
-                                        ?>
+                                     ?>
 
 
-                                    <td> <input type="submit" id="submit2 "> </td>
+                                     </td>
+                                    <td> <input type="submit" id="submit2" "> </td>
                                     </form>
                                 </tr>
 
@@ -205,9 +264,17 @@ There will be a link to the item's auction is chosen from a list (Bid for items 
                             <?php
 
 
-                                    }}
+                                    }}}
+
+                        ?>
 
 
+                        </tbody>
+
+
+
+
+                    <?php
 
 
                         } //main submit
@@ -215,18 +282,39 @@ There will be a link to the item's auction is chosen from a list (Bid for items 
                         ?>
 
 
-
-
-
-                        </tbody>
-
                     </table>
+
+
+
 
             </div>
         </div>
     </div>
 </div>
 
+
+<style>
+    .jumbotron{
+        background-color: transparent;
+    }
+
+</style>
+
+
+
+<?php
+
+if(isset($_POST["submit2"])){
+
+    echo "<script> location.href='logout.php'; </script>";
+
+
+
+
+}
+
+
+?>
 
 
 
