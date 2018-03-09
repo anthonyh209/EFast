@@ -171,8 +171,8 @@ The system should confirm to both the winner and seller of an auction its outcom
     }
 
     function load_auction_details(){
-        var id_auction = "AU_000041"; //should have global scope & should be populated on load of page - HARDCODED for now
-        var id_user = "ID_000485"; //dummy placeholders
+        //var id_auction = "AU_000041"; //should have global scope & should be populated on load of page - HARDCODED for now
+        //var id_user = "ID_000485"; //dummy placeholders
         var xhttp;
         xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
@@ -200,14 +200,15 @@ The system should confirm to both the winner and seller of an auction its outcom
 
             }
         };
-        xhttp.open("GET", "load-bid-page.php?id_auction="+id_auction+"&id_user="+id_user, true);
+        //xhttp.open("GET", "load-bid-page.php?id_auction="+id_auction+"&id_user="+id_user, true);
+        xhttp.open("GET", "load-bid-page.php", true);
         xhttp.send();
 
     }
 
 
     function check_bid_history(){ // it loads a global variable counter for keeping track of how many bids have been made and refreshes the bid history on initial load of page
-        var id_auction = "AU_000041"; //should have global scope & should be populated on load of page - HARDCODED for now
+        //var id_auction = "AU_000041"; //should have global scope & should be populated on load of page - HARDCODED for now
         var xhttp;
         xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
@@ -221,7 +222,8 @@ The system should confirm to both the winner and seller of an auction its outcom
                 refreshBidHistory();
             }
         };
-        xhttp.open("GET", "get-auction-counter.php?id_auction="+id_auction, true);
+        //xhttp.open("GET", "get-auction-counter.php?id_auction="+id_auction, true);
+        xhttp.open("GET", "get-auction-counter.php", true);
         xhttp.send();
 
         setInterval(function(){     //tells the page to call get-auction-counter.php every 3 seconds
@@ -242,15 +244,16 @@ The system should confirm to both the winner and seller of an auction its outcom
 
                 }
             };
-            xhttp.open("GET", "get-auction-counter.php?id_auction="+id_auction, true);
+            //xhttp.open("GET", "get-auction-counter.php?id_auction="+id_auction, true);
+            xhttp.open("GET", "get-auction-counter.php", true);
             xhttp.send();
             }, 3000);
     }
 
     function sendBid(){
         //load session variables for DOM hidden input elements to send via PHP for bidding
-        var id_auction = "AU_000041"; //dummy placeholders
-        var id_user = "ID_000052"; //dummy placeholders
+        //var id_auction = "AU_000041"; //dummy placeholders
+        //var id_user = "ID_000052"; //dummy placeholders
 
         //TAKEN FROM GITHUB -- TO ACKNOWLEDGE THIS WAS TAKEN FROM (https://gist.github.com/ophentis/3943464)
         //for converting JS Date object into MySQL datetime format
@@ -285,13 +288,14 @@ The system should confirm to both the winner and seller of an auction its outcom
                 refreshBidHistory();
             }
         };
-        var parameters = "id_auction="+id_auction+"&id_user="+id_user+"&time="+present_timestamp+"&price="+bid_price;
+        //var parameters = "id_auction="+id_auction+"&id_user="+id_user+"&time="+present_timestamp+"&price="+bid_price;
+        var parameters = "time="+present_timestamp+"&price="+bid_price;
         xhttp.open("POST", "send-bid.php/?"+parameters, true);
         xhttp.send();
     }
 
     function refreshBidHistory(){
-        var id_auction = "AU_000041"; //should have global scope & should be populated on load of page - HARDCODED for now
+        //var id_auction = "AU_000041"; //should have global scope & should be populated on load of page - HARDCODED for now
         var xhttp;
         xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
@@ -316,7 +320,8 @@ The system should confirm to both the winner and seller of an auction its outcom
                 }
             }
         };
-        xhttp.open("GET", "retrieve-bid-history.php?id_auction="+id_auction, true);
+        //xhttp.open("GET", "retrieve-bid-history.php?id_auction="+id_auction, true);
+        xhttp.open("GET", "retrieve-bid-history.php", true);
         xhttp.send();
 
     }

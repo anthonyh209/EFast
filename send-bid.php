@@ -11,16 +11,20 @@
 header('Access-Control-Allow-Origin:*');
 
 //picking up parameters from post
-$id_auction="";
-if (isset($_REQUEST['id_auction'])) {
-    $id_auction=$_REQUEST["id_auction"];
-} else {
-    echo("NOT SETTING!!!!");
-}
-$id_buyer="";
-if (isset($_REQUEST['id_user'])) {
-    $id_buyer=$_REQUEST["id_user"];
-}
+//$id_auction="";
+//if (isset($_REQUEST['id_auction'])) {
+//    $id_auction=$_REQUEST["id_auction"];
+//} else {
+//    echo("NOT SETTING!!!!");
+//}
+//$id_buyer="";
+//if (isset($_REQUEST['id_user'])) {
+//    $id_buyer=$_REQUEST["id_user"];
+//}
+session_start();
+$id_buyer = $_SESSION['userID'];
+$id_auction = $_SESSION['auctionID'];
+
 $datetime="";
 if (isset($_REQUEST['time'])) {
     $datetime=$_REQUEST["time"];
@@ -92,6 +96,16 @@ if ($expired_flag == 1){
         try{
             $stmt = $pdo->query('UPDATE auction SET COUNTER = COUNTER + 1 WHERE ID_AUCTION = \'' .$id_auction. '\'');
 
+
+        }
+        catch(PDOException $e)
+        {
+            echo $e -> getMessage();
+        }
+
+        //Attempt to insert watchlist table
+        try{
+            $stmt = $pdo->query('INSERT INTO watchlist (ID_AUCTION, ID_USER) VALUES ( \'' . $id_auction . '\' , \'' . $id_buyer . '\')');
 
         }
         catch(PDOException $e)

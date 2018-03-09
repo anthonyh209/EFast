@@ -71,7 +71,6 @@ $old_error_handler = set_error_handler("ErrorHandler");
 
 <?php
 $userID = $_SESSION['userID'];
-$email = $_SESSION['username'];
 $first_name = $_SESSION['first_name'];
 $last_name = $_SESSION['last_name'];
 $role = $_SESSION['role'];
@@ -198,7 +197,7 @@ $dispatchfeescore = round($dispatchfeescore,1);
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-offset-5">
-                                    <button class="btn btn-primary" ng-click="updateMe()">Update</button>
+                                    <button class="btn btn-primary" href="update-profile-info.php?userID=<?php echo $userID;?>"> Update </button>
                                 </div>
                             </div>
                         </form>
@@ -208,7 +207,6 @@ $dispatchfeescore = round($dispatchfeescore,1);
             </div> <!-- end panel-body -->
 
         </div> <!-- end panel -->
-
 
         <!-- Ratings section-->
 
@@ -446,7 +444,7 @@ $dispatchfeescore = round($dispatchfeescore,1);
                 <ul class="pagination pull-right">
                     <li class="disabled"><a href="s-myprofile.php?page=1"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
 <?php
-    $sql = "SELECT COUNT(*) AS total FROM rating WHERE TYPE = 0";
+$sql = "SELECT COUNT(*) AS total FROM rating r INNER JOIN user u ON r.ID_REVIEWEE = u.ID_USER WHERE u.ID_ROLE = 'ROLE_02'";
     $result6 = $conn->query($sql);
     $row = $result6->fetch_assoc();
     $total_pages = ceil($row["total"] / $results_per_page);
@@ -580,19 +578,13 @@ $dispatchfeescore = round($dispatchfeescore,1);
 
     <div class="container">
         <div class="row">
-
-
             <div class="col-md-12">
                 <h2>Auction History</h2>
                 <hr/>
                 <div class="table-responsive">
-
-
                     <table id="mytable" class="table table-bordred table-striped">
 
                         <thead>
-
-
                         <th>Item Name</th>
                         <th>Item Description</th>
                         <th>Time Remaining</th>
@@ -619,7 +611,9 @@ $total_views = $row8['total'];
 $sql9 = "SELECT PRICE FROM bid WHERE ID_AUCTION= '$currentauction' ORDER BY TIME LIMIT 1";
 $result9 = $conn->query($sql9);
 $row9 = $result9->fetch_assoc();
-$most_recent_bid = $row9['PRICE'];
+if(!$row9) {$most_recent_bid = "No bids";}
+else{
+$most_recent_bid = $row9['PRICE'];}
 $now = date('Y-m-d H:i:s');
 $expiration_datetime = $row7["EXPIRATION_TIME"];
 
@@ -643,11 +637,11 @@ $expiration_datetime = $row7["EXPIRATION_TIME"];
 
         if ($days > 0) {
             $timeremaining = "{$days} days {$hours} hours";
-        } elseif (hours > 0) {
-            $timeremaining = "{$hours} hours {$minutes}";
-        } elseif (minutes > 0) {
+        } elseif ($hours > 0) {
+            $timeremaining = "{$hours} hours {$minutes} minutes";
+        } elseif ($minutes > 0) {
             $timeremaining = "{$minutes} minutes {$seconds} seconds";
-        } elseif (seconds > 0) {
+        } elseif ($seconds > 0) {
             $timeremaining = "{$seconds} seconds";
         }
     }

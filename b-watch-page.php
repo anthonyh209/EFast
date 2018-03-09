@@ -174,11 +174,11 @@ if(!$result){$title = "";
 
             if ($days > 0) {
                 $timeremaining = "{$days} days {$hours} hours";
-            } elseif (hours > 0) {
-                $timeremaining = "{$hours} hours {$minutes}";
-            } elseif (minutes > 0) {
+            } elseif ($hours > 0) {
+                $timeremaining = "{$hours} hours {$minutes} minutes";
+            } elseif ($minutes > 0) {
                 $timeremaining = "{$minutes} minutes {$seconds} seconds";
-            } elseif (seconds > 0) {
+            } elseif ($seconds > 0) {
                 $timeremaining = "{$seconds} seconds";
             }
         }
@@ -194,7 +194,7 @@ if(!$result){$title = "";
                         <td><?php echo $highestbid?></td>
                         <td><?php echo $timeremaining?> </td>
                         <td> <?php echo $fname; echo " "; echo $lname?> </td>
-                        <td> <a class="btn" href="deletewatched.php?ID=<?php echo $ID;?>"</a><button class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash"></span></button></td>
+                        <td> <a class="btn" href="deletewatched.php?ID=<?php echo $ID;?>"<button class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash"></span></button></td>
                     </tr>
 
 <?php }} ?>

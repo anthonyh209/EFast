@@ -12,10 +12,6 @@ header('Access-Control-Allow-Origin:*');
 
 session_start();
 $id_user = $_SESSION['userID'];
-$email = $_SESSION['username'];
-$first_name = $_SESSION['first_name'];
-$last_name = $_SESSION['last_name'];
-$role = $_SESSION['role'];
 $id_auction=$_REQUEST["auctionID"];
 
 //picking up parameters from post

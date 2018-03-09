@@ -6,6 +6,8 @@
  * Time: 15:35
  */
 
+session_start();
+
 $conn = mysqli_connect("efastdbs.mysql.database.azure.com", "efast@efastdbs", "Gv3-LST-nZU-JyP", "efast_main");
 
 // Check connection
@@ -46,10 +48,10 @@ if (isset($_POST['submit'])) {
 
             date_default_timezone_set('Europe/London');
             $startdate = new DateTime();
+            $start = $startdate->format("Y-m-d H:i:s");
             $enddate = $startdate;
             $enddate->add(new DateInterval('PT' . $duration . 'M'));
             //$startdate-> format("Y-m-d H:i:s");
-            $start = $startdate->format("Y-m-d H:i:s");
             $end = $enddate->format("Y-m-d H:i:s");
             //echo $startdate-> format("Y-m-d H:i:s");
             //$currentdate->modify("+{$duration} minutes");
@@ -74,7 +76,7 @@ if (isset($_POST['submit'])) {
             $ExecQuery2 = MySQLi_query($conn, $Item_Query);
             while ($row = mysqli_fetch_array($ExecQuery2)) {
                 $item_number = $row['ID_ITEM'];
-                $id2 = s2; //later change with the user session id
+                $id2 = $_SESSION['userID']; //later change with the user session id
                 $auctionSQL = 'INSERT INTO auction (id_auction, id_seller, id_item, start_price, start_timestamp, expiration_time, expired, counter) VALUES (NULL, ?, ?, ?, ?, ?, ?,?)';
                 $auctionSTMT = $conn->prepare($auctionSQL);
                 $auctionSTMT->bind_param("ssdssii", $id2, $item_number, $price, $start, $end, $expiredValue, $counterDefault);
