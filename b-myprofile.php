@@ -71,7 +71,6 @@ $old_error_handler = set_error_handler("ErrorHandler");
 
 <?php
 $userID = $_SESSION['userID'];
-$email = $_SESSION['username'];
 $first_name = $_SESSION['first_name'];
 $last_name = $_SESSION['last_name'];
 $role = $_SESSION['role'];
@@ -296,7 +295,7 @@ $averagerating = round($averagerating,1);
             <ul class="pagination pull-right">
                 <li class="disabled"><a href="b-myprofile.php?page=1"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
                 <?php
-                $sql = "SELECT COUNT(*) AS total FROM rating WHERE TYPE = 1";
+                $sql = "SELECT COUNT(*) AS total FROM rating r INNER JOIN user u ON r.ID_REVIEWEE = u.ID_USER WHERE u.ID_ROLE = 'ROLE_01'";
                 $result6 = $conn->query($sql);
                 $row = $result6->fetch_assoc();
                 $total_pages = ceil($row["total"] / $results_per_page);

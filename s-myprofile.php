@@ -71,7 +71,6 @@ $old_error_handler = set_error_handler("ErrorHandler");
 
 <?php
 $userID = $_SESSION['userID'];
-$email = $_SESSION['username'];
 $first_name = $_SESSION['first_name'];
 $last_name = $_SESSION['last_name'];
 $role = $_SESSION['role'];
@@ -446,7 +445,7 @@ $dispatchfeescore = round($dispatchfeescore,1);
                 <ul class="pagination pull-right">
                     <li class="disabled"><a href="s-myprofile.php?page=1"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
 <?php
-    $sql = "SELECT COUNT(*) AS total FROM rating WHERE TYPE = 0";
+$sql = "SELECT COUNT(*) AS total FROM rating r INNER JOIN user u ON r.ID_REVIEWEE = u.ID_USER WHERE u.ID_ROLE = 'ROLE_02'";
     $result6 = $conn->query($sql);
     $row = $result6->fetch_assoc();
     $total_pages = ceil($row["total"] / $results_per_page);
@@ -580,19 +579,13 @@ $dispatchfeescore = round($dispatchfeescore,1);
 
     <div class="container">
         <div class="row">
-
-
             <div class="col-md-12">
                 <h2>Auction History</h2>
                 <hr/>
                 <div class="table-responsive">
-
-
                     <table id="mytable" class="table table-bordred table-striped">
 
                         <thead>
-
-
                         <th>Item Name</th>
                         <th>Item Description</th>
                         <th>Time Remaining</th>
