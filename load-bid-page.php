@@ -12,7 +12,7 @@ header('Access-Control-Allow-Origin:*');
 
 session_start();
 $id_user = $_SESSION['userID'];
-$id_auction=$_REQUEST["auctionID"];
+$id_auction=$_SESSION["auctionID"];
 
 //picking up parameters from post
 //$id_auction=$_REQUEST["id_auction"];
