@@ -19,6 +19,7 @@ if (isset($_POST['submit'])) {
     $score = $_POST['rating-score'];
     $textdesc = $_POST['rating-comment'];
     $title = $_POST['rating-title'];
+    date_default_timezone_set('Europe/London');
     $startdate = new DateTime();
     $start = $startdate->format("Y-m-d H:i:s");
 
