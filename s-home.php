@@ -33,7 +33,7 @@ session_start();
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
 
-    <a class="navbar-brand" href="s-home.html">
+    <a class="navbar-brand" href="s-home.php">
         <img width="100" src="efast.png">
     </a>
 
