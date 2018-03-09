@@ -11,7 +11,9 @@
 header('Access-Control-Allow-Origin:*');
 
 //picking up parameters from post
-$id_auction=$_REQUEST["id_auction"];
+//$id_auction=$_REQUEST["id_auction"];
+session_start();
+$id_auction=$_REQUEST["auctionID"];
 
 $data = "";
 

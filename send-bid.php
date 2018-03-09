@@ -11,16 +11,20 @@
 header('Access-Control-Allow-Origin:*');
 
 //picking up parameters from post
-$id_auction="";
-if (isset($_REQUEST['id_auction'])) {
-    $id_auction=$_REQUEST["id_auction"];
-} else {
-    echo("NOT SETTING!!!!");
-}
-$id_buyer="";
-if (isset($_REQUEST['id_user'])) {
-    $id_buyer=$_REQUEST["id_user"];
-}
+//$id_auction="";
+//if (isset($_REQUEST['id_auction'])) {
+//    $id_auction=$_REQUEST["id_auction"];
+//} else {
+//    echo("NOT SETTING!!!!");
+//}
+//$id_buyer="";
+//if (isset($_REQUEST['id_user'])) {
+//    $id_buyer=$_REQUEST["id_user"];
+//}
+session_start();
+$id_buyer = $_SESSION['userID'];
+$id_auction = $_SESSION['auctionID'];
+
 $datetime="";
 if (isset($_REQUEST['time'])) {
     $datetime=$_REQUEST["time"];
