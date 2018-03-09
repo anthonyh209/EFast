@@ -138,7 +138,12 @@ $dispatchfeescore = round($dispatchfeescore,1);
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .checked {
+            color: orange;
+        }
+    </style>
 </head>
 
 <!--This is the seller's MyProfile page. It should include:
@@ -192,23 +197,18 @@ $dispatchfeescore = round($dispatchfeescore,1);
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">Password</label>
-                                <div class="col-sm-9">
-                                    <input class="form-control" type="text" name="password"
-                                           placeholder="Password" ng-model="me.email">
-                                </div>
-                            </div>
-                            <div class="form-group">
                                 <div class="col-sm-offset-5">
                                     <button class="btn btn-primary" ng-click="updateMe()">Update</button>
                                 </div>
                             </div>
                         </form>
+
                     </div>
                 </div>  <!-- end form-horizontal -->
             </div> <!-- end panel-body -->
 
         </div> <!-- end panel -->
+
 
         <!-- Ratings section-->
 
@@ -217,7 +217,7 @@ $dispatchfeescore = round($dispatchfeescore,1);
 
                 <h4>Authenticity</h4>
                 <h2 class="bold padding-bottom-7"> <?php echo $authenticityscore ?> <small>/ 5</small></h2>
-                <?php if($authenticityscore >= 0.8){ ?>
+                <?php if($authenticityscore >= 0.5){ ?>
                     <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                     </button>
@@ -225,7 +225,7 @@ $dispatchfeescore = round($dispatchfeescore,1);
                 else { ?> <button type="button" class="btn btn-default btn-grey btn-sm" aria-label="Left Align">
                     <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                 </button> <?php } ?>
-                <?php if($authenticityscore >= 1.8){ ?>
+                <?php if($authenticityscore >= 1.5){ ?>
                     <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                     </button>
@@ -233,7 +233,7 @@ $dispatchfeescore = round($dispatchfeescore,1);
                 else { ?> <button type="button" class="btn btn-default btn-grey btn-sm" aria-label="Left Align">
                     <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                 </button> <?php } ?>
-                <?php if($authenticityscore >= 2.8){ ?>
+                <?php if($authenticityscore >= 2.5){ ?>
                     <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                     </button>
@@ -241,7 +241,7 @@ $dispatchfeescore = round($dispatchfeescore,1);
                 else { ?> <button type="button" class="btn btn-default btn-grey btn-sm" aria-label="Left Align">
                     <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                 </button> <?php } ?>
-                <?php if($authenticityscore >= 3.8){ ?>
+                <?php if($authenticityscore >= 3.5){ ?>
                     <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                     </button>
@@ -249,7 +249,7 @@ $dispatchfeescore = round($dispatchfeescore,1);
                 else { ?> <button type="button" class="btn btn-default btn-grey btn-sm" aria-label="Left Align">
                     <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                 </button> <?php } ?>
-                <?php if($authenticityscore >= 4.8){ ?>
+                <?php if($authenticityscore >= 4.5){ ?>
                     <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                     </button>
@@ -262,7 +262,7 @@ $dispatchfeescore = round($dispatchfeescore,1);
 
                 <h4><br>Responsiveness</h4>
                 <h2 class="bold padding-bottom-7"> <?php echo $responsivenessscore ?> <small>/ 5</small></h2>
-                <?php if($responsivenessscore >= 0.8){ ?>
+                <?php if($responsivenessscore >= 0.5){ ?>
                     <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                     </button>
@@ -270,7 +270,7 @@ $dispatchfeescore = round($dispatchfeescore,1);
                 else { ?> <button type="button" class="btn btn-default btn-grey btn-sm" aria-label="Left Align">
                     <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                 </button> <?php } ?>
-                <?php if($responsivenessscore >= 1.8){ ?>
+                <?php if($responsivenessscore >= 1.5){ ?>
                     <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                     </button>
@@ -278,7 +278,7 @@ $dispatchfeescore = round($dispatchfeescore,1);
                 else { ?> <button type="button" class="btn btn-default btn-grey btn-sm" aria-label="Left Align">
                     <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                 </button> <?php } ?>
-                <?php if($responsivenessscore >= 2.8){ ?>
+                <?php if($responsivenessscore >= 2.5){ ?>
                     <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                     </button>
@@ -286,7 +286,7 @@ $dispatchfeescore = round($dispatchfeescore,1);
                 else { ?> <button type="button" class="btn btn-default btn-grey btn-sm" aria-label="Left Align">
                     <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                 </button> <?php } ?>
-                <?php if($responsivenessscore >= 3.8){ ?>
+                <?php if($responsivenessscore >= 3.5){ ?>
                     <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                     </button>
@@ -294,7 +294,7 @@ $dispatchfeescore = round($dispatchfeescore,1);
                 else { ?> <button type="button" class="btn btn-default btn-grey btn-sm" aria-label="Left Align">
                     <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                 </button> <?php } ?>
-                <?php if($responsivenessscore >= 4.8){ ?>
+                <?php if($responsivenessscore >= 4.5){ ?>
                     <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                     </button>
@@ -310,7 +310,7 @@ $dispatchfeescore = round($dispatchfeescore,1);
 
                 <h4>Dispatch Time</h4>
                 <h2 class="bold padding-bottom-7"> <?php echo $dispatchtimescore ?> <small>/ 5</small></h2>
-                <?php if($dispatchtimescore >= 0.8){ ?>
+                <?php if($dispatchtimescore >= 0.5){ ?>
                     <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                     </button>
@@ -318,7 +318,7 @@ $dispatchfeescore = round($dispatchfeescore,1);
                 else { ?> <button type="button" class="btn btn-default btn-grey btn-sm" aria-label="Left Align">
                     <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                 </button> <?php } ?>
-                <?php if($dispatchtimescore >= 1.8){ ?>
+                <?php if($dispatchtimescore >= 1.5){ ?>
                     <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                     </button>
@@ -326,7 +326,7 @@ $dispatchfeescore = round($dispatchfeescore,1);
                 else { ?> <button type="button" class="btn btn-default btn-grey btn-sm" aria-label="Left Align">
                     <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                 </button> <?php } ?>
-                <?php if($dispatchtimescore >= 2.8){ ?>
+                <?php if($dispatchtimescore >= 2.5){ ?>
                     <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                     </button>
@@ -334,7 +334,7 @@ $dispatchfeescore = round($dispatchfeescore,1);
                 else { ?> <button type="button" class="btn btn-default btn-grey btn-sm" aria-label="Left Align">
                     <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                 </button> <?php } ?>
-                <?php if($dispatchtimescore >= 3.8){ ?>
+                <?php if($dispatchtimescore >= 3.5){ ?>
                     <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                     </button>
@@ -342,7 +342,7 @@ $dispatchfeescore = round($dispatchfeescore,1);
                 else { ?> <button type="button" class="btn btn-default btn-grey btn-sm" aria-label="Left Align">
                     <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                 </button> <?php } ?>
-                <?php if($dispatchtimescore >= 4.8){ ?>
+                <?php if($dispatchtimescore >= 4.5){ ?>
                     <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                     </button>
@@ -353,7 +353,7 @@ $dispatchfeescore = round($dispatchfeescore,1);
 
                 <h4><br>Dispatch Fees</h4>
                 <h2 class="bold padding-bottom-7"> <?php echo $dispatchfeescore ?> <small>/ 5</small></h2>
-                <?php if($dispatchfeescore >= 0.8){ ?>
+                <?php if($dispatchfeescore >= 0.5){ ?>
                     <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                     </button>
@@ -361,7 +361,7 @@ $dispatchfeescore = round($dispatchfeescore,1);
                 else { ?> <button type="button" class="btn btn-default btn-grey btn-sm" aria-label="Left Align">
                     <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                 </button> <?php } ?>
-                <?php if($dispatchfeescore >= 1.8){ ?>
+                <?php if($dispatchfeescore >= 1.5){ ?>
                     <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                     </button>
@@ -369,7 +369,7 @@ $dispatchfeescore = round($dispatchfeescore,1);
                 else { ?> <button type="button" class="btn btn-default btn-grey btn-sm" aria-label="Left Align">
                     <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                 </button> <?php } ?>
-                <?php if($dispatchfeescore >= 2.8){ ?>
+                <?php if($dispatchfeescore >= 2.5){ ?>
                     <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                     </button>
@@ -377,7 +377,7 @@ $dispatchfeescore = round($dispatchfeescore,1);
                 else { ?> <button type="button" class="btn btn-default btn-grey btn-sm" aria-label="Left Align">
                     <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                 </button> <?php } ?>
-                <?php if($dispatchfeescore >= 3.8){ ?>
+                <?php if($dispatchfeescore >= 3.5){ ?>
                     <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                     </button>
@@ -385,7 +385,7 @@ $dispatchfeescore = round($dispatchfeescore,1);
                 else { ?> <button type="button" class="btn btn-default btn-grey btn-sm" aria-label="Left Align">
                     <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                 </button> <?php } ?>
-                <?php if($dispatchfeescore >= 4.8){ ?>
+                <?php if($dispatchfeescore >= 4.5){ ?>
                     <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
                         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                     </button>
@@ -446,7 +446,7 @@ $dispatchfeescore = round($dispatchfeescore,1);
                 <ul class="pagination pull-right">
                     <li class="disabled"><a href="s-myprofile.php?page=1"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
 <?php
-    $sql = "SELECT COUNT(*) AS total FROM rating";
+    $sql = "SELECT COUNT(*) AS total FROM rating WHERE TYPE = 0";
     $result6 = $conn->query($sql);
     $row = $result6->fetch_assoc();
     $total_pages = ceil($row["total"] / $results_per_page);
@@ -464,6 +464,100 @@ $dispatchfeescore = round($dispatchfeescore,1);
 
             </div>
         </div>
+
+    <!-- could also use stars for the ratings: see below-->
+
+<?php /* <div class="review-criteria1"><a> Authenticity: &nbsp; <?php
+                        if($row["AUTHENTICITY"] >= 0.5){ ?>
+                            <span class="fa fa-star checked"></span>
+                        <?php }
+                        else { ?> <span class="fa fa-star"></span> <?php } ?>
+                        <?php if($row["AUTHENTICITY"] >= 1.5){ ?>
+                            <span class="fa fa-star checked"></span>
+                        <?php }
+                        else { ?> <span class="fa fa-star"></span> <?php } ?>
+                        <?php if($row["AUTHENTICITY"] >= 2.5){ ?>
+                            <span class="fa fa-star checked"></span>
+                        <?php }
+                        else { ?> <span class="fa fa-star"></span> <?php } ?>
+                        <?php if($row["AUTHENTICITY"] >= 3.5){ ?>
+                            <span class="fa fa-star checked"></span>
+                        <?php }
+                        else { ?> <span class="fa fa-star"></span> <?php } ?>
+                        <?php if($row["AUTHENTICITY"] >= 4.5){ ?>
+                            <span class="fa fa-star checked"></span>
+                        <?php }
+                        else { ?> <span class="fa fa-star"></span> <?php } ?>
+                    </a></div>
+                <div class="review-criteria2"><a>Responsiveness:  <?php
+                        if($row["RESPONSIVENESS"] >= 0.5){ ?>
+                            <span class="fa fa-star checked"></span>
+                        <?php }
+                        else { ?> <span class="fa fa-star"></span> <?php } ?>
+                        <?php if($row["RESPONSIVENESS"] >= 1.5){ ?>
+                            <span class="fa fa-star checked"></span>
+                        <?php }
+                        else { ?> <span class="fa fa-star"></span> <?php } ?>
+                        <?php if($row["RESPONSIVENESS"] >= 2.5){ ?>
+                            <span class="fa fa-star checked"></span>
+                        <?php }
+                        else { ?> <span class="fa fa-star"></span> <?php } ?>
+                        <?php if($row["RESPONSIVENESS"] >= 3.5){ ?>
+                            <span class="fa fa-star checked"></span>
+                        <?php }
+                        else { ?> <span class="fa fa-star"></span> <?php } ?>
+                        <?php if($row["RESPONSIVENESS"] >= 4.5){ ?>
+                            <span class="fa fa-star checked"></span>
+                        <?php }
+                        else { ?> <span class="fa fa-star"></span> <?php } ?></a></div>
+
+                <div class="review-criteria3"><a>Dispatch Time:  <?php
+                        if($row["DISPATCH_TIME"] >= 0.5){ ?>
+                            <span class="fa fa-star checked"></span>
+                        <?php }
+                        else { ?> <span class="fa fa-star"></span> <?php } ?>
+                        <?php if($row["DISPATCH_TIME"] >= 1.5){ ?>
+                            <span class="fa fa-star checked"></span>
+                        <?php }
+                        else { ?> <span class="fa fa-star"></span> <?php } ?>
+                        <?php if($row["DISPATCH_TIME"] >= 2.5){ ?>
+                            <span class="fa fa-star checked"></span>
+                        <?php }
+                        else { ?> <span class="fa fa-star"></span> <?php } ?>
+                        <?php if($row["DISPATCH_TIME"] >= 3.5){ ?>
+                            <span class="fa fa-star checked"></span>
+                        <?php }
+                        else { ?> <span class="fa fa-star"></span> <?php } ?>
+                        <?php if($row["DISPATCH_TIME"] >= 4.5){ ?>
+                            <span class="fa fa-star checked"></span>
+                        <?php }
+                        else { ?> <span class="fa fa-star"></span> <?php } ?></a></div>
+
+                <div class="review-criteria4"><a>Dispatch Fees:  <?php
+                        if($row["DISPATCH_FEE"] >= 0.5){ ?>
+                            <span class="fa fa-star checked"></span>
+                        <?php }
+                        else { ?> <span class="fa fa-star"></span> <?php } ?>
+                        <?php if($row["DISPATCH_FEE"] >= 1.5){ ?>
+                            <span class="fa fa-star checked"></span>
+                        <?php }
+                        else { ?> <span class="fa fa-star"></span> <?php } ?>
+                        <?php if($row["DISPATCH_FEE"] >= 2.5){ ?>
+                            <span class="fa fa-star checked"></span>
+                        <?php }
+                        else { ?> <span class="fa fa-star"></span> <?php } ?>
+                        <?php if($row["DISPATCH_FEE"] >= 3.5){ ?>
+                            <span class="fa fa-star checked"></span>
+                        <?php }
+                        else { ?> <span class="fa fa-star"></span> <?php } ?>
+                        <?php if($row["DISPATCH_FEE"] >= 4.5){ ?>
+                            <span class="fa fa-star checked"></span>
+                        <?php }
+                        else { ?> <span class="fa fa-star"></span> <?php } ?></a></div>
+                </div>
+ */ ?>
+
+
 <!-- Example numbered list:
 
         <div class="clearfix"></div>
@@ -490,6 +584,7 @@ $dispatchfeescore = round($dispatchfeescore,1);
 
             <div class="col-md-12">
                 <h2>Auction History</h2>
+                <hr/>
                 <div class="table-responsive">
 
 
@@ -532,7 +627,7 @@ $expiration_datetime = $row7["EXPIRATION_TIME"];
     if($diff>0) {
 
 // immediately convert to days
-        $temp = $diff / 86400; // 60 sec/min*60 min/hr*24 hr/day=86400 sec/day
+        $temp = $diff / 86400; // 86400 secs in a day
 
 // days
         $days = floor($temp);

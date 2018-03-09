@@ -334,14 +334,170 @@
 
 <!--contain for the RECOMMENDED ITEMS  items -->
 
+
 <div class="container-fluid" >
     <div class="jumbotron">
-        <h1 align="center">Items we reccomend for you, based on your bid history.</h1>
+        <h1 align="center">Items we recommend for you, based on your bid history.</h1>
     </div>
-    <p>GET CODE FROM THE B-TEM-SEARCH PAGE</p>
 
 
 </div>
+
+
+
+
+
+
+<div class="container">
+
+    <div class="row">
+
+
+
+
+        <?php include 'config.php'; ?>
+        <?php
+
+
+        //Columns must be a factor of 12 (1,2,3,4,6,12)
+        $numOfCols = 3;
+        $rowCount = 0;
+        $bootstrapColWidth = 12 / $numOfCols;
+
+
+
+        $userID = "ID_000004";
+
+        $sql = "SELECT DISTINCT ID_AUCTION FROM BID WHERE ID_BUYER IN (SELECT DISTINCT ID_BUYER FROM BID WHERE NOT ID_BUYER = '$userID' AND ID_AUCTION IN (SELECT DISTINCT ID_AUCTION FROM BID WHERE ID_BUYER = '$userID'))";
+
+        $result = MySQLi_query($conn, $sql);
+
+        //number of items
+        //$num_rows = -1;
+
+
+        while ($row = mysqli_fetch_array($result)) {
+
+            $auctionID = $row['ID_AUCTION'];
+            //$num_rows++;
+
+
+            $Query1 = "SELECT * FROM auction WHERE ID_AUCTION = '$auctionID' AND EXPIRED = '0' " ;
+
+            $ExecQuery1 = MySQLi_query($conn, $Query1);
+
+            while ($row = mysqli_fetch_array($ExecQuery1)) {
+
+
+                $exptime = $row['EXPIRATION_TIME'];
+                $startprice = $row['START_PRICE'];
+                $itemID = $row['ID_ITEM'];
+
+                $Query2 = "SELECT * FROM item WHERE ID_ITEM = '$itemID' ";
+
+                $ExecQuery2 = MySQLi_query($conn, $Query2);
+
+                while ($row = mysqli_fetch_array($ExecQuery2)) {
+
+                    $title = $row['TITLE'];
+                    $description = $row['DESCRIPTION'];
+                    $catagoryID = $row['ID_CATEGORY'];
+                    $state = $row['ID_STATE'];
+
+
+                    $Query3 = "SELECT MAX(PRICE) AS max_price FROM bid WHERE ID_AUCTION = '$auctionID' ";
+
+                    $ExecQuery3 = MySQLi_query($conn, $Query3);
+
+                    while ($row = mysqli_fetch_array($ExecQuery3)) {
+
+                        $currentBid = $row['max_price'];
+
+                        ?>
+
+
+
+                        <div class="col-md-<?php echo $bootstrapColWidth; ?>">
+
+                            <div class="card" style="width: 18rem;">
+                                <img class="card-img-top" src="..." alt="Card image cap">
+                                <div class="card-body">
+                                    <h5 class="card-title"><?php echo $title; ?></h5>
+                                    <p class="card-text"><?php echo $description; ?></p>
+                                </div>
+                                <ul class="list-group list-group-flush">
+
+                                    <li class="list-group-item"><?php if ($state == 'STATE_01') {
+                                            echo "New with sealed box";
+                                        } elseif ($state == 'STATE_02') {
+                                            echo "New with opened box";
+                                        } elseif ($state == 'STATE_03') {
+                                            echo "New with defects";
+                                        } else {
+                                            echo "Used";
+                                        } ?></li>
+
+                                    <li class="list-group-item">Starting price: <?php echo $startprice; ?></li>
+
+                                    <li class="list-group-item"><?php if (isset($currentBid)) {
+                                            echo "Highest bid "; echo  $currentBid;
+                                        } else {
+                                            echo "No bid made yet";
+                                        }
+                                        ?></li>
+
+                                </ul>
+                                <div class="card-body">
+                                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                                </div>
+                                <div class="card-footer text-muted">
+                                    Expiration time: <?php echo $exptime; ?>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+
+                        <?php
+
+
+                        $rowCount++;
+
+                        if ($rowCount % $numOfCols == 0) {
+                            echo '</div>';
+                            echo '<br>';
+                            echo '<br>';
+                            echo' <div class="row">';
+                        }
+
+
+
+                    }}}}
+
+
+
+
+
+        ?>
+
+    </div>
+    <br>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
