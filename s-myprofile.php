@@ -197,7 +197,7 @@ $dispatchfeescore = round($dispatchfeescore,1);
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-offset-5">
-                                    <button class="btn btn-primary" ng-click="updateMe()">Update</button>
+                                    <button class="btn btn-primary" href="deletewatched.php?ID=user<?php echo $userID;?>"> Update </button>
                                 </div>
                             </div>
                         </form>
@@ -207,7 +207,6 @@ $dispatchfeescore = round($dispatchfeescore,1);
             </div> <!-- end panel-body -->
 
         </div> <!-- end panel -->
-
 
         <!-- Ratings section-->
 
@@ -612,7 +611,9 @@ $total_views = $row8['total'];
 $sql9 = "SELECT PRICE FROM bid WHERE ID_AUCTION= '$currentauction' ORDER BY TIME LIMIT 1";
 $result9 = $conn->query($sql9);
 $row9 = $result9->fetch_assoc();
-$most_recent_bid = $row9['PRICE'];
+if(!$row9) {$most_recent_bid = "No bids";}
+else{
+$most_recent_bid = $row9['PRICE'];}
 $now = date('Y-m-d H:i:s');
 $expiration_datetime = $row7["EXPIRATION_TIME"];
 
@@ -636,11 +637,11 @@ $expiration_datetime = $row7["EXPIRATION_TIME"];
 
         if ($days > 0) {
             $timeremaining = "{$days} days {$hours} hours";
-        } elseif (hours > 0) {
+        } elseif ($hours > 0) {
             $timeremaining = "{$hours} hours {$minutes}";
-        } elseif (minutes > 0) {
+        } elseif ($minutes > 0) {
             $timeremaining = "{$minutes} minutes {$seconds} seconds";
-        } elseif (seconds > 0) {
+        } elseif ($seconds > 0) {
             $timeremaining = "{$seconds} seconds";
         }
     }
