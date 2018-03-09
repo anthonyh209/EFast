@@ -305,9 +305,9 @@ $averagerating = round($averagerating,1);
                     echo "<li class=\"active\"><a href='b-myprofile.php?page=".$i."'>".$i."</a></li>"; // need to fix this (or get rid of it)
                 };
                 ?>
-                <?php if ($_GET["page"] == 1){$j = 1;}  // the GET_page doesnt give me the right page number...
-                elseif ($_GET["page"]== $total_pages) {$j = $total_pages;}
-                else {$j = $_GET["page"]+1;} ?>
+                <?php if ($page == 1){$j = 1;}  // the GET_page doesnt give me the right page number...
+                elseif ($page== $total_pages) {$j = $total_pages;}
+                else {$j = $page+1;} ?>
 
                 <li><?php echo "<a href='b-myprofile.php?page=".$j."'>"?><span class="glyphicon glyphicon-chevron-right"></span></a></li> <!-- need to fix this link -->
             </ul>
