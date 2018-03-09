@@ -175,7 +175,7 @@ if(!$result){$title = "";
             if ($days > 0) {
                 $timeremaining = "{$days} days {$hours} hours";
             } elseif ($hours > 0) {
-                $timeremaining = "{$hours} hours {$minutes}";
+                $timeremaining = "{$hours} hours {$minutes} minutes";
             } elseif ($minutes > 0) {
                 $timeremaining = "{$minutes} minutes {$seconds} seconds";
             } elseif ($seconds > 0) {
