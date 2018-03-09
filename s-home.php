@@ -77,7 +77,7 @@ session_start();
 
     <div class="collapse navbar-collapse">
         <ul class="navbar-nav ml-auto">
-            <li><a href="s-myprofile.html"><img height="30px" src="img/user1.png"> <?php echo "Hi "; echo  $_SESSION['first_name'] ;     ?> </a></li>
+            <li><a href="s-myprofile.php"><img height="30px" src="img/user1.png"> <?php echo "Hi "; echo  $_SESSION['first_name'] ;     ?> </a></li>
         </ul>
     </div>
 
