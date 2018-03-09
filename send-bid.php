@@ -99,6 +99,16 @@ if ($expired_flag == 1){
             echo $e -> getMessage();
         }
 
+        //Attempt to insert watchlist table
+        try{
+            $stmt = $pdo->query('INSERT INTO watchlist (ID_AUCTION, ID_USER) VALUES ( \'' . $id_auction . '\' , \'' . $id_buyer . '\')');
+
+        }
+        catch(PDOException $e)
+        {
+            echo $e -> getMessage();
+        }
+
 
     } else {
         echo "Your proposed bid is not the current highest bid for the auction. Another buyer may have just posted a larger bid. Please review bid history.";
