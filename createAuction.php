@@ -48,10 +48,10 @@ if (isset($_POST['submit'])) {
 
             date_default_timezone_set('Europe/London');
             $startdate = new DateTime();
+            $start = $startdate->format("Y-m-d H:i:s");
             $enddate = $startdate;
             $enddate->add(new DateInterval('PT' . $duration . 'M'));
             //$startdate-> format("Y-m-d H:i:s");
-            $start = $startdate->format("Y-m-d H:i:s");
             $end = $enddate->format("Y-m-d H:i:s");
             //echo $startdate-> format("Y-m-d H:i:s");
             //$currentdate->modify("+{$duration} minutes");
