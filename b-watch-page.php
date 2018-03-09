@@ -77,7 +77,7 @@ $old_error_handler = set_error_handler("ErrorHandler");
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Seller MyProfile</title>
+    <title>Watch List</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -118,7 +118,7 @@ on those items including notifications when they are outbid.-->
 
 <?php
 $userID = $_SESSION['userID'];
-$sql = "SELECT TITLE, DESCRIPTION, w.ID_AUCTION, EXPIRATION_TIME, FNAME, LNAME, w.ID FROM item i INNER JOIN auction a ON i.ID_ITEM = a.ID_ITEM 
+$sql = "SELECT DISTINCT PIC, TITLE, DESCRIPTION, w.ID_AUCTION, EXPIRATION_TIME, FNAME, LNAME, w.ID FROM item i INNER JOIN auction a ON i.ID_ITEM = a.ID_ITEM 
               INNER JOIN user u ON u.ID_USER = a.ID_SELLER INNER JOIN watchlist w ON w.ID_AUCTION = a.ID_AUCTION WHERE w.ID_USER = '$userID'";
 $result = $conn->query($sql);
 // if there are no watched auctions:
@@ -129,7 +129,8 @@ if(!$result){$title = "";
     $expiration_datetime= "";
     $timeremaining="";
     $highestbid = "";
-    $ID = "";}
+    $ID = "";
+    $pic ="";}
     //otherwise:
     else{
     while($row = $result->fetch_assoc()) {
@@ -140,6 +141,7 @@ if(!$result){$title = "";
         $expiration_datetime = $row["EXPIRATION_TIME"];
         $currentauctionID = $row["ID_AUCTION"];
         $ID = $row["ID"];
+        $pic = $row["PIC"];
         $sql2 = "SELECT PRICE FROM bid WHERE ID_AUCTION = '$currentauctionID' ORDER BY PRICE DESC LIMIT 1";
         $result2 = $conn->query($sql2);
         $row2 = $result2->fetch_assoc();
@@ -188,7 +190,7 @@ if(!$result){$title = "";
 ?>
 
                     <tr>
-                        <td><img src="http://dummyimage.com/60x60/666/ffffff&text=No+Image" class="img-rounded"></td>
+                        <td><img src="<?php echo $pic?>" class="img-rounded" height="70" width="100"></td>
                         <td><?php echo $title?></td>
                         <td><?php echo $descr?></td>
                         <td><?php echo $highestbid?></td>
