@@ -149,6 +149,8 @@ if (isset($_POST['submit'])) {
     //Checking if the passwords match
     if ($password == $rpassword){
 
+            //Hashing of password
+            $password = password_hash($password,PASSWORD_BCRYPT);
 
             //Inserting data into the tables
             $sql = "INSERT INTO user (FNAME, LNAME, EMAIL, PASS, ID_ROLE) VALUES ('$firstname', '$lastname', '$email','$password','$role')";
