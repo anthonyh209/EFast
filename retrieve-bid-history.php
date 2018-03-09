@@ -13,6 +13,8 @@ header('Access-Control-Allow-Origin:*');
 //picking up parameters from post
 $id_auction=$_REQUEST["id_auction"];
 
+$data = "";
+
 //Define database connection parameters
     $hn = 'efastdbs.mysql.database.azure.com';
     $un = 'efast@efastdbs'; //username of database here

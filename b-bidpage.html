@@ -162,20 +162,23 @@ The system should confirm to both the winner and seller of an auction its outcom
         </div>
 
 <script>
+    var start_price = "";
+    var old_counter = "";
+
     function load_bid_page(){
         load_auction_details();
         check_bid_history();
     }
 
     function load_auction_details(){
-        var id_auction = "AU_000001"; //should have global scope & should be populated on load of page - HARDCODED for now
+        var id_auction = "AU_000041"; //should have global scope & should be populated on load of page - HARDCODED for now
         var id_user = "ID_000485"; //dummy placeholders
         var xhttp;
         xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 response = JSON.parse(this.responseText);
-                start_price = response[0].START_PRICE; // used as global variable to hold Starting price
+                start_price = response[0].START_PRICE;
                 document.getElementById("item_title").innerHTML =  response[0].TITLE;
                 document.getElementById("item_title2").innerHTML =  response[0].TITLE;
                 document.getElementById("item_description").innerHTML =  response[0].DESCRIPTION;
@@ -204,7 +207,7 @@ The system should confirm to both the winner and seller of an auction its outcom
 
 
     function check_bid_history(){ // it loads a global variable counter for keeping track of how many bids have been made and refreshes the bid history on initial load of page
-        var id_auction = "AU_000001"; //should have global scope & should be populated on load of page - HARDCODED for now
+        var id_auction = "AU_000041"; //should have global scope & should be populated on load of page - HARDCODED for now
         var xhttp;
         xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
@@ -246,7 +249,7 @@ The system should confirm to both the winner and seller of an auction its outcom
 
     function sendBid(){
         //load session variables for DOM hidden input elements to send via PHP for bidding
-        var id_auction = "AU_000001"; //dummy placeholders
+        var id_auction = "AU_000041"; //dummy placeholders
         var id_user = "ID_000052"; //dummy placeholders
 
         //TAKEN FROM GITHUB -- TO ACKNOWLEDGE THIS WAS TAKEN FROM (https://gist.github.com/ophentis/3943464)
@@ -288,7 +291,7 @@ The system should confirm to both the winner and seller of an auction its outcom
     }
 
     function refreshBidHistory(){
-        var id_auction = "AU_000001"; //should have global scope & should be populated on load of page - HARDCODED for now
+        var id_auction = "AU_000041"; //should have global scope & should be populated on load of page - HARDCODED for now
         var xhttp;
         xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {

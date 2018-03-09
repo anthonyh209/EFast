@@ -10,9 +10,17 @@
 //instruct the PHP script to allow a request from ANY domain by using the wildcard
 header('Access-Control-Allow-Origin:*');
 
+session_start();
+$id_user = $_SESSION['userID'];
+$email = $_SESSION['username'];
+$first_name = $_SESSION['first_name'];
+$last_name = $_SESSION['last_name'];
+$role = $_SESSION['role'];
+$id_auction=$_REQUEST["auctionID"];
+
 //picking up parameters from post
-$id_auction=$_REQUEST["id_auction"];
-$id_user=$_REQUEST["id_user"];
+//$id_auction=$_REQUEST["id_auction"];
+//$id_user=$_REQUEST["id_user"];
 
 //Define database connection parameters
     $hn = 'efastdbs.mysql.database.azure.com';
@@ -43,7 +51,7 @@ catch(PDOException $e)
 
 //Attempt to query tests table and retrieve set of text files associated with tests_id
 try{
-    $stmt = $pdo->query('SELECT ite.PIC, ite.TITLE, ite.DESCRIPTION, auc.START_PRICE, UNIX_TIMESTAMP(auc.START_TIMESTAMP) AS START_TIMESTAMP, UNIX_TIMESTAMP(auc.EXPIRATION_TIME) AS EXPIRATION_TIME, cat.CATEGORY, sta.STATE FROM (((item ite
+    $stmt = $pdo->query('SELECT ite.TITLE, ite.DESCRIPTION, auc.START_PRICE, UNIX_TIMESTAMP(auc.START_TIMESTAMP) AS START_TIMESTAMP, UNIX_TIMESTAMP(auc.EXPIRATION_TIME) AS EXPIRATION_TIME, cat.CATEGORY, sta.STATE FROM (((item ite
 INNER JOIN auction auc ON auc.ID_ITEM = ite.ID_ITEM)
 INNER JOIN category cat ON ite.ID_CATEGORY = cat.ID_CATEGORY)
 INNER JOIN state sta ON ite.ID_STATE = sta.ID_STATE)
