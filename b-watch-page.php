@@ -174,11 +174,11 @@ if(!$result){$title = "";
 
             if ($days > 0) {
                 $timeremaining = "{$days} days {$hours} hours";
-            } elseif (hours > 0) {
+            } elseif ($hours > 0) {
                 $timeremaining = "{$hours} hours {$minutes}";
-            } elseif (minutes > 0) {
+            } elseif ($minutes > 0) {
                 $timeremaining = "{$minutes} minutes {$seconds} seconds";
-            } elseif (seconds > 0) {
+            } elseif ($seconds > 0) {
                 $timeremaining = "{$seconds} seconds";
             }
         }
