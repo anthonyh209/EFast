@@ -24,20 +24,20 @@ if (isset($_POST['submit'])) {
     // Check if image file is a actual image or fake image
     $check = getimagesize($_FILES["upload"]["tmp_name"]);
     if ($check !== false) {
-        echo "File is an image - " . $check["mime"] . ".";
+        //echo "File is an image - " . $check["mime"] . ".";
         $uploadOk = 1;
     } else {
-        echo "File is not an image.";
+        echo "File is not an image. Please return and upload a correct image";
         $uploadOk = 0;
     }
     if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
         && $imageFileType != "gif") {
-        echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+        echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed. Please return and upload a correct image";
         $uploadOk = 0;
     }
 // Check if $uploadOk is set to 0 by an error
     if ($uploadOk == 0) {
-        echo "Sorry, your file was not uploaded.";
+    //echo "Sorry, your file was not uploaded.";
         // if everything is ok, try to upload file
     } else {
         if (move_uploaded_file($_FILES["upload"]["tmp_name"], $target_file)) {
@@ -63,7 +63,7 @@ if (isset($_POST['submit'])) {
             $price = $_POST['item-price'];
             settype($price, "double");
 
-            $sql = 'INSERT INTO item (id_item, pic, pic_name, title, description, id_category, id_state) VALUES (NULL, ?,?,?,?,?)';
+            $sql = 'INSERT INTO item (id_item, pic, title, description, id_category, id_state) VALUES (NULL, ?,?,?,?,?)';
             $itemSTMT = $conn->prepare($sql);
             $itemSTMT->bind_param("sssss", $target_file, $title, $description, $category, $state);
             $itemSTMT->execute();
