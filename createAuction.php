@@ -6,6 +6,8 @@
  * Time: 15:35
  */
 
+session_start();
+
 $conn = mysqli_connect("efastdbs.mysql.database.azure.com", "efast@efastdbs", "Gv3-LST-nZU-JyP", "efast_main");
 
 // Check connection
@@ -14,58 +16,76 @@ if ($conn->connect_error) {
 }
 
 if (isset($_POST['submit'])) {
-    //Get the content of the image and then add slashes to it
-    $imagename = $_FILES["upload"]["name"];
 
+//Get the content of the image and then add slashes to it
+    $target_dir = "uploads/";
+    $target_file = $target_dir . basename($_FILES["upload"]["name"]);
+    $uploadOk = 1;
+    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
-/*    $check = getimagesize($_FILES["upload"]["tmp_name"]);
-    if($check !== false) {
-        echo "File is an image - " . $check["mime"] . ".";
+    // Check if image file is a actual image or fake image
+    $check = getimagesize($_FILES["upload"]["tmp_name"]);
+    if ($check !== false) {
+        //echo "File is an image - " . $check["mime"] . ".";
         $uploadOk = 1;
     } else {
-        echo "File is not an image.";
+        echo "File is not an image. Please return and upload a correct image";
         $uploadOk = 0;
-    }*/
+    }
+    if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+        && $imageFileType != "gif") {
+        echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed. Please return and upload a correct image";
+        $uploadOk = 0;
+    }
+// Check if $uploadOk is set to 0 by an error
+    if ($uploadOk == 0) {
+    //echo "Sorry, your file was not uploaded.";
+        // if everything is ok, try to upload file
+    } else {
+        if (move_uploaded_file($_FILES["upload"]["tmp_name"], $target_file)) {
+            //echo "The file " . basename($_FILES["upload"]["name"]) . " has been uploaded.";
+            $duration = $_POST['item-duration'];
 
-    $duration = $_POST['item-duration'];
+            date_default_timezone_set('Europe/London');
+            $startdate = new DateTime();
+            $start = $startdate->format("Y-m-d H:i:s");
+            $enddate = $startdate;
+            $enddate->add(new DateInterval('PT' . $duration . 'M'));
+            //$startdate-> format("Y-m-d H:i:s");
+            $end = $enddate->format("Y-m-d H:i:s");
+            //echo $startdate-> format("Y-m-d H:i:s");
+            //$currentdate->modify("+{$duration} minutes");
+            //echo $currentdate;
+            $title = $_POST['item-title'];
+            $state = $_POST['item-state'];
+            $category = $_POST['item-category'];
+            $description = $_POST['item-description'];
+            $expiredValue = 0;
+            $counterDefault = 0;
+            $price = $_POST['item-price'];
+            settype($price, "double");
 
-    date_default_timezone_set('Europe/London');
-    $startdate = new DateTime();
-    $enddate = $startdate;
-    $enddate->add(new DateInterval('PT' . $duration . 'M'));
-    //$startdate-> format("Y-m-d H:i:s");
-    $start = $startdate->format("Y-m-d H:i:s");
-    $end = $enddate->format("Y-m-d H:i:s");
-    //echo $startdate-> format("Y-m-d H:i:s");
-    //$currentdate->modify("+{$duration} minutes");
-    //echo $currentdate;
+            $sql = 'INSERT INTO item (id_item, pic, title, description, id_category, id_state) VALUES (NULL, ?,?,?,?,?)';
+            $itemSTMT = $conn->prepare($sql);
+            $itemSTMT->bind_param("sssss", $target_file, $title, $description, $category, $state);
+            $itemSTMT->execute();
 
-    $title = $_POST['item-title'];
-    $state = $_POST['item-state'];
-    $category = $_POST['item-category'];
-    $description = $_POST['item-description'];
-    $expiredValue = 0;
-    $counterDefault = 0;
-
-    $price = $_POST['item-price'];
-    settype($price, "double");
-
-    $sql = 'INSERT INTO item (id_item, pic, pic_name, title, description, id_category, id_state) VALUES (NULL, ?,?,?,?,?,?)';
-    $itemSTMT = $conn->prepare($sql);
-    $itemSTMT->bind_param("bsssss", $imagetmp, $imagename, $title, $description, $category, $state);
-    $itemSTMT->send_long_data(0, file_get_contents($_FILES["upload"]["tmp_name"]));
-    $itemSTMT->execute();
-
-    $id = mysqli_insert_id($conn); //retrieves just inserted new item
-    settype($id, "string");
-
-    $id2 = s2; //later change with the user session id
-
-    $auctionSQL = 'INSERT INTO auction (id_auction, id_seller, id_item, start_price, start_timestamp, expiration_time, expired, counter) VALUES (NULL, ?, ?, ?, ?, ?, ?,?)';
-    $auctionSTMT = $conn->prepare($auctionSQL);
-    $auctionSTMT->bind_param("ssdssii", $id2, $id, $price, $start, $end, $expiredValue, $counterDefault);
-    $auctionSTMT->execute();
-
+            $id = mysqli_insert_id($conn); //retrieves just inserted new item
+            settype($id, "string");
+            $Item_Query = "SELECT * FROM item WHERE ID = '$id'";
+            $ExecQuery2 = MySQLi_query($conn, $Item_Query);
+            while ($row = mysqli_fetch_array($ExecQuery2)) {
+                $item_number = $row['ID_ITEM'];
+                $id2 = $_SESSION['userID']; //later change with the user session id
+                $auctionSQL = 'INSERT INTO auction (id_auction, id_seller, id_item, start_price, start_timestamp, expiration_time, expired, counter) VALUES (NULL, ?, ?, ?, ?, ?, ?,?)';
+                $auctionSTMT = $conn->prepare($auctionSQL);
+                $auctionSTMT->bind_param("ssdssii", $id2, $item_number, $price, $start, $end, $expiredValue, $counterDefault);
+                $auctionSTMT->execute();
+            }
+        } else {
+            echo "Sorry, there was an error uploading your file.";
+        }
+    }
 }
 ?>
 
@@ -142,7 +162,7 @@ if (isset($_POST['submit'])) {
                 <h5 class="card-title">Photo</h5>
                 <p class="card-text">Upload a photo of your item and improve user confidence by adding an associating
                     picture</p>
-                <input type="file" name="upload"  required>
+                <input type="file" name="upload" required>
                 <input type='submit' name='submit'>
             </div>
         </div>
