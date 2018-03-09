@@ -196,7 +196,7 @@ if(!$result){$title = "";
                         <td><?php echo $highestbid?></td>
                         <td><?php echo $timeremaining?> </td>
                         <td> <?php echo $fname; echo " "; echo $lname?> </td>
-                        <td> <a class="btn" href="deletewatched.php?ID=<?php echo $ID;?>"<button class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash"></span></button></td>
+                        <td> <a class="btn" href="deletewatched.php?ID=<?php echo $currentauctionID;?>"<button class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash"></span></button></td>
                     </tr>
 
 <?php }} ?>
