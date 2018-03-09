@@ -197,7 +197,7 @@ $dispatchfeescore = round($dispatchfeescore,1);
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-offset-5">
-                                    <button class="btn btn-primary" href="deletewatched.php?ID=user<?php echo $userID;?>"> Update </button>
+                                    <button class="btn btn-primary" href="update-profile-info.php?userID=<?php echo $userID;?>"> Update </button>
                                 </div>
                             </div>
                         </form>
