@@ -33,7 +33,7 @@ session_start();
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
 
-    <a class="navbar-brand" href="s-home.html">
+    <a class="navbar-brand" href="s-home.php">
         <img width="100" src="efast.png">
     </a>
 
@@ -77,7 +77,7 @@ session_start();
 
     <div class="collapse navbar-collapse">
         <ul class="navbar-nav ml-auto">
-            <li><a href="s-myprofile.html"><img height="30px" src="img/user1.png"> <?php echo "Hi "; echo  $_SESSION['first_name'] ;     ?> </a></li>
+            <li><a href="s-myprofile.php"><img height="30px" src="img/user1.png"> <?php echo "Hi "; echo  $_SESSION['first_name'] ;     ?> </a></li>
         </ul>
     </div>
 

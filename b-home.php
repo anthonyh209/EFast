@@ -79,7 +79,7 @@
 
     <div class="collapse navbar-collapse">
         <ul class="navbar-nav ml-auto">
-            <li><a href="b-myprofile.html"><img height="30px" src="img/user1.png"> <?php echo "Hi "; echo  $_SESSION['first_name'] ; echo " "; echo   $_SESSION['last_name'] ;   ?> </a></li>
+            <li><a href="b-myprofile.php"><img height="30px" src="img/user1.png"> <?php echo "Hi "; echo  $_SESSION['first_name'] ; echo " "; echo   $_SESSION['last_name'] ;   ?> </a></li>
         </ul>
     </div>
 
