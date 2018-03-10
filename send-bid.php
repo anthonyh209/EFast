@@ -105,7 +105,7 @@ if ($expired_flag == 1){
 
         //Attempt to insert watchlist table
         try{
-            $stmt = $pdo->query('INSERT INTO watchlist (ID_AUCTION, ID_USER) VALUES ( \'' . $id_auction . '\' , \'' . $id_buyer . '\')');
+            $stmt = $pdo->query('CALL UpdateWatchlist ( \'' . $id_auction . '\' , \'' . $id_buyer . '\')');
 
         }
         catch(PDOException $e)

@@ -15,7 +15,7 @@ header('Access-Control-Allow-Origin:*');
 session_start();
 $id_auction=$_SESSION["auctionID"];
 
-$data = "";
+$data = array();
 
 //Define database connection parameters
     $hn = 'efastdbs.mysql.database.azure.com';
