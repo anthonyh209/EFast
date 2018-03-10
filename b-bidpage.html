@@ -93,7 +93,7 @@ The system should confirm to both the winner and seller of an auction its outcom
                 <div class="row">
                     <div class="col-4">
                         <div class="card" style="height: 100%">
-                            <img src="img/fashion.jpg" alt="..." class="img-thumbnail" style="height: 100%">
+                            <img id="item_pic" src="" alt="..." class="img-thumbnail" style="height: 100%">
                         </div>
                     </div>
                     <div class="col-8">
@@ -179,6 +179,7 @@ The system should confirm to both the winner and seller of an auction its outcom
             if (this.readyState == 4 && this.status == 200) {
                 response = JSON.parse(this.responseText);
                 start_price = response[0].START_PRICE;
+                document.getElementById("item_pic").src = response[0].PIC;
                 document.getElementById("item_title").innerHTML =  response[0].TITLE;
                 document.getElementById("item_title2").innerHTML =  response[0].TITLE;
                 document.getElementById("item_description").innerHTML =  response[0].DESCRIPTION;
@@ -270,6 +271,11 @@ The system should confirm to both the winner and seller of an auction its outcom
         var present_timestamp = new Date().toMysqlFormat();
 
         var bid_price = document.getElementById("bid_price").value;
+
+        if (bid_price < start_price){
+            alert("Bid price cannot be lower than start price!");
+            return;
+        }
 
 
         var xhttp;
