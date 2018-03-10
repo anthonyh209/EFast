@@ -346,12 +346,11 @@
 
 
 
-
+<!--Recommeneded items -->
 
 <div class="container">
 
     <div class="row">
-
 
 
 
@@ -366,7 +365,7 @@
 
 
 
-        $userID = "ID_000004";
+        $userID = "ID_001032";
 
         $sql = "SELECT DISTINCT ID_AUCTION FROM BID WHERE ID_BUYER IN (SELECT DISTINCT ID_BUYER FROM BID WHERE NOT ID_BUYER = '$userID' AND ID_AUCTION IN (SELECT DISTINCT ID_AUCTION FROM BID WHERE ID_BUYER = '$userID'))";
 
@@ -399,6 +398,7 @@
 
                 while ($row = mysqli_fetch_array($ExecQuery2)) {
 
+                    $image = $row['PIC'];
                     $title = $row['TITLE'];
                     $description = $row['DESCRIPTION'];
                     $catagoryID = $row['ID_CATEGORY'];
@@ -420,7 +420,7 @@
                         <div class="col-md-<?php echo $bootstrapColWidth; ?>">
 
                             <div class="card" style="width: 18rem;">
-                                <img class="card-img-top" src="..." alt="Card image cap">
+                                <img class="card-img-top" src="<?php echo $image ?>" alt="Card image cap">
                                 <div class="card-body">
                                     <h5 class="card-title"><?php echo $title; ?></h5>
                                     <p class="card-text"><?php echo $description; ?></p>
@@ -436,8 +436,6 @@
                                         } else {
                                             echo "Used";
                                         } ?></li>
-
-                                    <li class="list-group-item">Starting price: <?php echo $startprice; ?></li>
 
                                     <li class="list-group-item"><?php if (isset($currentBid)) {
                                             echo "Highest bid "; echo  $currentBid;

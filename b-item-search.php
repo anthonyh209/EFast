@@ -88,7 +88,34 @@ There will be a link to the item's auction is chosen from a list (Bid for items 
 </nav>
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <div class="container">
+
+
+
     <div class="row">
         <div class="col-md-12">
 
@@ -96,44 +123,49 @@ There will be a link to the item's auction is chosen from a list (Bid for items 
             <?php include 'config.php'; ?>
             <?php
 
+
             if (isset($_POST["submit"])) {
 
 
             $itemToSearch = $_POST['search'];
 
-            if ($itemToSearch == null) {
+                if ($itemToSearch == null ) {
 
-                ?>
+                    ?>
 
 
-                <div class="container-fluid">
-                    <div class="jumbotron">
-                        <h1 align="center">Search returned no result</h1>
+                    <div class="container-fluid">
+                        <div class="jumbotron">
+                            <h1 align="center">Search returned no result</h1>
+                        </div>
+
                     </div>
-                    <p>Please try again...</p>
-
-
-                </div>
-
-                <?php
-                exit($status);
-
-            }
-
-            ?>
-
-
-            <div class="col-12">
-                <div class="card text-left">
 
                     <?php
+                    exit($status);
+
+                }
 
 
-                    $Query = 'SELECT * FROM item WHERE TITLE LIKE "%' . $itemToSearch . '%" ';
+
+
+                $Query = "SELECT * FROM item WHERE TITLE LIKE '%" . $itemToSearch . "%' AND ID_ITEM IN (SELECT ID_ITEM FROM auction WHERE EXPIRED ='0')";
 
                     $ExecQuery = MySQLi_query($conn, $Query);
-                    while ($row = mysqli_fetch_array($ExecQuery)) {
 
+                    // Check number of rows in the result set
+                    if(mysqli_num_rows($ExecQuery) == 0){
+                        echo "<div class=\"container-fluid\">
+                        <div class=\"jumbotron\">
+                            <h1 align=\"center\">Search returned no result</h1>
+                        </div>
+
+                    </div>";
+                    }
+
+
+                    while ($row = mysqli_fetch_array($ExecQuery)) {
+                    $image = $row['PIC'];
                     $itemID = $row['ID_ITEM'];
                     $title = $row['TITLE'];
                     $description = $row['DESCRIPTION'];
@@ -142,11 +174,12 @@ There will be a link to the item's auction is chosen from a list (Bid for items 
 
                     $Query2 = "SELECT * FROM auction WHERE ID_ITEM = '$itemID' AND EXPIRED = '0' ";
                     $ExecQuery2 = MySQLi_query($conn, $Query2);
-                    while ($row = mysqli_fetch_array($ExecQuery2)) {
 
+                    while ($row = mysqli_fetch_array($ExecQuery2)) {
                     $exptime = $row['EXPIRATION_TIME'];
                     $idauction = $row['ID_AUCTION'];
                     $startprice = $row['START_PRICE'];
+
 
                     $Query3 = "SELECT MAX(PRICE) AS max_price FROM bid WHERE ID_AUCTION = '$idauction' ";
 
@@ -158,13 +191,15 @@ There will be a link to the item's auction is chosen from a list (Bid for items 
                     $currentBid = $row['max_price'];
                     ?>
 
-
+            <div class="col-12">
+                <div class="card text-left">
                     <div class="card">
+                        <form action="searchtobid.php" method="post">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-4">
                                     <div class="card" style="height: 100%">
-                                        <img src="img/fashion.jpg" alt="..." class="img-thumbnail"
+                                        <img src="<?php echo $image ?>" alt="..." class="img-thumbnail"
                                              style="height: 200px">
                                     </div>
                                 </div>
@@ -195,58 +230,76 @@ There will be a link to the item's auction is chosen from a list (Bid for items 
                                     </div>
                                     <div id="spacer" style="height: 5%"></div>
                                     <?php echo $description; ?>
-                                </div>
-                                <?php
-                                }}}
-                                ?>
-                            </div>
+                                    <div id="remaining_time" class="card-footer text-muted">
+                                        Remaining Time:
+                                    </div>
 
+                                    <?php
+                                    $_SESSION['auctionID'] = $idauction;
+                                    ?>
+
+                                    <button
+                                            type='submit' name='submit' value="<?php echo $_SESSION['auctionID'];  ?>" id="submit" > Go to bidpage
+
+                                    </button>
+
+
+                                </div>
+                            </div>
                         </div>
-                        <div id="remaining_time" class="card-footer text-muted">
-                            Remaining Time:
-                        </div>
-                        <?php } //main submit ?>
+                        </form>
 
                     </div>
                 </div>
             </div>
+             <br>
+
+                        <?php
+
+                                }}}
+                                ?>
+
+                        <?php } //main submit ?>
 
 
-            <style>
-                .jumbotron {
-                    background-color: transparent;
-                }
-
-            </style>
-
-            <style>
-                div.scrollmenu {
-                    background-color: transparent;
-                    overflow: auto;
-                    white-space: nowrap;
-                }
-
-                div.scrollmenu a {
-                    display: inline-block;
-                    color: #777777;
-                    text-align: center;
-                    padding: 14px;
-                    text-decoration: none;
-                }
-
-                div.scrollmenu a:hover {
-                    color: #525252;
-                }
-            </style>
 
 
-            <?php
-            if (isset($_POST["submit2"])) {
-                echo "<script> location.href='logout.php'; </script>";
-            }
-            ?>
+
+
+
+
+
+
+
 
 </body>
+
+
+
+<style>
+    .jumbotron {
+        background-color: transparent;
+    }
+
+    div.scrollmenu {
+        background-color: transparent;
+        overflow: auto;
+        white-space: nowrap;
+    }
+
+    div.scrollmenu a {
+        display: inline-block;
+        color: #777777;
+        text-align: center;
+        padding: 14px;
+        text-decoration: none;
+    }
+
+    div.scrollmenu a:hover {
+        color: #525252;
+    }
+</style>
+
 
 
 </html>
