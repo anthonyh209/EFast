@@ -109,27 +109,30 @@ if (isset($_POST['submit'])) {
 
 </head>
 
+
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
 
-    <a class="navbar-brand" href="s-home.html">
+    <a class="navbar-brand" href="s-home.php">
         <img width="100" src="efast.png">
     </a>
 
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
             aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
-
     <div class="collapse navbar-collapse">
         <ul class="navbar-nav ml-auto">
-            <li><a href="s-myprofile.html"><img height="30px" src="img/user1.png">Your Profile</a></li>
+            <li><a href="s-myprofile.php"><img height="30px" src="img/user1.png"> <?php echo "Hi "; echo  $_SESSION['first_name'] ; echo " "; echo   $_SESSION['last_name'] ;   ?>  </a></li>
         </ul>
     </div>
 
+    <button style="margin-left: 10px" type="button" onclick="window.location='login.php';" class="btn btn-outline-danger btn-sm ">Logout</button>
 
 </nav>
+
+
 
 <body style="background-color: #F0EEEC">
 
@@ -162,7 +165,7 @@ if (isset($_POST['submit'])) {
                 <h5 class="card-title">Photo</h5>
                 <p class="card-text">Upload a photo of your item and improve user confidence by adding an associating
                     picture</p>
-                <input type="file" name="upload" required>
+                <input   type="file" name="upload" required>
                 <input type='submit' name='submit'>
             </div>
         </div>
@@ -291,16 +294,26 @@ if (isset($_POST['submit'])) {
 
         </div>
     </div>
-    <input type='submit' name='submit'>
-</form>
-
-<p style="font-size: 0.7em">Please make sure that all fields are correctly filled and that all information provided
+<!--         <input type='submit' name='submit'>
+ -->    
+ <div class="container">
+ <input class="btn btn-primary btn-danger btn-lg btn-block" type='submit' name='submit' value="List item as new auction">
+ <p style="font-size: 0.7em">Please make sure that all fields are correctly filled and that all information provided
     reflect the actual current physical state of the item. Be aware that buyers have the right to request refunds during
     a 2 weeks time-frame upon receive of the auctioned item. Note that wrong information might lead to negative
     reviews. </p>
+    <br>
+    <br>
+</div>
+</form>
+
+
+
+
+    <!-- 
 <div class="spacer" style="height: 20px"></div>
 <button type="button" class="btn btn-primary btn-danger btn-lg btn-block">List item as new auction</button>
-<button type="button" class="cancelbtn" onclick="window.location='createAuction.php';">List item as new auction</button>
+<button type="button" class="cancelbtn" onclick="window.location='createAuction.php';">List item as new auction</button> -->
 <!--             <button type="submit" class="signupbtn">Sign Up</button>
 
 

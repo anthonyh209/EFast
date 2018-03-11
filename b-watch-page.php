@@ -1,7 +1,6 @@
 <?php
 
 session_start();
-require_once("config.php");
 
 ?>
 
@@ -85,6 +84,7 @@ $old_error_handler = set_error_handler("ErrorHandler");
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
 </head>
 
 <!-- Buyers can watch auctions on items and receive emailed updates on bids
@@ -92,11 +92,63 @@ on those items including notifications when they are outbid.-->
 
 <body>
 
-<nav class="navbar navbar-light bg-light">
-    <a class="navbar-brand" href="s-home.html">
-        <img src="eFast.png" width="100" height="30" alt="">
-    </a>
+
+
+
+
+
+
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+            <a class="navbar-brand" href="b-home.php">
+                <img width="100" src="efast.png">
+            </a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="col-md-auto">
+            </div>
+
+    <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="b-myprofile.php"><img height="30px" src="img/user1.png"> <?php echo "Hi "; echo  $_SESSION['first_name'] ; echo " "; echo   $_SESSION['last_name'] ;   ?> </a></li>
+        </ul>
+    </div>
+
+    <button style="margin-left: 10px" type="button" onclick="window.location='logout.php';" class="btn btn-outline-danger btn-sm ">Logout</button>
+
+
 </nav>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <div class="container">
     <div class="row">
@@ -116,10 +168,15 @@ on those items including notifications when they are outbid.-->
                     </thead>
                     <tbody>
 
+
+
+<?php include 'config.php'; ?>
 <?php
 $userID = $_SESSION['userID'];
+
 $sql = "SELECT DISTINCT PIC, TITLE, DESCRIPTION, w.ID_AUCTION, EXPIRATION_TIME, FNAME, LNAME, w.ID FROM item i INNER JOIN auction a ON i.ID_ITEM = a.ID_ITEM 
               INNER JOIN user u ON u.ID_USER = a.ID_SELLER INNER JOIN watchlist w ON w.ID_AUCTION = a.ID_AUCTION WHERE w.ID_USER = '$userID'";
+
 $result = $conn->query($sql);
 // if there are no watched auctions:
 if(!$result){$title = "";
