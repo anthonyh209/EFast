@@ -69,7 +69,7 @@
                                 </div>
                             </li>
                         </ul>
-                        <input class="btn btn-outline-success my-2 my-sm-0" type='submit' id="submit" name="submit">
+                        <input class="btn btn-outline-success my-2 my-sm-0" type='submit' id="submit" name="submit" value="Search">
                     </form>
 
 
@@ -365,7 +365,7 @@
 
 
 
-        $userID = "ID_001032";
+        $userID = $_SESSION['userID'];
 
         $sql = "SELECT DISTINCT ID_AUCTION FROM BID WHERE ID_BUYER IN (SELECT DISTINCT ID_BUYER FROM BID WHERE NOT ID_BUYER = '$userID' AND ID_AUCTION IN (SELECT DISTINCT ID_AUCTION FROM BID WHERE ID_BUYER = '$userID'))";
 
@@ -391,6 +391,7 @@
                 $exptime = $row['EXPIRATION_TIME'];
                 $startprice = $row['START_PRICE'];
                 $itemID = $row['ID_ITEM'];
+                $idauction = $row['ID_AUCTION'];
 
                 $Query2 = "SELECT * FROM item WHERE ID_ITEM = '$itemID' ";
 
@@ -418,7 +419,7 @@
 
 
                         <div class="col-md-<?php echo $bootstrapColWidth; ?>">
-
+                            <form action="searchtobid.php" method="post">
                             <div class="card" style="width: 18rem;">
                                 <img class="card-img-top" src="<?php echo $image ?>" alt="Card image cap">
                                 <div class="card-body">
@@ -438,7 +439,7 @@
                                         } ?></li>
 
                                     <li class="list-group-item"><?php if (isset($currentBid)) {
-                                            echo "Highest bid "; echo  $currentBid;
+                                            echo "Highest bid is £"; echo  $currentBid;
                                         } else {
                                             echo "No bid made yet";
                                         }
@@ -446,12 +447,21 @@
 
                                 </ul>
                                 <div class="card-body">
-                                    <a href="#" class="btn btn-primary">Go somewhere</a>
+
+                                    <?php
+                                    $_SESSION['auctionID'] = $idauction;
+                                    ?>
+
+                                    <button
+                                            class="btn btn-primary"  type='submit' name='submit' value="<?php echo $_SESSION['auctionID'];  ?>" id="submit" > Go to bidpage
+                                    </button>
+
                                 </div>
                                 <div class="card-footer text-muted">
                                     Expiration time: <?php echo $exptime; ?>
                                 </div>
                             </div>
+                            </form>
 
 
                         </div>
