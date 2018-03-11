@@ -81,7 +81,7 @@
                 <div class="spacer" style="height:5px"></div>
                 <button type="button" class="btn btn-primary" onclick="window.location='./users.php';">Inspect all users</button>
                 <div class="spacer" style="height:30px"></div>
-                <button type="button" class="btn btn-default">Logout</button>
+                <button type="button" onclick="window.location='logout.php'" class="btn btn-default">Logout</button>
 
             </div>
             <div class="spacer" style="height:20px"></div>

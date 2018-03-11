@@ -260,7 +260,7 @@
     <div class="jumbotron">
         <h1>View upcoming auctions and bid away!</h1>
         <p><strong>eFast</strong> is an online auction system which allows users to buy and sell items. </p>
-        <button type="button" onclick="window.location='./b-watch-page.html';" class="btn btn-primary">Go to your watchlist</button>
+        <button type="button" onclick="window.location='./b-watch-page.php';" class="btn btn-primary">Go to your watchlist</button>
     </div>
 
 </div>

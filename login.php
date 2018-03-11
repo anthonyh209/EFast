@@ -136,7 +136,7 @@
             } elseif ($role == 'ROLE_02') {
                 echo "<script> location.href='s-home.php'; </script>";
             } elseif ($role == 'ROLE_03') {
-                echo "<script> location.href='./a-home.html'; </script>";
+                echo "<script> location.href='admin-home.php'; </script>";
             } else { echo "<div align='center'>
                <p><strong>Please enter a valid username and password</strong></p>
                 </div>";

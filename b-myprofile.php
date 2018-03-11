@@ -119,11 +119,35 @@ $averagerating = round($averagerating,1);
 
 <!-- nav bar -->
 
-<nav class="navbar navbar-light bg-light">
-    <a class="navbar-brand" href="s-home.html">
-        <img src="eFast.png" width="100" height="30" alt="">
-    </a>
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+            <a class="navbar-brand" href="b-home.php">
+                <img width="100" src="efast.png">
+            </a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="col-md-auto">
+            </div>
+
+    <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+            <button style="margin-left: 10px" type="button" onclick="window.location='logout.php';" class="btn btn-outline-danger btn-sm ">Logout</button>
+        </ul>
+    </div>
+
+    
+
+
 </nav>
+
+
 
 
 

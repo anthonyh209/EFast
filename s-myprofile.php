@@ -156,10 +156,19 @@ $dispatchfeescore = round($dispatchfeescore,1);
 <body>
 
 
-<nav class="navbar navbar-light bg-light">
-    <a class="navbar-brand" href="s-home.html">
-        <img src="eFast.png" width="100" height="30" alt="">
-    </a>
+
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+            <a class="navbar-brand" href="s-home.php">
+                <img width="100" src="efast.png">
+            </a>
+
+            <ul class="navbar-nav ml-auto">
+            <button style="margin-left: 10px" type="button" onclick="window.location='logout.php';" class="btn btn-outline-danger btn-sm ">Logout</button>
+            </ul>
+
+
 </nav>
 
 
