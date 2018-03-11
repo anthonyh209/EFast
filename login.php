@@ -55,11 +55,11 @@
             </div>
             <div id="spacer" style="height: 20px"></div>
             <!-- <button type="submit" class="btn btn-primary btn-lg btn-block btn-sm">Login</button> -->
-            <input type='submit' name='submit' value='submit' id="submit" />
+            <input class="btn btn-primary btn-lg btn-block btn-sm" type='submit' name='submit' value='Login' id="submit" />
         </div>
         <div id="spacer2" style="height: 20px"></div>
         <div>
-            <button type="button" class="btn btn-primary btn-lg btn-block btn-sm" onclick="window.location='./register.php';">Sign up here</button>
+            <button type="button" class="btn btn-success btn-lg btn-block btn-sm" onclick="window.location='./register.php';">Sign up here</button>
         </div>
 
 
