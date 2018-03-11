@@ -92,17 +92,6 @@ if ($expired_flag == 1){
             echo $e -> getMessage();
         }
 
-        //Attempt to update COUNTER column in auction table
-        try{
-            $stmt = $pdo->query('UPDATE auction SET COUNTER = COUNTER + 1 WHERE ID_AUCTION = \'' .$id_auction. '\'');
-
-
-        }
-        catch(PDOException $e)
-        {
-            echo $e -> getMessage();
-        }
-
         //Attempt to insert watchlist table
         try{
             $stmt = $pdo->query('CALL UpdateWatchlist ( \'' . $id_auction . '\' , \'' . $id_buyer . '\')');

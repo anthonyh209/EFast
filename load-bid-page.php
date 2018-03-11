@@ -45,7 +45,7 @@ catch(PDOException $e)
 }
 
 
-//Attempt to query tests table and retrieve set of text files associated with tests_id
+//Attempt to query
 try{
     $stmt = $pdo->query('SELECT ite.PIC, ite.TITLE, ite.DESCRIPTION, auc.START_PRICE, UNIX_TIMESTAMP(auc.START_TIMESTAMP) AS START_TIMESTAMP, UNIX_TIMESTAMP(auc.EXPIRATION_TIME) AS EXPIRATION_TIME, cat.CATEGORY, sta.STATE FROM (((item ite
 INNER JOIN auction auc ON auc.ID_ITEM = ite.ID_ITEM)

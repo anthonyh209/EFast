@@ -35,18 +35,18 @@ $opt = array(
 $pdo = new PDO($dsn, $un, $pwd, $opt);
 
 
-//Attempt to query tests table and retrieve set of text files associated with tests_id
-try{
-    $stmt = $pdo->query('SELECT COUNTER, EXPIRED FROM auction WHERE ID_AUCTION = \'' .$id_auction. '\'');
+try {
+    $sql = 'CALL GetAuctionCounter(?,@COUNTER,@EXPIRED)';
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(1,$id_auction);
 
-    while($row = $stmt -> fetch(PDO::FETCH_OBJ))
-    {
-        //Assign each row of data to associative array
-        $data[] = $row;
-    }
+    $stmt->execute();
+    $stmt->closeCursor();
+
+    $r = $pdo->query("SELECT @COUNTER AS COUNTER,@EXPIRED AS EXPIRED")->fetch(PDO::FETCH_OBJ);
+    $data[] = $r;
 
     echo json_encode($data);
-
 }
 catch(PDOException $e)
 {
