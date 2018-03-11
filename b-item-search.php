@@ -30,25 +30,29 @@ There will be a link to the item's auction is chosen from a list (Bid for items 
 
 
 <!-- Navigation Bar search function -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light" style="margin-bottom: 30px">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
     <a class="navbar-brand" href="b-home.php">
         <img width="100" src="efast.png">
     </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
             aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
+
     <div class="col-md-auto">
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
             <form action="b-item-search.php" method="post" class="form-inline my-2 my-lg-0">
                 <!--                        <input class="form-control mr-sm-2" type="search" name="search" id="search" placeholder="Search" aria-label="Search">-->
-                <input type="text" placeholder="Search" id="search" name="search" onkeyup="getStates(this.value)">
+                <div class="search-box">
+                    <input type="text" autocomplete="off" placeholder="Search" id="search" name="search" />
+                    <div class="result"></div>
+                </div>
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                           data-toggle="dropdown" aria-haspopup="true"
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
                            aria-expanded="false">
                             Search by Category
                         </a>
@@ -65,24 +69,21 @@ There will be a link to the item's auction is chosen from a list (Bid for items 
                         </div>
                     </li>
                 </ul>
-                <input class="btn btn-outline-success my-2 my-sm-0" type='submit' id="submit" name="submit">
+                <input class="btn btn-outline-success my-2 my-sm-0" type='submit' id="submit" name="submit" value="Search">
             </form>
+
+
+
         </div>
     </div>
 
-
     <div class="collapse navbar-collapse">
         <ul class="navbar-nav ml-auto">
-            <li><a href="b-myprofile.html"><img height="30px" src="img/user1.png"> <?php echo "Hi ";
-                    echo $_SESSION['first_name'];
-                    echo " ";
-                    echo $_SESSION['last_name']; ?> </a></li>
+            <li><a href="b-myprofile.php"><img height="30px" src="img/user1.png"> <?php echo "Hi "; echo  $_SESSION['first_name'] ; echo " "; echo   $_SESSION['last_name'] ;   ?> </a></li>
         </ul>
     </div>
 
-    <button style="margin-left: 10px" type="button" onclick="window.location='logout.php';"
-            class="btn btn-outline-danger btn-sm ">Logout
-    </button>
+    <button style="margin-left: 10px" type="button" onclick="window.location='logout.php';" class="btn btn-outline-danger btn-sm ">Logout</button>
 
 
 </nav>
@@ -90,6 +91,67 @@ There will be a link to the item's auction is chosen from a list (Bid for items 
 
 
 
+<style type="text/css">
+    /* Formatting search box */
+    .search-box{
+        width: 300px;
+        position: relative;
+        display: inline-block;
+        font-size: 14px;
+    }
+    .search-box input[type="text"]{
+        height: 32px;
+        padding: 5px 10px;
+        border: 1px solid #CCCCCC;
+        font-size: 14px;
+    }
+    .result{
+        background-color: white;
+        position: absolute;
+        z-index: 999;
+        top: 100%;
+        left: 0;
+    }
+    .search-box input[type="text"], .result{
+        width: 100%;
+        box-sizing: border-box;
+    }
+    /* Formatting result items */
+    .result p{
+        margin: 0;
+        padding: 7px 10px;
+        border: 1px solid #20b5dd;
+        border-top: none;
+        cursor: pointer;
+    }
+    .result p:hover{
+        background: #f2f2f2;
+    }
+</style>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.search-box input[type="text"]').on("keyup input", function(){
+            /* Get input value on change */
+            var inputVal = $(this).val();
+            var resultDropdown = $(this).siblings(".result");
+            if(inputVal.length){
+                $.get("backend-search.php", {term: inputVal}).done(function(data){
+                    // Display the returned data in browser
+                    resultDropdown.html(data);
+                });
+            } else{
+                resultDropdown.empty();
+            }
+        });
+
+        // Set search input value on click of result item
+        $(document).on("click", ".result p", function(){
+            $(this).parents(".search-box").find('input[type="text"]').val($(this).text());
+            $(this).parent(".result").empty();
+        });
+    });
+</script>
 
 
 
@@ -101,6 +163,166 @@ There will be a link to the item's auction is chosen from a list (Bid for items 
 
 
 
+
+
+
+
+
+
+
+
+
+
+<!---->
+<!---->
+<!--<div class="container">-->
+<!---->
+<!---->
+<!---->
+<!--    <div class="row">-->
+<!--        <div class="col-md-12">-->
+<!---->
+<!---->
+<!--            --><?php //include 'config.php'; ?>
+<!--            --><?php
+//
+//
+//            if (isset($_POST["submit"])) {
+//
+//
+//            $itemToSearch = $_POST['search'];
+//
+//                if ($itemToSearch == null ) {
+//
+//                    ?>
+<!---->
+<!---->
+<!--                    <div class="container-fluid">-->
+<!--                        <div class="jumbotron">-->
+<!--                            <h1 align="center">Search returned no result</h1>-->
+<!--                        </div>-->
+<!---->
+<!--                    </div>-->
+<!---->
+<!--                    --><?php
+//                    exit($status);
+//
+//                }
+//
+//
+//
+//
+//                $Query = "SELECT * FROM item WHERE TITLE LIKE '%" . $itemToSearch . "%' AND ID_ITEM IN (SELECT ID_ITEM FROM auction WHERE EXPIRED ='0')";
+//
+//                    $ExecQuery = MySQLi_query($conn, $Query);
+//
+//                    // Check number of rows in the result set
+//                    if(mysqli_num_rows($ExecQuery) == 0){
+//                        echo "<div class=\"container-fluid\">
+//                        <div class=\"jumbotron\">
+//                            <h1 align=\"center\">Search returned no result</h1>
+//                        </div>
+//
+//                    </div>";
+//                    }
+//
+//
+//                    while ($row = mysqli_fetch_array($ExecQuery)) {
+//                    $image = $row['PIC'];
+//                    $itemID = $row['ID_ITEM'];
+//                    $title = $row['TITLE'];
+//                    $description = $row['DESCRIPTION'];
+//                    $catagoryID = $row['ID_CATEGORY'];
+//                    $state = $row['ID_STATE'];
+//
+//                    $Query2 = "SELECT * FROM auction WHERE ID_ITEM = '$itemID' AND EXPIRED = '0' ";
+//                    $ExecQuery2 = MySQLi_query($conn, $Query2);
+//
+//                    while ($row = mysqli_fetch_array($ExecQuery2)) {
+//                    $exptime = $row['EXPIRATION_TIME'];
+//                    $idauction = $row['ID_AUCTION'];
+//                    $startprice = $row['START_PRICE'];
+//
+//
+//                    $Query3 = "SELECT MAX(PRICE) AS max_price FROM bid WHERE ID_AUCTION = '$idauction' ";
+//
+//                    $ExecQuery3 = MySQLi_query($conn, $Query3);
+//
+//
+//                    while ($row = mysqli_fetch_array($ExecQuery3)) {
+//
+//                    $currentBid = $row['max_price'];
+//                    ?>
+<!---->
+<!--            <div class="col-12">-->
+<!--                <div class="card text-left">-->
+<!--                    <div class="card">-->
+<!--                        <form action="searchtobid.php" method="post">-->
+<!--                        <div class="card-body">-->
+<!--                            <div class="row">-->
+<!--                                <div class="col-4">-->
+<!--                                    <div class="card" style="height: 100%">-->
+<!--                                        <img src="--><?php //echo $image ?><!--" alt="..." class="img-thumbnail"-->
+<!--                                             style="height: 200px">-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="col-8">-->
+<!--                                    <h3>--><?php //echo $title; ?><!--</h3>-->
+<!---->
+<!---->
+<!--                                    <small class="card-title" id="highest_bid">-->
+<!--                                        --><?php //if ($state == 'STATE_01') {
+//                                            echo "New with sealed box";
+//                                        } elseif ($state == 'STATE_02') {
+//                                            echo "New with opened box";
+//                                        } elseif ($state == 'STATE_03') {
+//                                            echo "New with defects";
+//                                        } else {
+//                                            echo "Used";
+//                                        } ?><!--</small>-->
+<!--                                    <div id="spacer" style="height: 20px"></div>-->
+<!--                                    <div>-->
+<!--                                        <h3>-->
+<!--                                        --><?php //if (isset($currentBid)) {
+//                                            echo $currentBid;
+//                                        } else {
+//                                            echo "No bid made yet";
+//                                        }
+//                                        ?>
+<!--                                        </h3>-->
+<!--                                    </div>-->
+<!--                                    <div id="spacer" style="height: 5%"></div>-->
+<!--                                    --><?php //echo $description; ?>
+<!--                                    <div id="remaining_time" class="card-footer text-muted">-->
+<!--                                        Remaining Time:-->
+<!--                                    </div>-->
+<!---->
+<!--                                    --><?php
+//                                    $_SESSION['auctionID'] = $idauction;
+//                                    ?>
+<!---->
+<!--                                    <button-->
+<!--                                            type='submit' name='submit' value="--><?php //echo $_SESSION['auctionID'];  ?><!--" id="submit" > Go to bidpage-->
+<!---->
+<!--                                    </button>-->
+<!---->
+<!---->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        </form>-->
+<!---->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!---->
+<!--                        --><?php
+//
+//                                }}}
+//                                ?>
+<!---->
+<!--                        --><?php //} //main submit ?>
+<!---->
 
 
 
@@ -113,153 +335,185 @@ There will be a link to the item's auction is chosen from a list (Bid for items 
 
 
 <div class="container">
+    <?php include 'config.php'; ?>
+    <?php
 
+    if (isset($_POST["submit"])) {
+        $itemToSearch = $_POST['search'];
 
+        if ($itemToSearch == null ) {
 
-    <div class="row">
-        <div class="col-md-12">
+            ?>
 
+            <div class="container-fluid">
+                <div class="jumbotron">
+                    <h1 align="center">Search returned no result</h1>
+                </div>
+            </div>
 
-            <?php include 'config.php'; ?>
             <?php
+                exit($status);
+        }
 
 
-            if (isset($_POST["submit"])) {
+        $Query = "SELECT * FROM item WHERE TITLE LIKE '%" . $itemToSearch . "%' AND ID_ITEM IN (SELECT ID_ITEM FROM auction WHERE EXPIRED ='0')";
+
+        $ExecQuery = MySQLi_query($conn, $Query);
+
+        // Check number of rows in the result set
+            if(mysqli_num_rows($ExecQuery) == 0){
+                echo "<div class=\"container-fluid\">
+                          <div class=\"jumbotron\">
+                             <h1 align=\"center\">Search returned no result</h1>
+                               </div>
+                               </div>";
+            }else{
+                echo "<br>
+                        <div class=\"container-fluid\">
+                             <h1 align=\"center\">Here are the results</h1>
+                               </div>
+                               <br>";
+            }
 
 
-            $itemToSearch = $_POST['search'];
+        while ($row = mysqli_fetch_array($ExecQuery)) {
 
-                if ($itemToSearch == null ) {
+            $image = $row['PIC'];
+            $itemID = $row['ID_ITEM'];
+            $title = $row['TITLE'];
+            $description = $row['DESCRIPTION'];
+            $catagoryID = $row['ID_CATEGORY'];
+            $state = $row['ID_STATE'];
 
-                    ?>
+            $Query2 = "SELECT * FROM auction WHERE ID_ITEM = '$itemID' AND EXPIRED = '0' ";
+            $ExecQuery2 = MySQLi_query($conn, $Query2);
 
+            while ($row = mysqli_fetch_array($ExecQuery2)) {
+                $exptime = $row['EXPIRATION_TIME'];
+                $idauction = $row['ID_AUCTION'];
+                $startprice = $row['START_PRICE'];
 
-                    <div class="container-fluid">
-                        <div class="jumbotron">
-                            <h1 align="center">Search returned no result</h1>
-                        </div>
+                 $Query3 = "SELECT MAX(PRICE) AS max_price FROM bid WHERE ID_AUCTION = '$idauction' ";
 
-                    </div>
+                $ExecQuery3 = MySQLi_query($conn, $Query3);
 
-                    <?php
-                    exit($status);
-
-                }
-
-
-
-
-                $Query = "SELECT * FROM item WHERE TITLE LIKE '%" . $itemToSearch . "%' AND ID_ITEM IN (SELECT ID_ITEM FROM auction WHERE EXPIRED ='0')";
-
-                    $ExecQuery = MySQLi_query($conn, $Query);
-
-                    // Check number of rows in the result set
-                    if(mysqli_num_rows($ExecQuery) == 0){
-                        echo "<div class=\"container-fluid\">
-                        <div class=\"jumbotron\">
-                            <h1 align=\"center\">Search returned no result</h1>
-                        </div>
-
-                    </div>";
-                    }
-
-
-                    while ($row = mysqli_fetch_array($ExecQuery)) {
-                    $image = $row['PIC'];
-                    $itemID = $row['ID_ITEM'];
-                    $title = $row['TITLE'];
-                    $description = $row['DESCRIPTION'];
-                    $catagoryID = $row['ID_CATEGORY'];
-                    $state = $row['ID_STATE'];
-
-                    $Query2 = "SELECT * FROM auction WHERE ID_ITEM = '$itemID' AND EXPIRED = '0' ";
-                    $ExecQuery2 = MySQLi_query($conn, $Query2);
-
-                    while ($row = mysqli_fetch_array($ExecQuery2)) {
-                    $exptime = $row['EXPIRATION_TIME'];
-                    $idauction = $row['ID_AUCTION'];
-                    $startprice = $row['START_PRICE'];
-
-
-                    $Query3 = "SELECT MAX(PRICE) AS max_price FROM bid WHERE ID_AUCTION = '$idauction' ";
-
-                    $ExecQuery3 = MySQLi_query($conn, $Query3);
-
-
-                    while ($row = mysqli_fetch_array($ExecQuery3)) {
+                while ($row = mysqli_fetch_array($ExecQuery3)) {
 
                     $currentBid = $row['max_price'];
+
                     ?>
 
-            <div class="col-12">
-                <div class="card text-left">
-                    <div class="card">
-                        <form action="searchtobid.php" method="post">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-4">
-                                    <div class="card" style="height: 100%">
-                                        <img src="<?php echo $image ?>" alt="..." class="img-thumbnail"
-                                             style="height: 200px">
+                    <div class="row">
+
+                        <div class="col-md-12">
+
+                        <div class="card">
+                            <div class="col-12">
+                                <form action="searchtobid.php" method="post">
+
+                                    <div class="card-body">
+                                        <div class="row">
+
+
+                                            <div class="col-4">
+                                                <div class="card" >
+                                                    <img src="<?php echo $image ?>" alt="..."
+                                                         style="height: 200px">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-8">
+                                                <h3><?php echo $title; ?></h3>
+
+                                                <p class="card-title" >
+                                                    <?php echo $description; ?> </p>
+
+
+
+                                                <ul class="list-group list-group-flush">
+                                                    <li class="list-group-item">
+                                                        <?php if ($state == 'STATE_01') {
+                                                            echo "New with sealed box";
+                                                        } elseif ($state == 'STATE_02') {
+                                                            echo "New with opened box";
+                                                        } elseif ($state == 'STATE_03') {
+                                                            echo "New with defects";
+                                                        } else {
+                                                            echo "Used";
+                                                        } ?>
+                                                    </li>
+                                                    <li class="list-group-item">
+                                                        <?php if (isset($currentBid)) {
+                                                            echo 'Highest bid is £';
+                                                            echo $currentBid;
+                                                        } else {
+                                                            echo "No bid made yet";
+                                                        }
+                                                        ?>
+                                                    </li>
+                                                </ul>
+
+
+                                                <?php
+                                                $_SESSION['auctionID'] = $idauction;
+                                                ?>
+
+
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-6">
+                                                            <button
+                                                                    class="btn btn-primary"  type='submit' name='submit' value="<?php echo $_SESSION['auctionID'];  ?>" id="submit" > Go to bidpage
+                                                            </button>
+
+                                                        </div>
+
+                                                        <div class="col-6">
+                                                            <button
+                                                                    class="btn btn-primary" type='submit' name='submit' value="<?php echo $_SESSION['auctionID'];  ?>" id="submit" > Add to Watchlist
+                                                            </button>
+
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-8">
-                                    <h3><?php echo $title; ?></h3>
+
+                                </form>
 
 
-                                    <small class="card-title" id="highest_bid">
-                                        <?php if ($state == 'STATE_01') {
-                                            echo "New with sealed box";
-                                        } elseif ($state == 'STATE_02') {
-                                            echo "New with opened box";
-                                        } elseif ($state == 'STATE_03') {
-                                            echo "New with defects";
-                                        } else {
-                                            echo "Used";
-                                        } ?></small>
-                                    <div id="spacer" style="height: 20px"></div>
-                                    <div>
-                                        <h3>
-                                        <?php if (isset($currentBid)) {
-                                            echo $currentBid;
-                                        } else {
-                                            echo "No bid made yet";
-                                        }
-                                        ?>
-                                        </h3>
-                                    </div>
-                                    <div id="spacer" style="height: 5%"></div>
-                                    <?php echo $description; ?>
-                                    <div id="remaining_time" class="card-footer text-muted">
-                                        Remaining Time:
-                                    </div>
+                            </div>
 
-                                    <?php
-                                    $_SESSION['auctionID'] = $idauction;
-                                    ?>
-
-                                    <button
-                                            type='submit' name='submit' value="<?php echo $_SESSION['auctionID'];  ?>" id="submit" > Go to bidpage
-
-                                    </button>
-
-
-                                </div>
+                            <div class="card-footer">
+                                <p align="center" class="text-muted">Expiration date and time: <?php echo $exptime ?> </p>
                             </div>
                         </div>
-                        </form>
+
 
                     </div>
                 </div>
-            </div>
-             <br>
 
-                        <?php
+                    <br>
 
-                                }}}
-                                ?>
+                                        <?php
 
-                        <?php } //main submit ?>
+                                    }}}
+
+
+                        } //main submit
+
+
+                        ?>
+</div>
+
+
+
 
 
 
