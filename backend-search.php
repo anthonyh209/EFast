@@ -48,7 +48,7 @@
 
 if(isset($_REQUEST['term'])){
     // Prepare a select statement
-    $sql = "SELECT * FROM item WHERE TITLE LIKE ? AND ID_ITEM IN (SELECT ID_ITEM FROM auction WHERE EXPIRED = '0')";
+    $sql = "SELECT * FROM item WHERE TITLE LIKE ? AND ID_ITEM IN (SELECT ID_ITEM FROM auction WHERE EXPIRATION_TIME > NOW())";
 
     if($stmt = mysqli_prepare($conn, $sql)){
         // Bind variables to the prepared statement as parameters

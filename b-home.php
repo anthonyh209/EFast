@@ -45,30 +45,11 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
                     <form action="b-item-search.php" method="post" class="form-inline my-2 my-lg-0">
-<!--                        <input class="form-control mr-sm-2" type="search" name="search" id="search" placeholder="Search" aria-label="Search">-->
-                        <div class="search-box">
+
+                        <div class="search-box" style="padding-right: 10px">
                             <input type="text" autocomplete="off" placeholder="Search" id="search" name="search" />
                             <div class="result"></div>
                         </div>
-                        <ul class="navbar-nav mr-auto">
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
-                                   aria-expanded="false">
-                                    Search by Category
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="www.google.com">BOOKS</a>
-                                    <a class="dropdown-item" href="#">MOVIES</a>
-                                    <a class="dropdown-item" href="#">ELECTRONICS</a>
-                                    <a class="dropdown-item" href="#">HOME</a>
-                                    <a class="dropdown-item" href="#">CHILDREN</a>
-                                    <a class="dropdown-item" href="#">SPORTS</a>
-                                    <a class="dropdown-item" href="#">FOOD</a>
-                                    <a class="dropdown-item" href="#">BEAUTY</a>
-                                    <a class="dropdown-item" href="#">VEHICLE</a>
-                                </div>
-                            </li>
-                        </ul>
                         <input class="btn btn-outline-success my-2 my-sm-0" type='submit' id="submit" name="submit" value="Search">
                     </form>
 
@@ -77,13 +58,14 @@
                 </div>
             </div>
 
-    <div class="collapse navbar-collapse">
-        <ul class="navbar-nav ml-auto">
-            <li><a href="b-myprofile.php"><img height="30px" src="img/user1.png"> <?php echo "Hi "; echo  $_SESSION['first_name'] ; echo " "; echo   $_SESSION['last_name'] ;   ?> </a></li>
-        </ul>
-    </div>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ml-auto">
+                    <li><a href="b-myprofile.php"><img height="30px" src="img/user1.png"> <?php echo "Hi "; echo  $_SESSION['first_name'] ; echo " "; echo   $_SESSION['last_name'] ;   ?> </a></li>
+                </ul>
+            </div>
 
-    <button style="margin-left: 10px" type="button" onclick="window.location='logout.php';" class="btn btn-outline-danger btn-sm ">Logout</button>
+            <button style="margin-left: 10px" type="button" onclick="window.location='logout.php';" class="btn btn-outline-danger btn-sm ">Logout</button>
+
 
 
 </nav>
@@ -166,39 +148,6 @@
 
 
 
-
-
-
-
-
-<!--for the horizontal bar when the catagories need to be implemented -> has to be another row-->
-<!--<div class="row">-->
-<!---->
-<!--    <div class="collapse navbar-collapse" id="myNavbar">-->
-<!---->
-<!--        <div class="scrollmenu">-->
-<!---->
-<!--            <a href="#home">Home</a>-->
-<!--            <a href="#news">News</a>-->
-<!--            <a href="#contact">Contact</a>-->
-<!--            <a href="#about">About</a>-->
-<!--            <a href="#support">Support</a>-->
-<!--            <a href="#blog">Blog</a>-->
-<!--            <a href="#tools">Tools</a>-->
-<!--            <a href="#base">Base</a>-->
-<!--            <a href="#custom">Custom</a>-->
-<!--            <a href="#more">More</a>-->
-<!--            <a href="#logo">Logo</a>-->
-<!--            <a href="#friends">Friends</a>-->
-<!--            <a href="#partners">Partners</a>-->
-<!--            <a href="#people">People</a>-->
-<!--            <a href="#work">Work</a>-->
-<!---->
-<!--        </div>-->
-<!---->
-<!--    </div>-->
-<!---->
-<!--</div>-->
 
 
 
@@ -381,7 +330,7 @@
             //$num_rows++;
 
 
-            $Query1 = "SELECT * FROM auction WHERE ID_AUCTION = '$auctionID' AND EXPIRED = '0' " ;
+            $Query1 = "SELECT * FROM auction WHERE ID_AUCTION = '$auctionID' AND EXPIRATION_TIME > NOW() " ;
 
             $ExecQuery1 = MySQLi_query($conn, $Query1);
 
@@ -458,7 +407,39 @@
 
                                 </div>
                                 <div class="card-footer text-muted">
-                                    Expiration time: <?php echo $exptime; ?>
+                                    <?php
+                                    $now = date('Y-m-d H:i:s');
+                                    $diff=strtotime($exptime)-strtotime($now);
+                                    if($diff>0) {
+
+                                        // immediately convert to days
+                                        $temp = $diff / 86400; // 86400 secs in a day
+
+                                        // days
+                                        $days = floor($temp);
+                                        $temp = 24 * ($temp - $days);
+                                        // hours
+                                        $hours = floor($temp);
+                                        $temp = 60 * ($temp - $hours);
+                                        // minutes
+                                        $minutes = floor($temp);
+                                        $temp = 60 * ($temp - $minutes);
+                                        // seconds
+                                        $seconds = floor($temp);
+
+                                        if ($days > 0) {
+                                            $timeremaining = "{$days} days {$hours} hours";
+                                        } elseif ($hours > 0) {
+                                            $timeremaining = "{$hours} hours {$minutes} minutes";
+                                        } elseif ($minutes > 0) {
+                                            $timeremaining = "{$minutes} minutes {$seconds} seconds";
+                                        } elseif ($seconds > 0) {
+                                            $timeremaining = "{$seconds} seconds";
+                                        }
+                                    }
+                                    else {$timeremaining = "Auction Complete";}
+                                    ?>
+                                    Time remaining: <?php echo $timeremaining; ?>
                                 </div>
                             </div>
                             </form>
