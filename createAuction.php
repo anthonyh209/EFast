@@ -43,44 +43,60 @@ if (isset($_POST['submit'])) {
         // if everything is ok, try to upload file
     } else {
         if (move_uploaded_file($_FILES["upload"]["tmp_name"], $target_file)) {
-            //echo "The file " . basename($_FILES["upload"]["name"]) . " has been uploaded.";
-            $duration = $_POST['item-duration'];
-
-            date_default_timezone_set('Europe/London');
-            $startdate = new DateTime();
-            $start = $startdate->format("Y-m-d H:i:s");
-            $enddate = $startdate;
-            $enddate->add(new DateInterval('PT' . $duration . 'M'));
-            //$startdate-> format("Y-m-d H:i:s");
-            $end = $enddate->format("Y-m-d H:i:s");
-            //echo $startdate-> format("Y-m-d H:i:s");
-            //$currentdate->modify("+{$duration} minutes");
-            //echo $currentdate;
-            $title = $_POST['item-title'];
-            $state = $_POST['item-state'];
-            $category = $_POST['item-category'];
-            $description = $_POST['item-description'];
-            $expiredValue = 0;
-            $counterDefault = 0;
+            echo "The file " . basename($_FILES["upload"]["name"]) . " has been uploaded.";
             $price = $_POST['item-price'];
-            settype($price, "double");
+            $reserve = $_POST['item-reserve'];
 
-            $sql = 'INSERT INTO item (id_item, pic, title, description, id_category, id_state) VALUES (NULL, ?,?,?,?,?)';
-            $itemSTMT = $conn->prepare($sql);
-            $itemSTMT->bind_param("sssss", $target_file, $title, $description, $category, $state);
-            $itemSTMT->execute();
+            if (!is_numeric($price) | !is_numeric($reserve)){
+                echo "Please provide numerical values for your prices";
+            } else {
+                if (($price < 0) | ($reserve < 0)) {
+                    echo "Your price values are negative";
+                } else {
+                    if ($reserve < $price) {
+                        echo "Your reserve price must be higher than your starting price";
+                    } else {
 
-            $id = mysqli_insert_id($conn); //retrieves just inserted new item
-            settype($id, "string");
-            $Item_Query = "SELECT * FROM item WHERE ID = '$id'";
-            $ExecQuery2 = MySQLi_query($conn, $Item_Query);
-            while ($row = mysqli_fetch_array($ExecQuery2)) {
-                $item_number = $row['ID_ITEM'];
-                $id2 = $_SESSION['userID']; //later change with the user session id
-                $auctionSQL = 'INSERT INTO auction (id_auction, id_seller, id_item, start_price, start_timestamp, expiration_time, expired, counter) VALUES (NULL, ?, ?, ?, ?, ?, ?,?)';
-                $auctionSTMT = $conn->prepare($auctionSQL);
-                $auctionSTMT->bind_param("ssdssii", $id2, $item_number, $price, $start, $end, $expiredValue, $counterDefault);
-                $auctionSTMT->execute();
+                        echo "Hello";
+                        $duration = $_POST['item-duration'];
+
+                        date_default_timezone_set('Europe/London');
+                        $startdate = new DateTime();
+                        $start = $startdate->format("Y-m-d H:i:s");
+                        $enddate = $startdate;
+                        $enddate->add(new DateInterval('PT' . $duration . 'M'));
+                        //$startdate-> format("Y-m-d H:i:s");
+                        $end = $enddate->format("Y-m-d H:i:s");
+                        //echo $startdate-> format("Y-m-d H:i:s");
+                        //$currentdate->modify("+{$duration} minutes");
+                        //echo $currentdate;
+                        $title = $_POST['item-title'];
+                        $state = $_POST['item-state'];
+                        $category = $_POST['item-category'];
+                        $description = $_POST['item-description'];
+
+                        settype($price, "double");
+                        $sql = 'INSERT INTO item (id_item, pic, title, description, id_category, id_state) VALUES (NULL, ?,?,?,?,?)';
+                        $itemSTMT = $conn->prepare($sql);
+                        $itemSTMT->bind_param("sssss", $target_file, $title, $description, $category, $state);
+                        $itemSTMT->execute();
+
+                        $id = mysqli_insert_id($conn); //retrieves just inserted new item
+                        settype($id, "string");
+                        $Item_Query = "SELECT * FROM item WHERE ID = '$id'";
+                        $ExecQuery2 = MySQLi_query($conn, $Item_Query);
+                        while ($row = mysqli_fetch_array($ExecQuery2)) {
+                            echo "Hello2";
+                            $item_number = $row['ID_ITEM'];
+                            $id2 = $_SESSION['userID']; //later change with the user session id
+                            echo $id2;
+                            $auctionSQL = 'INSERT INTO auction (id_auction, id_seller, id_item, start_price, start_timestamp, expiration_time, reserve_price) VALUES (NULL, ?, ?, ?, ?, ?, ?)';
+                            $auctionSTMT = $conn->prepare($auctionSQL);
+                            $auctionSTMT->bind_param("ssdssd", $id2, $item_number, $price, $start, $end, $reserve);
+                            $auctionSTMT->execute();
+                        }
+                    }
+                }
             }
         } else {
             echo "Sorry, there was an error uploading your file.";
@@ -166,7 +182,6 @@ if (isset($_POST['submit'])) {
                 <p class="card-text">Upload a photo of your item and improve user confidence by adding an associating
                     picture</p>
                 <input   type="file" name="upload" required>
-                <input type='submit' name='submit'>
             </div>
         </div>
 
@@ -249,7 +264,7 @@ if (isset($_POST['submit'])) {
                                 <div class="input-group-prepend">
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text">$</span>
+                                            <span class="input-group-text">£</span>
                                         </div>
                                         <input type="text" class="form-control" name="item-price"
                                                aria-label="Amount (to the nearest dollar)" required>
@@ -261,6 +276,26 @@ if (isset($_POST['submit'])) {
 
                     <!-- Duration -->
                     <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Reserve Price</h5>
+                                <p class="card-text">Please provide a reserve price for your auction</p>
+                                <div class="input-group-prepend">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">£</span>
+                                        </div>
+                                        <input type="text" class="form-control" name="item-reserve"
+                                               aria-label="Amount (to the nearest pound)" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="spacer" style="height: 30px"></div>
+                <div class="row">
+                    <div class="col">
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Duration</h5>
@@ -289,7 +324,6 @@ if (isset($_POST['submit'])) {
                         </div>
                     </div>
                 </div>
-
             </div>
 
         </div>
