@@ -64,7 +64,7 @@
 
 
 
-        <?php include 'config.php'; ?>
+        <?php include 'configPDO.php'; ?>
         <?php
         if(isset($_POST["submit"]))
         {
@@ -74,12 +74,13 @@
             $email = $_POST['email'];
             $password = $_POST['password'];
 
-            $query = "SELECT * FROM user WHERE EMAIL = '$email' ";
+            //$query = "SELECT * FROM user WHERE EMAIL = '$email' ";
+            $query = 'SELECT * FROM user WHERE EMAIL = ? ';
+            $stmt = $pdo->prepare($query);
+            $stmt->bindParam(1,$email, PDO::PARAM_STR);
+            $stmt->execute();
 
-
-            $result = mysqli_query($conn, $query);
-
-            while($row = mysqli_fetch_assoc($result)) {
+            while($row = $stmt-> fetch(PDO::FETCH_ASSOC)) {
 
                 $userID = $row['ID_USER'];
                 $db_pass = $row['PASS'];

@@ -133,7 +133,7 @@
 
 </style>
 
-<?php include 'config.php'; ?>
+<?php include 'configPDO.php'; ?>
 <?php
 
 // when the form is submitted this is triggered
@@ -156,10 +156,17 @@ if (isset($_POST['submit'])) {
             $password = password_hash($password,PASSWORD_BCRYPT);
 
             //Inserting data into the tables
-            $sql = "INSERT INTO user (FNAME, LNAME, EMAIL, PASS, ID_ROLE) VALUES ('$firstname', '$lastname', '$email','$password','$role')";
-
+            //$sql = "INSERT INTO user (FNAME, LNAME, EMAIL, PASS, ID_ROLE) VALUES ('$firstname', '$lastname', '$email','$password','$role')";
+        $sql = 'INSERT INTO user (FNAME, LNAME, EMAIL, PASS, ID_ROLE) VALUES (?, ?, ?,?,?)';
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(1,$firstname, PDO::PARAM_STR);
+        $stmt->bindParam(2,$lastname, PDO::PARAM_STR);
+        $stmt->bindParam(3,$email, PDO::PARAM_STR);
+        $stmt->bindParam(4,$password, PDO::PARAM_STR);
+        $stmt->bindParam(5,$role, PDO::PARAM_STR);
+        $res = $stmt->execute();
             // if the query is correct -> redirect to login page
-            if ($conn->query($sql) === TRUE) {
+            if ($res) {
                    echo '<script type="text/javascript"> window.location = "./login.php" </script>';
             } else {
                 echo "Error: " . $sql . "<br>" . $conn->error;
