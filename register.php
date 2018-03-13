@@ -43,17 +43,20 @@
 
         <input type="radio" name="radio" value="ROLE_01"> Buyer<br>
         <input type="radio" name="radio" value="ROLE_02"> Seller<br>
-        <input type="radio" name="radio" value="ROLE_03"> Administrator<br>
-
+<!--         <input type="radio" name="radio" value="ROLE_03"> Administrator<br>
+ -->
 
         <br>
         <br>
 
 
         <div>
-            <button type="button" class="cancelbtn" onclick="window.location='login.php';" >Cancel</button>
+            
 <!--             <button type="submit" class="signupbtn">Sign Up</button>
- -->            <input type='submit' name='submit' value='submit' id="submit" />
+ -->            <input class='btn btn-info btn-lg btn-block btn-sm'
+ type='submit' name='submit' value='Register' id="submit" />
+
+                <button type="button" class="btn btn-warning btn-lg btn-block btn-sm" onclick="window.location='login.php';" >Cancel</button>
 
         </div>
 
