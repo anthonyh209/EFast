@@ -1,18 +1,34 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: anthony
- * Date: 09/03/2018
- * Time: 16:24
- */
-$conn = mysqli_connect("efastdbs.mysql.database.azure.com", "efast@efastdbs", "Gv3-LST-nZU-JyP", "efast_main");
 
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+session_start();
+require_once("config.php");
+
+
+$reviewer = $_SESSION['userID'];
+$auctionID = $_GET['aID'];
+
+
+$sql = "SELECT ID_SELLER, FNAME, LNAME, FEEDBACK_S, EXPIRATION_TIME FROM auction INNER JOIN user ON ID_SELLER = ID_USER WHERE ID_AUCTION = '$auctionID'";
+$result = $conn->query($sql);
+while($row = $result->fetch_assoc()) {
+    $reviewee= $row['ID_SELLER'];
+    $FNAME = $row['FNAME'];
+    $LNAME = $row['LNAME'];
+    $FEEDBACK_S = $row['FEEDBACK_S'];
+    $expiration_datetime = $row['EXPIRATION_TIME'];
 }
 
+$now = date('Y-m-d H:i:s');
+$diff=strtotime($expiration_datetime)-strtotime($now);
+if($diff<=0) { $expired = 1; }
+else {$expired = 0;}
 
+$sql2 = "SELECT ID_BUYER FROM bid WHERE ID_AUCTION = '$auctionID' ORDER BY PRICE DESC LIMIT 1";
+$result2 = $conn->query($sql2);
+$row2 = $result2->fetch_assoc();
+$ID_BUYER = $row2['ID_BUYER'];
+if ($ID_BUYER == $reviewer) {$verification = 1;}
+if($FEEDBACK_S == 0 && $expired == 1 && $verification ==1) {
 
 if (isset($_POST['submit'])) {
 
@@ -39,13 +55,19 @@ if (isset($_POST['submit'])) {
     while ($row = mysqli_fetch_array($ExecQuery2)) {
         $rating_criteria = $row['ID_CRITERIA'];
         //echo $rating_criteria;
-        $reviewer = 'hiasdf'; //later change with the user session id
-        $reviewee = 'INST2302';
         $auctionSQL = 'INSERT INTO rating (id_rating, id_reviewer, id_reviewee, comment, id_criteria, comment_headline, time_stamp) VALUES (NULL, ?, ?, ?, ?, ?,?)';
         $auctionSTMT = $conn->prepare($auctionSQL);
         $auctionSTMT->bind_param("ssssss", $reviewer, $reviewee, $textdesc, $rating_criteria, $title, $start);
         $auctionSTMT->execute();
     }
+
+    $sql3 = "UPDATE auction SET FEEDBACK_B = 1 WHERE ID_AUCTION = '$auctionID'";
+    if ($conn->query($sql3) === TRUE) {
+        echo "Record updated successfully";
+    } else {
+        echo "Error updating record: " . $conn->error;
+    }
+    header('Location: /Ebay-System/b-myprofile.php');
 }
 
 ?>
@@ -55,7 +77,7 @@ if (isset($_POST['submit'])) {
 <head>
     <head>
         <meta charset="UTF-8">
-        <title>Create an Auction</title>
+        <title>Feedback</title>
         <link href="css/bootstrap.min.css" rel="stylesheet">
 
         <!-- Custom CSS -->
@@ -128,7 +150,7 @@ if (isset($_POST['submit'])) {
     <div class="col-sm-12" style="height:auto; width:auto;">
         <!-- Custom information -->
         <div class="about" style="height:auto; width:auto;">
-            <h3>Provide a new rating for seller </h3>
+            <h3>Provide feedback for <?php echo "$FNAME $LNAME" ?> </h3>
             <form action="seller-rating.php" role="form" method="post" enctype="multipart/form-data">
                 <div class="spacer" style="height:20px"></div>
                 <center>
@@ -201,6 +223,14 @@ if (isset($_POST['submit'])) {
     </div>
 </div>
 
+<?php }
 
+elseif($row['FEEDBACK_S'] == 1 && $expired == 1 && verification ==1) {
+    echo "Feedback already given.";
+}
+else { echo "You're not allowed to give feedback."; }
+
+
+?>
 </body>
 </html>

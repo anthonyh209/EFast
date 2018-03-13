@@ -142,6 +142,14 @@ $dispatchfeescore = round($dispatchfeescore,1);
         .checked {
             color: orange;
         }
+        .button2 {
+            background-color: #4CAF50;
+            align-self: center;
+        }
+        .button3 {
+            background-color: #D3D3D3;
+            align-self: center;
+        }
     </style>
 </head>
 
@@ -600,12 +608,13 @@ $sql = "SELECT COUNT(*) AS total FROM rating r INNER JOIN user u ON r.ID_REVIEWE
                         <th>Most Recent Bid</th>
                         <th>Views</th>
                         <th>Cancel Auction</th>
+                        <th>Feedback</th>
                         </thead>
                         <tbody>
 
 
 
-<?php $sql7 = "SELECT TITLE, DESCRIPTION, EXPIRATION_TIME, ID_AUCTION FROM auction a INNER JOIN item i ON a.ID_ITEM = i.ID_ITEM WHERE a.ID_SELLER = '$userID'";
+<?php $sql7 = "SELECT TITLE, DESCRIPTION, EXPIRATION_TIME, ID_AUCTION, FEEDBACK_S FROM auction a INNER JOIN item i ON a.ID_ITEM = i.ID_ITEM WHERE a.ID_SELLER = '$userID'";
 $result7 = $conn->query($sql7);
 if (!$result7) {
     throw new Exception("Database Error4");
@@ -613,6 +622,7 @@ if (!$result7) {
 
 while($row7 = $result7->fetch_assoc()){
     $currentauction = $row7["ID_AUCTION"];
+    $feedbackgiven = $row7["FEEDBACK_S"];
     $sql8 = "SELECT COUNT(*) AS total FROM traffic WHERE ID_AUCTION = '$currentauction'";
 $result8 = $conn->query($sql8);
 $row8 = $result8->fetch_assoc();
@@ -667,6 +677,19 @@ $expiration_datetime = $row7["EXPIRATION_TIME"];
                         <td><?php echo $most_recent_bid?></td>
                         <td><?php echo $total_views?></td>
                         <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
+                        <td> <?php ?>
+                            <centre> <a> &nbsp&nbsp;</a>
+                                <?php if ($feedbackgiven == 0 && $timeremaining == 'Auction Complete' && $most_recent_bid != "No bids") { ?>
+                                <a <?php echo "href='buyer-rating.php?aID=".$currentauction."'"?>> <button class = "btn button3 btn-xs">
+                                        <span class ="glyphicon glyphicon-remove" background-color="#A9A9A9"></span></button>
+
+                                    <?php }
+                                    else if ($feedbackgiven == 1 ) { ?>
+                                        <a class="button2"></a> <button class = "btn button2 btn-xs">
+                                            <span class="glyphicon glyphicon-ok" background-color="#4CAF50"></span></button>
+                                    <?php } ?>
+                            </centre>
+                        </td>
                     </tr>
 
                         <?php }  ?>

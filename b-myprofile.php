@@ -112,6 +112,15 @@ $averagerating = round($averagerating,1);
         .checked {
             color: orange;
         }
+        .button2 {
+            background-color: #4CAF50;
+            align-self: center;
+        }
+        .button3 {
+            background-color: #D3D3D3;
+            align-self: center;
+        }
+
     </style>
 </head>
 
@@ -380,7 +389,7 @@ $averagerating = round($averagerating,1);
                         <th>Your Bid</th>
                         <th>Auction Time Remaining</th>
                         <th>Bid Status</th>
-                        <th>Delete</th>
+                        <th>Feedback</th>
                         </thead>
                         <tbody>
 
@@ -390,11 +399,12 @@ $averagerating = round($averagerating,1);
                         while($row10 = $result10->fetch_assoc()){
                             $currentauctionID = $row10['ID_AUCTION'];
                             $bidamount = $row10['PRICE'];
-                            $sql11 = "SELECT TITLE, DESCRIPTION, EXPIRATION_TIME, FNAME, LNAME FROM auction a INNER JOIN item i ON a.ID_ITEM = i.ID_ITEM
+                            $sql11 = "SELECT TITLE, DESCRIPTION, EXPIRATION_TIME, FNAME, LNAME, FEEDBACK_B FROM auction a INNER JOIN item i ON a.ID_ITEM = i.ID_ITEM
                                       INNER JOIN user u ON u.ID_USER = a.ID_SELLER WHERE ID_AUCTION = '$currentauctionID' ORDER BY EXPIRATION_TIME DESC";
                             $result11 = $conn->query($sql11);
                             if(!$result11) {throw new Exception("Database Error6");}
                             $row11 = $result11->fetch_assoc();
+                            $feedbackgiven = $row11["FEEDBACK_B"];
                         $now = date('Y-m-d H:i:s');
                         $expiration_datetime = $row11["EXPIRATION_TIME"];
                         $diff=strtotime($expiration_datetime)-strtotime($now);
@@ -446,31 +456,21 @@ $averagerating = round($averagerating,1);
                                 <td><?php echo $bidamount?></td>
                                 <td><?php echo $timeremaining ?></td>
                                 <td><?php echo $bidstatus?></td>
-                                <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" <?php echo "data-target='#delete".$m."'"?>><span class="glyphicon glyphicon-trash"></span></button></p></td>
+                                <td> <?php ?>
+                                    <centre> <a> &nbsp&nbsp;</a>
+                                        <?php if ($feedbackgiven == 0 && $bidstatus == 'Bid Successful') { ?>
+                                        <a <?php echo "href='seller-rating.php?aID=".$currentauctionID."'"?>> <button class = "btn button3 btn-xs">
+                                            <span class ="glyphicon glyphicon-remove" background-color="#FF0000"></span></button>
+
+                                        <?php }
+                                        else if ($feedbackgiven == 1 ) { ?>
+                                        <a class="button2"></a> <button class = "btn button2 btn-xs">
+                                            <span class="glyphicon glyphicon-ok" background-color="#4CAF50"></span></button>
+                                    <?php } ?>
+                                    </centre>
+                                </td>
                             </tr>
 
-                            <div class="modal fade" <?php echo "id='delete".$m."'" ?> tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
-                                <php if $
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-                                            <h4 class="modal-title custom_align" id="Heading">Delete this entry</h4>
-                                        </div>
-                                        <div class="modal-body">
-
-                                            <div class="alert alert-danger"><span class="glyphicon glyphicon-warning-sign"></span> Are you sure you want to delete this bid?</div>
-
-                                        </div>
-                                        <div class="modal-footer ">
-                                            <button type="button" class="btn btn-success" ><span class="glyphicon glyphicon-ok-sign"></span> Yes</button>
-                                            <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> No</button>
-                                        </div>
-                                    </div>
-                                    <!-- /.modal-content -->
-                                </div>
-                                <!-- /.modal-dialog -->
-                            </div>
                         <?php }  ?>
                         </tbody>
                     </table>
@@ -481,28 +481,6 @@ $averagerating = round($averagerating,1);
 
     <!-- This section is the delete auction confirmation - but this isn't in the required features -->
 
-    <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
-        <php if $
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-                    <h4 class="modal-title custom_align" id="Heading">Delete this entry</h4>
-                </div>
-                <div class="modal-body">
-
-                    <div class="alert alert-danger"><span class="glyphicon glyphicon-warning-sign"></span> Are you sure you want to delete this bid?</div>
-
-                </div>
-                <div class="modal-footer ">
-                    <button type="button" class="btn btn-success" ><span class="glyphicon glyphicon-ok-sign"></span> Yes</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> No</button>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
 
 
 </body>
