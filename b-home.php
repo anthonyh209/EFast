@@ -1,3 +1,4 @@
+<?php include 'configPDO.php'; ?>
 <?php
  session_start();
 
@@ -313,7 +314,7 @@
 
 
 
-        <?php include 'config.php'; ?>
+
         <?php
 
 
@@ -329,157 +330,192 @@
         // $sql = "SELECT DISTINCT ID_AUCTION FROM BID WHERE ID_BUYER IN (SELECT DISTINCT ID_BUYER FROM BID WHERE NOT ID_BUYER = '$userID' AND ID_AUCTION IN (SELECT DISTINCT ID_AUCTION FROM BID WHERE ID_BUYER = '$userID'))";
 
 
-        $sql = "SELECT DISTINCT auc.ID_AUCTION FROM BID bid INNER JOIN auction auc ON bid.ID_AUCTION = auc.ID_AUCTION WHERE bid.ID_BUYER IN (SELECT DISTINCT ID_BUYER FROM BID WHERE NOT ID_BUYER = '$userID' AND ID_AUCTION IN (SELECT DISTINCT ID_AUCTION FROM BID WHERE ID_BUYER = '$userID')) AND bid.ID_AUCTION NOT IN (SELECT ID_AUCTION FROM bid WHERE ID_BUYER = '$userID') AND auc.EXPIRATION_TIME > NOW()";
+        //$sql = "SELECT DISTINCT auc.ID_AUCTION FROM BID bid INNER JOIN auction auc ON bid.ID_AUCTION = auc.ID_AUCTION WHERE bid.ID_BUYER IN (SELECT DISTINCT ID_BUYER FROM BID WHERE NOT ID_BUYER = '$userID' AND ID_AUCTION IN (SELECT DISTINCT ID_AUCTION FROM BID WHERE ID_BUYER = '$userID')) AND bid.ID_AUCTION NOT IN (SELECT ID_AUCTION FROM bid WHERE ID_BUYER = '$userID') AND auc.EXPIRATION_TIME > NOW()";
+
+        try {
+            $sql = 'SELECT DISTINCT auc.ID_AUCTION FROM BID bid INNER JOIN auction auc ON bid.ID_AUCTION = auc.ID_AUCTION WHERE bid.ID_BUYER IN (SELECT DISTINCT ID_BUYER FROM BID WHERE NOT ID_BUYER = ? AND ID_AUCTION IN (SELECT DISTINCT ID_AUCTION FROM BID WHERE ID_BUYER = ?)) AND bid.ID_AUCTION NOT IN (SELECT ID_AUCTION FROM bid WHERE ID_BUYER = ?) AND auc.EXPIRATION_TIME > NOW();';
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(1,$userID, PDO::PARAM_STR, 9);
+            $stmt->bindParam(2,$userID, PDO::PARAM_STR, 9);
+            $stmt->bindParam(3,$userID, PDO::PARAM_STR, 9);
+
+            $stmt->execute();
+             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+
+
+                 $auctionID = $row['ID_AUCTION'];
+                 //$num_rows++;
+
+
+                 //$Query1 = "SELECT * FROM auction WHERE ID_AUCTION = '$auctionID'" ;
+                 $Query1 = 'SELECT * FROM auction WHERE ID_AUCTION = ?' ;
+                 $stmt1 = $pdo->prepare($Query1);
+                 $stmt1->bindParam(1,$auctionID, PDO::PARAM_STR,9);
+                 $stmt1->execute();
+
+                 //$ExecQuery1 = MySQLi_query($conn, $Query1);
+
+                 while ($row = $stmt1->fetch(PDO::FETCH_ASSOC)) {
+
+
+                     $exptime = $row['EXPIRATION_TIME'];
+                     $startprice = $row['START_PRICE'];
+                     $itemID = $row['ID_ITEM'];
+                     $idauction = $row['ID_AUCTION'];
+
+                     //$Query2 = "SELECT * FROM item WHERE ID_ITEM = '$itemID' ";
+                     $Query2 = 'SELECT * FROM item WHERE ID_ITEM = ? ';
+                     $stmt2 = $pdo->prepare($Query2);
+                     $stmt2->bindParam(1,$itemID,PDO::PARAM_STR,9);
+                     $stmt2->execute();
+
+                     //$ExecQuery2 = MySQLi_query($conn, $Query2);
+
+                     while ($row = $stmt2->fetch(PDO::FETCH_ASSOC)) {
+
+                         $image = $row['PIC'];
+                         $title = $row['TITLE'];
+                         $description = $row['DESCRIPTION'];
+                         $catagoryID = $row['ID_CATEGORY'];
+                         $state = $row['ID_STATE'];
+
+
+                         //$Query3 = "SELECT MAX(PRICE) AS max_price FROM bid WHERE ID_AUCTION = '$auctionID' ";
+                         $Query3 = 'SELECT MAX(PRICE) AS max_price FROM bid WHERE ID_AUCTION = ? ';
+                         $stmt3 = $pdo->prepare($Query3);
+                         $stmt3->bindParam(1,$auctionID, PDO::PARAM_STR,9);
+                         $stmt3->execute();
+
+                         //$ExecQuery3 = MySQLi_query($conn, $Query3);
+
+                         while ($row = $stmt3->fetch(PDO::FETCH_ASSOC)) {
+
+                             $currentBid = $row['max_price'];
+
+                             ?>
+
+
+
+                             <div class="col-md-<?php echo $bootstrapColWidth; ?>">
+                                 <form action="searchtobid.php" method="post">
+                                     <div class="card" style="width: 18rem;">
+                                         <img class="card-img-top" src="<?php echo $image ?>" alt="Card image cap">
+                                         <div class="card-body">
+                                             <h5 class="card-title"><?php echo $title; ?></h5>
+                                             <p class="card-text"><?php echo $description; ?></p>
+                                         </div>
+                                         <ul class="list-group list-group-flush">
+
+                                             <li class="list-group-item"><?php if ($state == 'STATE_01') {
+                                                     echo "New with sealed box";
+                                                 } elseif ($state == 'STATE_02') {
+                                                     echo "New with opened box";
+                                                 } elseif ($state == 'STATE_03') {
+                                                     echo "New with defects";
+                                                 } else {
+                                                     echo "Used";
+                                                 } ?></li>
+
+                                             <li class="list-group-item"><?php if (isset($currentBid)) {
+                                                     echo "Highest bid is £"; echo  $currentBid;
+                                                 } else {
+                                                     echo "No bid made yet";
+                                                 }
+                                                 ?></li>
+
+                                         </ul>
+                                         <div class="card-body">
+
+                                             <?php
+                                             $_SESSION['auctionID'] = $idauction;
+                                             ?>
+
+                                             <button
+                                                     class="btn btn-primary"  type='submit' name='submit' value="<?php echo $_SESSION['auctionID'];  ?>" id="submit" > Go to bidpage
+                                             </button>
+
+                                         </div>
+                                         <div class="card-footer text-muted">
+                                             <?php
+                                             $now = date('Y-m-d H:i:s');
+                                             $diff=strtotime($exptime)-strtotime($now);
+                                             if($diff>0) {
+
+                                                 // immediately convert to days
+                                                 $temp = $diff / 86400; // 86400 secs in a day
+
+                                                 // days
+                                                 $days = floor($temp);
+                                                 $temp = 24 * ($temp - $days);
+                                                 // hours
+                                                 $hours = floor($temp);
+                                                 $temp = 60 * ($temp - $hours);
+                                                 // minutes
+                                                 $minutes = floor($temp);
+                                                 $temp = 60 * ($temp - $minutes);
+                                                 // seconds
+                                                 $seconds = floor($temp);
+
+                                                 if ($days > 0) {
+                                                     $timeremaining = "{$days} days {$hours} hours";
+                                                 } elseif ($hours > 0) {
+                                                     $timeremaining = "{$hours} hours {$minutes} minutes";
+                                                 } elseif ($minutes > 0) {
+                                                     $timeremaining = "{$minutes} minutes {$seconds} seconds";
+                                                 } elseif ($seconds > 0) {
+                                                     $timeremaining = "{$seconds} seconds";
+                                                 }
+                                             }
+                                             else {$timeremaining = "Auction Complete";}
+                                             ?>
+                                             Time remaining: <?php echo $timeremaining; ?>
+                                         </div>
+                                     </div>
+                                 </form>
+
+
+                             </div>
+
+
+
+                             <?php
+
+
+                             $rowCount++;
+
+                             if ($rowCount % $numOfCols == 0) {
+                                 echo '</div>';
+                                 echo '<br>';
+                                 echo '<br>';
+                                 echo' <div class="row">';
+                             }
+
+
+
+                         }}}
 
 
 
 
-        $result = MySQLi_query($conn, $sql);
+
+             }
+
+
+        }
+        catch(PDOException $e)
+        {
+            echo $e -> getMessage();
+        }
+
+
+
+       // $result = MySQLi_query($conn, $sql);
 
         //number of items
         //$num_rows = -1;
 
 
-        while ($row = mysqli_fetch_array($result)) {
-
-            $auctionID = $row['ID_AUCTION'];
-            //$num_rows++;
-
-
-            $Query1 = "SELECT * FROM auction WHERE ID_AUCTION = '$auctionID'" ;
-
-            $ExecQuery1 = MySQLi_query($conn, $Query1);
-
-            while ($row = mysqli_fetch_array($ExecQuery1)) {
-
-
-                $exptime = $row['EXPIRATION_TIME'];
-                $startprice = $row['START_PRICE'];
-                $itemID = $row['ID_ITEM'];
-                $idauction = $row['ID_AUCTION'];
-
-                $Query2 = "SELECT * FROM item WHERE ID_ITEM = '$itemID' ";
-
-                $ExecQuery2 = MySQLi_query($conn, $Query2);
-
-                while ($row = mysqli_fetch_array($ExecQuery2)) {
-
-                    $image = $row['PIC'];
-                    $title = $row['TITLE'];
-                    $description = $row['DESCRIPTION'];
-                    $catagoryID = $row['ID_CATEGORY'];
-                    $state = $row['ID_STATE'];
-
-
-                    $Query3 = "SELECT MAX(PRICE) AS max_price FROM bid WHERE ID_AUCTION = '$auctionID' ";
-
-                    $ExecQuery3 = MySQLi_query($conn, $Query3);
-
-                    while ($row = mysqli_fetch_array($ExecQuery3)) {
-
-                        $currentBid = $row['max_price'];
-
-                        ?>
-
-
-
-                        <div class="col-md-<?php echo $bootstrapColWidth; ?>">
-                            <form action="searchtobid.php" method="post">
-                            <div class="card" style="width: 18rem;">
-                                <img class="card-img-top" src="<?php echo $image ?>" alt="Card image cap">
-                                <div class="card-body">
-                                    <h5 class="card-title"><?php echo $title; ?></h5>
-                                    <p class="card-text"><?php echo $description; ?></p>
-                                </div>
-                                <ul class="list-group list-group-flush">
-
-                                    <li class="list-group-item"><?php if ($state == 'STATE_01') {
-                                            echo "New with sealed box";
-                                        } elseif ($state == 'STATE_02') {
-                                            echo "New with opened box";
-                                        } elseif ($state == 'STATE_03') {
-                                            echo "New with defects";
-                                        } else {
-                                            echo "Used";
-                                        } ?></li>
-
-                                    <li class="list-group-item"><?php if (isset($currentBid)) {
-                                            echo "Highest bid is £"; echo  $currentBid;
-                                        } else {
-                                            echo "No bid made yet";
-                                        }
-                                        ?></li>
-
-                                </ul>
-                                <div class="card-body">
-
-                                    <?php
-                                    $_SESSION['auctionID'] = $idauction;
-                                    ?>
-
-                                    <button
-                                            class="btn btn-primary"  type='submit' name='submit' value="<?php echo $_SESSION['auctionID'];  ?>" id="submit" > Go to bidpage
-                                    </button>
-
-                                </div>
-                                <div class="card-footer text-muted">
-                                    <?php
-                                    $now = date('Y-m-d H:i:s');
-                                    $diff=strtotime($exptime)-strtotime($now);
-                                    if($diff>0) {
-
-                                        // immediately convert to days
-                                        $temp = $diff / 86400; // 86400 secs in a day
-
-                                        // days
-                                        $days = floor($temp);
-                                        $temp = 24 * ($temp - $days);
-                                        // hours
-                                        $hours = floor($temp);
-                                        $temp = 60 * ($temp - $hours);
-                                        // minutes
-                                        $minutes = floor($temp);
-                                        $temp = 60 * ($temp - $minutes);
-                                        // seconds
-                                        $seconds = floor($temp);
-
-                                        if ($days > 0) {
-                                            $timeremaining = "{$days} days {$hours} hours";
-                                        } elseif ($hours > 0) {
-                                            $timeremaining = "{$hours} hours {$minutes} minutes";
-                                        } elseif ($minutes > 0) {
-                                            $timeremaining = "{$minutes} minutes {$seconds} seconds";
-                                        } elseif ($seconds > 0) {
-                                            $timeremaining = "{$seconds} seconds";
-                                        }
-                                    }
-                                    else {$timeremaining = "Auction Complete";}
-                                    ?>
-                                    Time remaining: <?php echo $timeremaining; ?>
-                                </div>
-                            </div>
-                            </form>
-
-
-                        </div>
-
-
-
-                        <?php
-
-
-                        $rowCount++;
-
-                        if ($rowCount % $numOfCols == 0) {
-                            echo '</div>';
-                            echo '<br>';
-                            echo '<br>';
-                            echo' <div class="row">';
-                        }
-
-
-
-                    }}}}
+        //while ($row = mysqli_fetch_array($result)) {}
 
 
 
