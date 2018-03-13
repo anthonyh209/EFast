@@ -29,46 +29,56 @@
 
 <body>
 
+<!-- Navigation Bar search function -->
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
 
-            <a class="navbar-brand" href="b-home.php">
-                <img width="100" src="efast.png">
-            </a>
+    <a class="navbar-brand" href="b-home.php">
+        <img width="100" src="efast.png">
+    </a>
 
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+            aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-            <div class="col-md-auto">
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <div class="col-md-auto">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
-                    <form action="b-item-search.php" method="post" class="form-inline my-2 my-lg-0">
-
-                        <div class="search-box" style="padding-right: 10px">
-                            <input type="text" autocomplete="off" placeholder="Search" id="search" name="search" />
-                            <div class="result"></div>
-                        </div>
-                        <input class="btn btn-outline-success my-2 my-sm-0" type='submit' id="submit" name="submit" value="Search">
-                    </form>
-
-
-
+            <form action="b-item-search.php" method="post" class="form-inline my-2 my-lg-0">
+                <!--                        <input class="form-control mr-sm-2" type="search" name="search" id="search" placeholder="Search" aria-label="Search">-->
+                <div class="search-box">
+                    <input type="text" autocomplete="off" placeholder="Search" id="search" name="search" />
+                    <div class="result"></div>
                 </div>
-            </div>
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item" style="padding-left: 10px; padding-right: 10px ">
+                    <input type="button" class="btn btn-primary navbar-btn" value="Search by category" onclick="window.location.href='b-category-search.php'" />
+                    </a>
+                    </li>
 
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav ml-auto">
-                    <li><a href="b-myprofile.php"><img height="30px" src="img/user1.png"> <?php echo "Hi "; echo  $_SESSION['first_name'] ; echo " "; echo   $_SESSION['last_name'] ;   ?> </a></li>
+
                 </ul>
-            </div>
+                <input class="btn btn-outline-success my-2 my-sm-0" type='submit' id="submit" name="submit" value="Search">
+            </form>
 
-            <button style="margin-left: 10px" type="button" onclick="window.location='logout.php';" class="btn btn-outline-danger btn-sm ">Logout</button>
 
+
+        </div>
+    </div>
+
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ml-auto">
+            <li><a href="b-myprofile.php"><img height="30px" src="img/user1.png"> <?php echo "Hi "; echo  $_SESSION['first_name'] ; echo " "; echo   $_SESSION['last_name'] ;   ?> </a></li>
+        </ul>
+    </div>
+
+    <button style="margin-left: 10px" type="button" onclick="window.location='logout.php';" class="btn btn-outline-danger btn-sm ">Logout</button>
 
 
 </nav>
+
+
 
 
 <style type="text/css">
@@ -316,7 +326,13 @@
 
         $userID = $_SESSION['userID'];
 
-        $sql = "SELECT DISTINCT ID_AUCTION FROM BID WHERE ID_BUYER IN (SELECT DISTINCT ID_BUYER FROM BID WHERE NOT ID_BUYER = '$userID' AND ID_AUCTION IN (SELECT DISTINCT ID_AUCTION FROM BID WHERE ID_BUYER = '$userID'))";
+        // $sql = "SELECT DISTINCT ID_AUCTION FROM BID WHERE ID_BUYER IN (SELECT DISTINCT ID_BUYER FROM BID WHERE NOT ID_BUYER = '$userID' AND ID_AUCTION IN (SELECT DISTINCT ID_AUCTION FROM BID WHERE ID_BUYER = '$userID'))";
+
+
+        $sql = "SELECT DISTINCT auc.ID_AUCTION FROM BID bid INNER JOIN auction auc ON bid.ID_AUCTION = auc.ID_AUCTION WHERE bid.ID_BUYER IN (SELECT DISTINCT ID_BUYER FROM BID WHERE NOT ID_BUYER = '$userID' AND ID_AUCTION IN (SELECT DISTINCT ID_AUCTION FROM BID WHERE ID_BUYER = '$userID')) AND bid.ID_AUCTION NOT IN (SELECT ID_AUCTION FROM bid WHERE ID_BUYER = '$userID') AND auc.EXPIRATION_TIME > NOW()";
+
+
+
 
         $result = MySQLi_query($conn, $sql);
 
@@ -330,7 +346,7 @@
             //$num_rows++;
 
 
-            $Query1 = "SELECT * FROM auction WHERE ID_AUCTION = '$auctionID' AND EXPIRATION_TIME > NOW() " ;
+            $Query1 = "SELECT * FROM auction WHERE ID_AUCTION = '$auctionID'" ;
 
             $ExecQuery1 = MySQLi_query($conn, $Query1);
 

@@ -30,6 +30,7 @@ There will be a link to the item's auction is chosen from a list (Bid for items 
 
 
 <!-- Navigation Bar search function -->
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
 
     <a class="navbar-brand" href="b-home.php">
@@ -51,23 +52,12 @@ There will be a link to the item's auction is chosen from a list (Bid for items 
                     <div class="result"></div>
                 </div>
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
-                           aria-expanded="false">
-                            Search by Category
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="www.google.com">BOOKS</a>
-                            <a class="dropdown-item" href="#">MOVIES</a>
-                            <a class="dropdown-item" href="#">ELECTRONICS</a>
-                            <a class="dropdown-item" href="#">HOME</a>
-                            <a class="dropdown-item" href="#">CHILDREN</a>
-                            <a class="dropdown-item" href="#">SPORTS</a>
-                            <a class="dropdown-item" href="#">FOOD</a>
-                            <a class="dropdown-item" href="#">BEAUTY</a>
-                            <a class="dropdown-item" href="#">VEHICLE</a>
-                        </div>
+                    <li class="nav-item" style="padding-left: 10px; padding-right: 10px ">
+                    <input type="button" class="btn btn-primary navbar-btn" value="Search by category" onclick="window.location.href='b-category-search.php'" />
+                    </a>
                     </li>
+
+
                 </ul>
                 <input class="btn btn-outline-success my-2 my-sm-0" type='submit' id="submit" name="submit" value="Search">
             </form>
@@ -87,6 +77,8 @@ There will be a link to the item's auction is chosen from a list (Bid for items 
 
 
 </nav>
+
+
 
 
 
