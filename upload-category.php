@@ -16,12 +16,27 @@ if ($conn->connect_error) {
 if (isset($_POST['submit'])) {
 
     $title = $_POST['category-name'];
-    echo $title;
+    $title = strtoupper($title);
+    $check = 0;
 
-    $sql = 'INSERT INTO category (id_category, category) VALUES (NULL, ?)';
-    $itemSTMT = $conn->prepare($sql);
-    $itemSTMT->bind_param("s", $title);
-    $itemSTMT->execute();
+    $sql = "SELECT * from category";
+    $result = MySQLi_query($conn, $sql);
+    while ($row = mysqli_fetch_array($result)) {
+        $categoryName = $row['CATEGORY'];
+        if ($categoryName == $title){
+            $check = 1;
+        }
+    }
+
+    if ($check == 0) {
+        $sql = 'INSERT INTO category (id_category, category) VALUES (NULL, ?)';
+        $itemSTMT = $conn->prepare($sql);
+        $itemSTMT->bind_param("s", $title);
+        $itemSTMT->execute();
+        echo "New category successfully added";
+    } else {
+        echo "This category already exists";
+    }
 }
 ?>
 
