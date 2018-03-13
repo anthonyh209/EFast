@@ -3,72 +3,95 @@
 session_start();
 require_once("config.php");
 
+//buyer giving seller a rating
+//$reviewer = $_SESSION['userID'];
+$reviewer = "ID_001034";
+//$auctionID = $_GET['aID'];
+$auctionID = "AU_000057";
 
-$reviewer = $_SESSION['userID'];
-$auctionID = $_GET['aID'];
-
-
+// getting the seller details
 $sql = "SELECT ID_SELLER, FNAME, LNAME, FEEDBACK_S, EXPIRATION_TIME FROM auction INNER JOIN user ON ID_SELLER = ID_USER WHERE ID_AUCTION = '$auctionID'";
 $result = $conn->query($sql);
-while($row = $result->fetch_assoc()) {
-    $reviewee= $row['ID_SELLER'];
+while ($row = $result->fetch_assoc()) {
+    $reviewee = $row['ID_SELLER'];
     $FNAME = $row['FNAME'];
     $LNAME = $row['LNAME'];
     $FEEDBACK_S = $row['FEEDBACK_S'];
     $expiration_datetime = $row['EXPIRATION_TIME'];
+
 }
 
-$now = date('Y-m-d H:i:s');
-$diff=strtotime($expiration_datetime)-strtotime($now);
-if($diff<=0) { $expired = 1; }
-else {$expired = 0;}
+$now = date('Y-m-d H:i:s'); //getting current time
+$diff = strtotime($expiration_datetime) - strtotime($now);
+echo $diff;
 
+// why are you checking expired?
+if ($diff <= 0) {
+    $expired = 1;
+} else {
+    $expired = 0;
+}
+
+//getting the buyer details, the one with the highest bid
 $sql2 = "SELECT ID_BUYER FROM bid WHERE ID_AUCTION = '$auctionID' ORDER BY PRICE DESC LIMIT 1";
 $result2 = $conn->query($sql2);
 $row2 = $result2->fetch_assoc();
 $ID_BUYER = $row2['ID_BUYER'];
-if ($ID_BUYER == $reviewer) {$verification = 1;}
-if($FEEDBACK_S == 0 && $expired == 1 && $verification ==1) {
-
-if (isset($_POST['submit'])) {
-
-    $authen = $_POST['rating-authen'];
-    $response = $_POST['rating-response'];
-    $speed = $_POST['rating-speed'];
-    $fee = $_POST['rating-fee'];
-    $textdesc = $_POST['rating-comment'];
-    $title = $_POST['rating-title'];
-    date_default_timezone_set('Europe/London');
-    $startdate = new DateTime();
-    $start = $startdate->format("Y-m-d H:i:s");
-
-
-    $sql = 'INSERT INTO criteria_seller (id_criteria, authenticity, responsiveness, dispatch_time, dispatch_fee) VALUES (NULL, ?,?,?,?)';
-    $itemSTMT = $conn->prepare($sql);
-    $itemSTMT->bind_param("iiii", $authen, $response, $speed, $fee);
-    $itemSTMT->execute();
-
-    $id = mysqli_insert_id($conn); //retrieves just inserted new item
-    echo $id;
-    $Item_Query = "SELECT * FROM criteria_seller WHERE ID = '$id'";
-    $ExecQuery2 = MySQLi_query($conn, $Item_Query);
-    while ($row = mysqli_fetch_array($ExecQuery2)) {
-        $rating_criteria = $row['ID_CRITERIA'];
-        //echo $rating_criteria;
-        $auctionSQL = 'INSERT INTO rating (id_rating, id_reviewer, id_reviewee, comment, id_criteria, comment_headline, time_stamp) VALUES (NULL, ?, ?, ?, ?, ?,?)';
-        $auctionSTMT = $conn->prepare($auctionSQL);
-        $auctionSTMT->bind_param("ssssss", $reviewer, $reviewee, $textdesc, $rating_criteria, $title, $start);
-        $auctionSTMT->execute();
-    }
-
-    $sql3 = "UPDATE auction SET FEEDBACK_B = 1 WHERE ID_AUCTION = '$auctionID'";
-    if ($conn->query($sql3) === TRUE) {
-        echo "Record updated successfully";
-    } else {
-        echo "Error updating record: " . $conn->error;
-    }
-    header('Location: /Ebay-System/b-myprofile.php');
+if ($ID_BUYER == $reviewer) {
+    $verification = 1;
 }
+
+
+if ($FEEDBACK_S == 0 && $expired == 1 && $verification == 1) {
+
+    if (isset($_POST['submit'])) {
+
+        $authen = $_POST['rating-authen'];
+        $response = $_POST['rating-response'];
+        $speed = $_POST['rating-speed'];
+        $fee = $_POST['rating-fee'];
+        $textdesc = $_POST['rating-comment'];
+        $title = $_POST['rating-title'];
+        date_default_timezone_set('Europe/London');
+        $startdate = new DateTime();
+        $start = $startdate->format("Y-m-d H:i:s");
+
+
+        $sql = 'INSERT INTO criteria_seller (id_criteria, authenticity, responsiveness, dispatch_time, dispatch_fee) VALUES (NULL, ?,?,?,?)';
+        $itemSTMT = $conn->prepare($sql);
+        $itemSTMT->bind_param("iiii", $authen, $response, $speed, $fee);
+        $itemSTMT->execute();
+
+
+        $id = mysqli_insert_id($conn); //retrieves just inserted new item
+        echo $id;
+        $Item_Query = "SELECT * FROM criteria_seller WHERE ID = '$id'";
+        $ExecQuery2 = MySQLi_query($conn, $Item_Query);
+        while ($row = mysqli_fetch_array($ExecQuery2)) {
+            $rating_criteria = $row['ID_CRITERIA'];
+            //echo $rating_criteria;
+            $auctionSQL = 'INSERT INTO rating (id_rating, id_reviewer, id_reviewee, comment, id_criteria, comment_headline, time_stamp) VALUES (NULL, ?, ?, ?, ?, ?,?)';
+            $auctionSTMT = $conn->prepare($auctionSQL);
+            $auctionSTMT->bind_param("ssssss", $reviewer, $reviewee, $textdesc, $rating_criteria, $title, $start);
+            $auctionSTMT->execute();
+        }
+
+        $sql3 = "UPDATE auction SET  FEEDBACK_B = 1 WHERE ID_AUCTION = '$auctionID'";
+        if ($conn->query($sql3) === TRUE) {
+            echo "Record updated successfully";
+        } else {
+            echo "Error updating record: " . $conn->error;
+        }
+        header('Location: /Ebay-System/b-myprofile.php');
+
+    }
+} elseif ($row['FEEDBACK_S'] == 1 && $expired == 1 && verification == 1) {
+    echo "Feedback already given.";
+} else {
+    echo "You're not allowed to give feedback.";
+}
+
+
 
 ?>
 
@@ -90,59 +113,59 @@ if (isset($_POST['submit'])) {
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         -->
 
-    <style class="cp-pen-styles">body {
-    background-color: #f3f5f7;
-        font-family: 'Helvetica Neue', Arial, sans-serif;
-    }
+        <style class="cp-pen-styles">body {
+                background-color: #f3f5f7;
+                font-family: 'Helvetica Neue', Arial, sans-serif;
+            }
 
-    .card {
-    background-color: #fff;
-        box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        max-width: 300px;
-        height: 375px;
-        border-radius: 10px;
-        overflow: hidden;
-    }
+            .card {
+                background-color: #fff;
+                box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                max-width: 300px;
+                height: 375px;
+                border-radius: 10px;
+                overflow: hidden;
+            }
 
-    .card .about {
-    height: 225px;
-        padding: 20px;
-        box-sizing: border-box;
-    }
+            .card .about {
+                height: 225px;
+                padding: 20px;
+                box-sizing: border-box;
+            }
 
-    .card .about h3,
-    .card .about .lead {
-    font-weight: 300;
-        margin: 0;
-    }
+            .card .about h3,
+            .card .about .lead {
+                font-weight: 300;
+                margin: 0;
+            }
 
-    .card .about h3 {
-    font-size: 24px;
-    }
+            .card .about h3 {
+                font-size: 24px;
+            }
 
-    .card .about .lead {
-    color: #aaa;
-}
+            .card .about .lead {
+                color: #aaa;
+            }
 
-    .card .info {
-    float: left;
-    padding: 10px 30px 10px 0;
-    }
+            .card .info {
+                float: left;
+                padding: 10px 30px 10px 0;
+            }
 
-    .card .info p {
-    font-size: 11px;
-        color: #aaa;
-        font-weight: 300;
-    }
+            .card .info p {
+                font-size: 11px;
+                color: #aaa;
+                font-weight: 300;
+            }
 
-    </style>
-</head>
+        </style>
+    </head>
 
-<!--List of auctions, items, users. Analytics.-->
+    <!--List of auctions, items, users. Analytics.-->
 
 
 <body>
@@ -223,14 +246,5 @@ if (isset($_POST['submit'])) {
     </div>
 </div>
 
-<?php }
-
-elseif($row['FEEDBACK_S'] == 1 && $expired == 1 && verification ==1) {
-    echo "Feedback already given.";
-}
-else { echo "You're not allowed to give feedback."; }
-
-
-?>
 </body>
 </html>
