@@ -189,13 +189,9 @@ if ($row["ID_ROLE"] == "ROLE_01") {
 
         <?php
 
-        $results_per_page = 5;
-
-        if (isset($_GET["page"])) { $page  = $_GET["page"]; } else { $page=1; };
-        $start_from = ($page-1) * $results_per_page;
         $sql6 = "SELECT FNAME, LNAME, TIME_STAMP, COMMENT_HEADLINE, COMMENT, RATING_SCORE
               FROM rating r INNER JOIN criteria_buyer c ON r.ID_CRITERIA = c.ID_CRITERIA
-              INNER JOIN user u ON u.ID_USER = r.ID_reviewer WHERE  r.ID_REVIEWEE = '$other_profileID' ORDER BY TIME_STAMP DESC LIMIT $start_from, $results_per_page";
+              INNER JOIN user u ON u.ID_USER = r.ID_reviewer WHERE  r.ID_REVIEWEE = '$other_profileID' ORDER BY TIME_STAMP DESC";
         $rs_result = $conn->query($sql6);
         if (!$rs_result) {
             throw new Exception("Database Error3");
@@ -250,27 +246,7 @@ if ($row["ID_ROLE"] == "ROLE_01") {
                 <?php
                 };
                 ?>
-                <div class="clearfix"></div>
-                <ul class="pagination pull-right">
-                    <li class="disabled"><a href="b-myprofile.php?page=1"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
-                    <?php
-                    $sql = "SELECT COUNT(*) AS total FROM rating WHERE TYPE = 1";
-                    $result6 = $conn->query($sql);
-                    $row = $result6->fetch_assoc();
-                    $total_pages = ceil($row["total"] / $results_per_page);
 
-                    for ($i=1; $i<=$total_pages; $i++) {
-                        echo "<li class=\"active\"><a href='b-myprofile.php?page=".$i."'>".$i."</a></li>"; // need to fix this (or get rid of it)
-                    };
-                    ?>
-                    <?php if ($_GET["page"] = 1){$j = 1;}  // the GET_page doesnt give me the right page number...
-                    elseif ($_GET["page"]= $total_pages) {$j = $total_pages;}
-                    else {$j = $_GET["page"]+1;} ?>
-
-                    <li><?php echo "<a href='b-myprofile.php?page=".$j."'>"?><span class="glyphicon glyphicon-chevron-right"></span></a></li> <!-- need to fix this link -->
-                </ul>
-
-            </div>
         </div>
 
         <!-- Example numbered list:
@@ -620,13 +596,9 @@ elseif($row["ID_ROLE"] == "ROLE_02") { ?>
         <!-- This is the review history.-->
         <?php
 
-        $results_per_page = 5;
-
-        if (isset($_GET["page"])) { $page  = $_GET["page"]; } else { $page=1; };
-        $start_from = ($page-1) * $results_per_page;
         $sql6 = "SELECT FNAME, LNAME, TIME_STAMP, COMMENT_HEADLINE, COMMENT, AUTHENTICITY, RESPONSIVENESS, DISPATCH_TIME, DISPATCH_FEE
               FROM rating r INNER JOIN criteria_seller c ON r.ID_CRITERIA = c.ID_CRITERIA
-              INNER JOIN user u ON u.ID_USER = r.ID_reviewer WHERE  r.ID_REVIEWEE = '$other_profileID' ORDER BY TIME_STAMP DESC LIMIT $start_from, $results_per_page";
+              INNER JOIN user u ON u.ID_USER = r.ID_reviewer WHERE  r.ID_REVIEWEE = '$other_profileID' ORDER BY TIME_STAMP DESC";
         $rs_result = $conn->query($sql6);
         if (!$rs_result) {
             throw new Exception("Database Error3");
@@ -661,27 +633,6 @@ elseif($row["ID_ROLE"] == "ROLE_02") { ?>
                 <?php
                 };
                 ?>
-                <div class="clearfix"></div>
-                <ul class="pagination pull-right">
-                    <li class="disabled"><a href="s-myprofile.php?page=1"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
-                    <?php
-                    $sql = "SELECT COUNT(*) AS total FROM rating r INNER JOIN user u ON r.ID_REVIEWEE = u.ID_USER WHERE u.ID_ROLE = 'ROLE_02'";
-                    $result6 = $conn->query($sql);
-                    $row = $result6->fetch_assoc();
-                    $total_pages = ceil($row["total"] / $results_per_page);
-
-                    for ($i=1; $i<=$total_pages; $i++) {
-                        echo "<li class=\"active\"><a href='s-myprofile.php?page=".$i."'>".$i."</a></li>"; // need to fix this (or get rid of it)
-                    };
-                    ?>
-                    <?php if ($page == 1){$j = 1;}  // the GET_page doesnt give me the right page number...
-                    elseif ($page == $total_pages) {$j = $total_pages;}
-                    else {$j = $page+1;} ?>
-
-                    <li><?php echo "<a href='s-myprofile.php?page=".$j."'>"?><span class="glyphicon glyphicon-chevron-right"></span></a></li> <!-- need to fix this link -->
-                </ul>
-
-            </div>
         </div>
 
 
