@@ -38,7 +38,7 @@ $pdo = new PDO($dsn, $un, $pwd, $opt);
 
 //Attempt to insert watchlist table
 try{
-    $stmt = $pdo->query('CALL UpdateWatchlist ( \'' . $id_auction . '\' , \'' . $id_buyer . '\')');
+    $stmt = $pdo->query('CALL AddWatchList ( \'' . $id_auction . '\' , \'' . $id_buyer . '\')');
 
 }
 catch(PDOException $e)

@@ -231,7 +231,6 @@ There will be a link to the item's auction is chosen from a list (Bid for items 
 
                                 <div class="card">
                                     <div class="col-12">
-                                        <form action="searchtobid.php" method="post">
 
                                             <div class="card-body">
                                                 <div class="row">
@@ -283,6 +282,9 @@ There will be a link to the item's auction is chosen from a list (Bid for items 
 
                                                         <div class="card-body">
                                                             <div class="row">
+
+                                                                <form action="searchtobid.php" method="post">
+
                                                                 <div class="col-6">
                                                                     <button
                                                                             class="btn btn-primary"  type='submit' name='submit' value="<?php echo $_SESSION['auctionID'];  ?>" id="submit" > Go to bidpage
@@ -290,9 +292,13 @@ There will be a link to the item's auction is chosen from a list (Bid for items 
 
                                                                 </div>
 
+                                                                </form>
+
                                                                 <div class="col-6">
+
                                                                     <button
-                                                                            class="btn btn-primary" type='submit' name='submit' value="<?php echo $_SESSION['auctionID'];  ?>" id="submit" > Add to Watchlist
+                                                                            class="btn btn-primary" type='watchlistbtn' onclick="addToWatchlist()" name='watchlistbtn' 
+                                                                            value="<?php echo $_SESSION['auctionID'];  ?>" id="watchlistbtn" > Add to Watchlist
                                                                     </button>
 
                                                                 </div>
@@ -307,7 +313,6 @@ There will be a link to the item's auction is chosen from a list (Bid for items 
                                                 </div>
                                             </div>
 
-                                        </form>
 
 
                                     </div>
@@ -383,13 +388,34 @@ There will be a link to the item's auction is chosen from a list (Bid for items 
 </div>
 
 
+<script type="text/javascript">
+    function addToWatchlist() {
+
+        var auction_id = document.getElementById("watchlistbtn").value;   
+
+       var xhttp;
+        xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                if (this.responseText != ""){
+                    alert(this.responseText);
+                } else {
+                    alert("Added to watchlist")
+                }
+                
+            }
+        };
+        var parameters = "auctionID="+auction_id;
+        xhttp.open("POST", "add-watchlist.php/?"+parameters, true);
+        xhttp.send();
 
 
 
+    }
 
 
 
-
+</script>
 
 
 
