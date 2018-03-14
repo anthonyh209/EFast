@@ -435,18 +435,20 @@ $averagerating = round($averagerating,1);
                         else {$timeremaining = "Auction Complete";}
 
 
-                        $sql12 = "SELECT PRICE FROM bid WHERE ID_AUCTION = '$currentauctionID' ORDER BY PRICE DESC LIMIT 1";
+                        $sql12 = "SELECT PRICE, RESERVE_PRICE FROM bid b INNER JOIN auction a ON a.ID_AUCTION = b.ID_AUCTION
+                                WHERE b.ID_AUCTION = '$currentauctionID' ORDER BY PRICE DESC LIMIT 1";
                         $result12 = $conn->query($sql12);
-                        $row12 = $result12->fetch_assoc();
+                        while ($row12 = $result12->fetch_assoc()){
                         $highestbid = $row12['PRICE'];
+                        $reserveprice = $row12['RESERVE_PRICE']; }
                         if ($highestbid > $bidamount){$bidstatus = 'Outbid';}
-                        elseif ($highestbid = $bidamount && $timeremaining == "Auction Complete") {$bidstatus = 'Bid Successful';}
+                        elseif ($highestbid = $bidamount && $timeremaining == "Auction Complete" && $reserveprice <= $bidamount) {$bidstatus = "You're a winner!";}
                         elseif ($highestbid = $bidamount && $timeremaining != "Auction Complete") {$bidstatus = 'Highest Bid';}
-                        $m=1;
+                        else if($highestbid = $bidamount && $timeremaining == "Auction Complete" && $reserveprice > $bidamount){$bidstatus= 'Reserve not met';}
                         ?>
 
                             <tr>
-                                <td> <a <?php echo "href='intermediate.php?auctionIDP=".$currentauctionID."'"?>><?php echo $row11["TITLE"]?></a></td>
+                                <td> <a <?php if($timeremaining != "Auction Complete"){ echo "href='intermediate.php?auctionIDP=".$currentauctionID."'";}?>><?php echo $row11["TITLE"]?></a></td>
                                 <td><a <?php echo "href='profile-other.php?uID=".$selecteduserID."'"?></a><?php echo $row11["FNAME"]; echo " ";echo $row11["LNAME"]?></td>
                                 <td><?php echo $row11["DESCRIPTION"]?></td>
                                 <td><?php echo $bidamount?></td>
@@ -454,7 +456,7 @@ $averagerating = round($averagerating,1);
                                 <td><?php echo $bidstatus?></td>
                                 <td> <?php ?>
                                     <centre> <a> &nbsp&nbsp;</a>
-                                        <?php if ($feedbackgiven == 0 && $bidstatus == 'Bid Successful') { ?>
+                                        <?php if ($feedbackgiven == 0 && $bidstatus == "You're a winner!") { ?>
                                         <a <?php echo "href='seller-rating.php?aID=".$currentauctionID."'"?>> <button class = "btn button3 btn-xs">
                                             <span class ="glyphicon glyphicon-pencil" background-color="#FF0000"></span></button>
 

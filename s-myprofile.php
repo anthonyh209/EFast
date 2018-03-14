@@ -598,6 +598,7 @@ $sql = "SELECT COUNT(*) AS total FROM rating r INNER JOIN user u ON r.ID_REVIEWE
                         <th>Item Description</th>
                         <th>Time Remaining</th>
                         <th>Most Recent Bid</th>
+                        <th>Reserve Price</th>
                         <th>Views</th>
                         <th>Feedback</th>
                         </thead>
@@ -605,7 +606,7 @@ $sql = "SELECT COUNT(*) AS total FROM rating r INNER JOIN user u ON r.ID_REVIEWE
 
 
 
-<?php $sql7 = "SELECT TITLE, DESCRIPTION, EXPIRATION_TIME, ID_AUCTION, FEEDBACK_B FROM auction a INNER JOIN item i ON a.ID_ITEM = i.ID_ITEM WHERE a.ID_SELLER = '$userID'
+<?php $sql7 = "SELECT RESERVE_PRICE, TITLE, DESCRIPTION, EXPIRATION_TIME, ID_AUCTION, FEEDBACK_B FROM auction a INNER JOIN item i ON a.ID_ITEM = i.ID_ITEM WHERE a.ID_SELLER = '$userID'
                 ORDER BY EXPIRATION_TIME ASC";
 $result7 = $conn->query($sql7);
 if (!$result7) {
@@ -615,6 +616,7 @@ if (!$result7) {
 while($row7 = $result7->fetch_assoc()){
     $currentauction = $row7["ID_AUCTION"];
     $feedbackgiven = $row7["FEEDBACK_B"];
+    $reserve_price = $row7['RESERVE_PRICE'];
     $sql8 = "SELECT COUNT(*) AS total FROM traffic WHERE ID_AUCTION = '$currentauction'";
 $result8 = $conn->query($sql8);
 $row8 = $result8->fetch_assoc();
@@ -667,10 +669,11 @@ $expiration_datetime = $row7["EXPIRATION_TIME"];
                         <td><?php echo $row7["DESCRIPTION"]?></td>
                         <td><?php echo $timeremaining?></td>
                         <td><?php echo $most_recent_bid?></td>
+                        <td><?php echo $reserve_price?></td>
                         <td><?php echo $total_views?></td>
                         <td> <?php ?>
                             <centre> <a> &nbsp&nbsp;</a>
-                                <?php if ($feedbackgiven == 0 && $timeremaining == 'Auction Complete' && $most_recent_bid != "No bids") { ?>
+                                <?php if ($feedbackgiven == 0 && $timeremaining == 'Auction Complete' && $most_recent_bid != "No bids" && $reserve_price <= $most_recent_bid) { ?>
                                 <a <?php echo "href='buyer-rating.php?aID=".$currentauction."'"?>> <button class = "btn button3 btn-xs">
                                         <span class ="glyphicon glyphicon-pencil" background-color="#A9A9A9"></span></button>
 
