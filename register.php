@@ -25,21 +25,21 @@
         <p>Please fill in this form to create an account.</p>
         <hr>
 
-        <label><b>Firstname</b></label>
-        <input type="text" placeholder="Enter firstname " name="firstname" id="firstname"  required>
+        <label><b>First name</b></label>
+        <input type="text" placeholder="Enter your first name " name="firstname" id="firstname"  required>
 
-        <label><b>Lastname</b></label>
-        <input type="text" placeholder="Enter lastname " name="lastname" id="lastname" required>
+        <label><b>Last name</b></label>
+        <input type="text" placeholder="Enter your last name " name="lastname" id="lastname" required>
 
 
         <label><b>Email</b></label>
-        <input type="text" placeholder="Enter Email (Will act as your username) " name="email" id="email" required>
+        <input type="text" placeholder="Enter your email. This will act as your username " name="email" id="email" required>
 
         <label><b>Password</b></label>
-        <input type="password" placeholder="Enter Password" name="password" id="password" required>
+        <input type="password" placeholder="Enter your password" name="password" id="password" required>
 
         <label><b>Repeat Password</b></label>
-        <input type="password" placeholder="Repeat Password" name="password-repeat" id="password-repeat" required>
+        <input type="password" placeholder="Repeat password" name="password-repeat" id="password-repeat" required>
 
         <input type="radio" name="radio" value="ROLE_01"> Buyer<br>
         <input type="radio" name="radio" value="ROLE_02"> Seller<br>
