@@ -3,6 +3,8 @@
 session_start();
 require_once("config.php");
 
+
+
 ?>
 <?php
 
@@ -95,6 +97,7 @@ $averagerating = round($averagerating,1);
 
 ?>
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -127,7 +130,6 @@ $averagerating = round($averagerating,1);
 <body>
 
 <!-- nav bar -->
-
 
 
 
@@ -440,7 +442,7 @@ $averagerating = round($averagerating,1);
                         ?>
 
                             <tr>
-                                <td><?php echo $row11["TITLE"]?></td>
+                                <td> <a <?php echo "href='b-bidpage.html?auctionID=".$currentauctionID."?a=register'"?>><?php echo $row11["TITLE"]?></a></td>
                                 <td><a <?php echo "href='profile-other.php?uID=".$selecteduserID."'"?></a><?php echo $row11["FNAME"]; echo " ";echo $row11["LNAME"]?></td>
                                 <td><?php echo $row11["DESCRIPTION"]?></td>
                                 <td><?php echo $bidamount?></td>
@@ -469,7 +471,6 @@ $averagerating = round($averagerating,1);
         </div>
     </div>
 
-    <!-- This section is the delete auction confirmation - but this isn't in the required features -->
 
 
 

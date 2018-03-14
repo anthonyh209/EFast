@@ -76,6 +76,10 @@ $row = $result->fetch_assoc();
 $first_name = $row['FNAME'];
 $last_name = $row['LNAME'];
 $email = $row['EMAIL'];
+if ($_SESSION['role'] == 'ROLE_01') {
+    $homelink = "b-home.php";}
+if ($_SESSION['role'] == 'ROLE_02') {
+    $homelink = "s-home.php";}
 if ($row["ID_ROLE"] == "ROLE_01") {
 
 // calculating average score
@@ -113,13 +117,20 @@ if ($row["ID_ROLE"] == "ROLE_01") {
 
     <body>
 
-    <!-- nav bar -->
 
-    <nav class="navbar navbar-light bg-light">
-        <a class="navbar-brand" href="s-home.html">
-            <img src="eFast.png" width="100" height="30" alt="">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+        <a class="navbar-brand" href="s-home.php">
+            <img width="100" src="efast.png">
         </a>
+
+        <ul class="navbar-nav ml-auto">
+            <button style="margin-left: 10px" type="button" onclick="window.location='logout.php';" class="btn btn-outline-danger btn-sm ">Logout</button>
+        </ul>
+
+
     </nav>
+
 
 
 
@@ -321,6 +332,9 @@ elseif($row["ID_ROLE"] == "ROLE_02") { ?>
     $dispatchfeescore = $row5['AVG(DISPATCH_FEE)'];}
     $dispatchfeescore = round($dispatchfeescore,1);
 
+
+
+
     ?>
 
     <!DOCTYPE html>
@@ -354,12 +368,9 @@ elseif($row["ID_ROLE"] == "ROLE_02") { ?>
 
     <body>
 
-
-
-
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
 
-        <a class="navbar-brand" href="s-home.php">
+        <a class="navbar-brand" <?php echo "href='".$homelink."''"?>>
             <img width="100" src="efast.png">
         </a>
 
@@ -369,6 +380,9 @@ elseif($row["ID_ROLE"] == "ROLE_02") { ?>
 
 
     </nav>
+
+
+
 
 
 
