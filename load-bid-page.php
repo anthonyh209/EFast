@@ -37,7 +37,13 @@ $opt = array(
 $pdo = new PDO($dsn, $un, $pwd, $opt);
 
 try{
-    $stmt = $pdo->query('INSERT INTO traffic (ID_AUCTION, ID_USER, DATETIME) VALUES ( \'' . $id_auction . '\', \'' . $id_user . '\', Now() )');
+    //$stmt = 'INSERT INTO traffic (ID_AUCTION, ID_USER, DATETIME) VALUES ( \'' . $id_auction . '\', \'' . $id_user . '\', Now() )';
+    $query = 'INSERT INTO traffic (ID_AUCTION, ID_USER, DATETIME) VALUES ( ?, ?, Now() )';
+    $stmt = $pdo->prepare($query);
+    $stmt->bindParam(1,$id_auction, PDO::PARAM_STR);
+    $stmt->bindParam(2,$id_user, PDO::PARAM_STR);
+    $stmt->execute();
+
 }
 catch(PDOException $e)
 {
@@ -47,13 +53,22 @@ catch(PDOException $e)
 
 //Attempt to query
 try{
-    $stmt = $pdo->query('SELECT ite.PIC, ite.TITLE, ite.DESCRIPTION, auc.START_PRICE, UNIX_TIMESTAMP(auc.START_TIMESTAMP) AS START_TIMESTAMP, UNIX_TIMESTAMP(auc.EXPIRATION_TIME) AS EXPIRATION_TIME, cat.CATEGORY, sta.STATE FROM (((item ite
+    //$stmt = $pdo->query('SELECT ite.PIC, ite.TITLE, ite.DESCRIPTION, auc.START_PRICE, UNIX_TIMESTAMP(auc.START_TIMESTAMP) AS START_TIMESTAMP, UNIX_TIMESTAMP(auc.EXPIRATION_TIME) AS EXPIRATION_TIME, cat.CATEGORY, sta.STATE FROM (((item ite
+//INNER JOIN auction auc ON auc.ID_ITEM = ite.ID_ITEM)
+//INNER JOIN category cat ON ite.ID_CATEGORY = cat.ID_CATEGORY)
+//INNER JOIN state sta ON ite.ID_STATE = sta.ID_STATE)
+//WHERE auc.ID_AUCTION = \'' .$id_auction. '\'');
+
+    $query2 = 'SELECT ite.PIC, ite.TITLE, ite.DESCRIPTION, auc.START_PRICE, UNIX_TIMESTAMP(auc.START_TIMESTAMP) AS START_TIMESTAMP, UNIX_TIMESTAMP(auc.EXPIRATION_TIME) AS EXPIRATION_TIME, cat.CATEGORY, sta.STATE FROM (((item ite
 INNER JOIN auction auc ON auc.ID_ITEM = ite.ID_ITEM)
 INNER JOIN category cat ON ite.ID_CATEGORY = cat.ID_CATEGORY)
 INNER JOIN state sta ON ite.ID_STATE = sta.ID_STATE)
-WHERE auc.ID_AUCTION = \'' .$id_auction. '\'');
+WHERE auc.ID_AUCTION = ?';
+    $stmt2 = $pdo->prepare($query2);
+    $stmt2->bindParam(1,$id_auction, PDO::PARAM_STR);
+    $stmt2->execute();
 
-    while($row = $stmt -> fetch(PDO::FETCH_OBJ))
+    while($row = $stmt2 -> fetch(PDO::FETCH_OBJ))
     {
         //Assign each row of data to associative array
         $data[] = $row;

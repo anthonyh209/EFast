@@ -85,7 +85,13 @@ if ($expired_flag == 1){
 
         //Attempt to insert bid table
         try{
-            $stmt = $pdo->query('INSERT INTO bid (ID_BUYER, ID_AUCTION, PRICE, TIME) VALUES ( \'' . $id_buyer . '\', \'' . $id_auction . '\' , \'' . $price. '\' , \'' . $datetime . '\')');
+            $query = 'INSERT INTO bid (ID_BUYER, ID_AUCTION, PRICE, TIME) VALUES ( \'' . $id_buyer . '\', \'' . $id_auction . '\' , \'' . $price. '\' , \'' . $datetime . '\')';
+            $stmt = $pdo->prepare($query);
+            $stmt->bindParam(1,$id_buyer, PDO::PARAM_STR);
+            $stmt->bindParam(2,$id_auction, PDO::PARAM_STR);
+            $stmt->bindParam(3,$price, PDO::PARAM_STR);
+            $stmt->bindParam(4,$datetime, PDO::PARAM_STR);
+            $stmt->execute();
         }
         catch(PDOException $e)
         {
