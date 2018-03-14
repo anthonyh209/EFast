@@ -69,7 +69,7 @@ $old_error_handler = set_error_handler("ErrorHandler");
 // end of error code
 
 
-$_GET['uID'] = $other_profileID;
+$other_profileID = $_GET['uID'];
 $sql = "SELECT ID_ROLE, FNAME, LNAME, EMAIL FROM user WHERE ID_USER = '$other_profileID'";
 $result =$conn->query($sql);
 $row = $result->fetch_assoc();
@@ -375,7 +375,7 @@ elseif($row["ID_ROLE"] == "ROLE_02") { ?>
     <!-- Profile form -->
 
     <div class="container">
-        <h1 class="display-3"> &nbsp My Profile </h1>
+        <h1 class="display-3"> &nbsp <?php echo "$first_name $last_name's Profile"?> </h1>
         <div class="row">
             <div class="col-sm-6">
                 <div class="panel panel-default panel-info Profile">
