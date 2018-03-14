@@ -388,13 +388,14 @@ $averagerating = round($averagerating,1);
                         while($row10 = $result10->fetch_assoc()){
                             $currentauctionID = $row10['ID_AUCTION'];
                             $bidamount = $row10['PRICE'];
-                            $sql11 = "SELECT TITLE, DESCRIPTION, EXPIRATION_TIME, FNAME, LNAME, FEEDBACK_S FROM auction a INNER JOIN item i ON a.ID_ITEM = i.ID_ITEM
+                            $sql11 = "SELECT TITLE, DESCRIPTION, EXPIRATION_TIME, FNAME, LNAME, FEEDBACK_S, ID_USER FROM auction a INNER JOIN item i ON a.ID_ITEM = i.ID_ITEM
                                       INNER JOIN user u ON u.ID_USER = a.ID_SELLER WHERE ID_AUCTION = '$currentauctionID' ORDER BY EXPIRATION_TIME DESC";
                             $result11 = $conn->query($sql11);
                             if(!$result11) {throw new Exception("Database Error6");}
                             $row11 = $result11->fetch_assoc();
                             $feedbackgiven = $row11["FEEDBACK_S"];
-                        $now = date('Y-m-d H:i:s');
+                            $selecteduserID = $row11["ID_USER"];
+                            $now = date('Y-m-d H:i:s');
                         $expiration_datetime = $row11["EXPIRATION_TIME"];
                         $diff=strtotime($expiration_datetime)-strtotime($now);
 
@@ -440,7 +441,7 @@ $averagerating = round($averagerating,1);
 
                             <tr>
                                 <td><?php echo $row11["TITLE"]?></td>
-                                <td><?php echo $row11["FNAME"]; echo " ";echo $row11["LNAME"]?></td>
+                                <td><a <?php echo "href='profile-other.php?uID=".$selecteduserID."'"?></a><?php echo $row11["FNAME"]; echo " ";echo $row11["LNAME"]?></td>
                                 <td><?php echo $row11["DESCRIPTION"]?></td>
                                 <td><?php echo $bidamount?></td>
                                 <td><?php echo $timeremaining ?></td>
