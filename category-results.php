@@ -118,7 +118,6 @@ th {text-align: left;}
 
                                 <div class="card">
                                     <div class="col-12">
-                                        <form action="searchtobid.php" method="post">
 
                                             <div class="card-body">
                                                 <div class="row">
@@ -170,6 +169,9 @@ th {text-align: left;}
 
                                                         <div class="card-body">
                                                             <div class="row">
+
+                                                                <form action="searchtobid.php" method="post">
+
                                                                 <div class="col-6">
                                                                     <button
                                                                             class="btn btn-primary"  type='submit' name='submit' value="<?php echo $_SESSION['auctionID'];  ?>" id="submit" > Go to bidpage
@@ -177,12 +179,18 @@ th {text-align: left;}
 
                                                                 </div>
 
+                                                                </form>
+
+
                                                                 <div class="col-6">
+
                                                                     <button
-                                                                            class="btn btn-primary" type='submit' name='submit' value="<?php echo $_SESSION['auctionID'];  ?>" id="submit" > Add to Watchlist
+                                                                            class="btn btn-primary" type='watchlistbtn' onclick="addToWatchlist()" name='watchlistbtn' 
+                                                                            value="<?php echo $_SESSION['auctionID'];  ?>" id="watchlistbtn" > Add to Watchlist
                                                                     </button>
 
                                                                 </div>
+
 
 
                                                             </div>
@@ -194,7 +202,6 @@ th {text-align: left;}
                                                 </div>
                                             </div>
 
-                                        </form>
 
 
                                     </div>

@@ -157,6 +157,35 @@ function showUser(str) {
 }
 </script>
 
+
+<script type="text/javascript">
+    function addToWatchlist() {
+
+        var auction_id = document.getElementById("watchlistbtn").value;   
+
+       var xhttp;
+        xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                if (this.responseText != ""){
+                    alert(this.responseText);
+                } else {
+                    alert("Added to watchlist")
+                }
+                
+            }
+        };
+        var parameters = "auctionID="+auction_id;
+        xhttp.open("POST", "add-watchlist.php/?"+parameters, true);
+        xhttp.send();
+
+
+
+    }
+</script>
+
+
+
 <div class="container">
     <br>
     <br>
@@ -203,6 +232,7 @@ $result = mysqli_query($conn,$sql);
     <h1 align="center">Please select a category to return results</h1></div>
 
 </div>
+
 
 
 </body>

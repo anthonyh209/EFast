@@ -46,7 +46,7 @@ There will be a link to the item's auction is chosen from a list (Bid for items 
     <div class="col-md-auto">
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
-            <form action="xxx.php" method="post" class="form-inline my-2 my-lg-0">
+            <form action="b-item-search.php" method="post" class="form-inline my-2 my-lg-0">
                 <!--                        <input class="form-control mr-sm-2" type="search" name="search" id="search" placeholder="Search" aria-label="Search">-->
                 <div class="search-box">
                     <input type="text" autocomplete="off" placeholder="Search" id="search" name="search" />
