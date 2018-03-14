@@ -46,7 +46,7 @@ There will be a link to the item's auction is chosen from a list (Bid for items 
     <div class="col-md-auto">
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
-            <form action="b-item-search.php" method="post" class="form-inline my-2 my-lg-0">
+            <form action="xxx.php" method="post" class="form-inline my-2 my-lg-0">
                 <!--                        <input class="form-control mr-sm-2" type="search" name="search" id="search" placeholder="Search" aria-label="Search">-->
                 <div class="search-box">
                     <input type="text" autocomplete="off" placeholder="Search" id="search" name="search" />
@@ -172,54 +172,64 @@ There will be a link to the item's auction is chosen from a list (Bid for items 
                 exit($status);
         }
 
-        $itemToSearch = "%".$itemToSearch."%";
-        //$Query = "SELECT * FROM item WHERE TITLE LIKE '%" . $itemToSearch . "%' AND ID_ITEM IN (SELECT ID_ITEM FROM auction WHERE EXPIRATION_TIME > NOW() )";
-        $Query = 'SELECT COUNT(*) AS CON FROM item WHERE TITLE LIKE ? AND ID_ITEM IN (SELECT ID_ITEM FROM auction WHERE EXPIRATION_TIME > NOW() )';
-        $stmt = $pdo->prepare($Query);
-        $stmt->bindParam(1,$itemToSearch, PDO::PARAM_STR);
-        $stmt->execute();
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($row['CON'] > 0){
-            echo "<br>
+    $itemToSearch = "%" . $itemToSearch . "%";
+    //$Query = "SELECT * FROM item WHERE TITLE LIKE '%" . $itemToSearch . "%' AND ID_ITEM IN (SELECT ID_ITEM FROM auction WHERE EXPIRATION_TIME > NOW() )";
+    $Query = 'SELECT COUNT(*) AS CON FROM item WHERE TITLE LIKE ? AND ID_ITEM IN (SELECT ID_ITEM FROM auction WHERE EXPIRATION_TIME > NOW() )';
+    $stmt = $pdo->prepare($Query);
+    $stmt->bindParam(1, $itemToSearch, PDO::PARAM_STR);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($row['CON'] > 0) {
+        echo "<br>
                         <div class=\"container-fluid\">
                              <h1 align=\"center\">Here are the results</h1>
                                </div>
                                <br>";
 
 
-            $Query1 = 'SELECT * FROM item WHERE TITLE LIKE ? AND ID_ITEM IN (SELECT ID_ITEM FROM auction WHERE EXPIRATION_TIME > NOW() )';
-            $stmt1 = $pdo->prepare($Query1);
-            $stmt1->bindParam(1,$itemToSearch, PDO::PARAM_STR);
-            $stmt1->execute();
+        $Query1 = 'SELECT * FROM item WHERE TITLE LIKE ? AND ID_ITEM IN (SELECT ID_ITEM FROM auction WHERE EXPIRATION_TIME > NOW() )';
+        $stmt1 = $pdo->prepare($Query1);
+        $stmt1->bindParam(1, $itemToSearch, PDO::PARAM_STR);
+        $stmt1->execute();
 
-            while ($row = $stmt1->fetch(PDO::FETCH_ASSOC)) {
+        while ($row = $stmt1->fetch(PDO::FETCH_ASSOC)) {
 
-                $image = $row['PIC'];
-                $itemID = $row['ID_ITEM'];
-                $title = $row['TITLE'];
-                $description = $row['DESCRIPTION'];
-                $catagoryID = $row['ID_CATEGORY'];
-                $state = $row['ID_STATE'];
+            $image = $row['PIC'];
+            $itemID = $row['ID_ITEM'];
+            $title = $row['TITLE'];
+            $description = $row['DESCRIPTION'];
+            $catagoryID = $row['ID_CATEGORY'];
+            $state = $row['ID_STATE'];
 
-                //$Query2 = "SELECT * FROM auction WHERE ID_ITEM = '$itemID' ";
-                $Query2 = 'SELECT * FROM auction WHERE ID_ITEM = ? ';
-                $stmt2 = $pdo->prepare($Query2);
-                $stmt2->bindParam(1,$itemID, PDO::PARAM_STR);
-                $stmt2->execute();
+            //$Query2 = "SELECT * FROM auction WHERE ID_ITEM = '$itemID' ";
+            $Query2 = 'SELECT * FROM auction WHERE ID_ITEM = ? ';
+            $stmt2 = $pdo->prepare($Query2);
+            $stmt2->bindParam(1, $itemID, PDO::PARAM_STR);
+            $stmt2->execute();
 
-                while ($row = $stmt2->fetch(PDO::FETCH_ASSOC)) {
-                    $exptime = $row['EXPIRATION_TIME'];
-                    $idauction = $row['ID_AUCTION'];
-                    $startprice = $row['START_PRICE'];
+            while ($row = $stmt2->fetch(PDO::FETCH_ASSOC)) {
+                $exptime = $row['EXPIRATION_TIME'];
+                $idauction = $row['ID_AUCTION'];
+                $startprice = $row['START_PRICE'];
+                $selecteduserID = $row['ID_SELLER'];
+
+
+                $Query3 = 'SELECT * FROM user WHERE ID_USER = ? ';
+                $stmt3 = $pdo->prepare($Query3);
+                $stmt3->bindParam(1, $selecteduserID, PDO::PARAM_STR);
+                $stmt3->execute();
+                while ($row = $stmt3->fetch(PDO::FETCH_ASSOC)) {
+                    $seller_first = $row['FNAME'];
+                    $seller_last = $row['LNAME'];
 
                     //$Query3 = "SELECT MAX(PRICE) AS max_price FROM bid WHERE ID_AUCTION = '$idauction' ";
-                    $Query3 = 'SELECT MAX(PRICE) AS max_price FROM bid WHERE ID_AUCTION = ? ';
-                    $stmt3 = $pdo->prepare($Query3);
-                    $stmt3->bindParam(1,$idauction, PDO::PARAM_STR);
-                    $stmt3->execute();
+                    $Query4 = 'SELECT MAX(PRICE) AS max_price FROM bid WHERE ID_AUCTION = ? ';
+                    $stmt4 = $pdo->prepare($Query4);
+                    $stmt4->bindParam(1, $idauction, PDO::PARAM_STR);
+                    $stmt4->execute();
 
 
-                    while ($row = $stmt3->fetch(PDO::FETCH_ASSOC)) {
+                    while ($row = $stmt4->fetch(PDO::FETCH_ASSOC)) {
 
                         $currentBid = $row['max_price'];
 
@@ -249,7 +259,7 @@ There will be a link to the item's auction is chosen from a list (Bid for items 
                                                         <p class="card-title" >
                                                             <?php echo $description; ?> </p>
 
-
+                                                        <a <?php echo "href='profile-other.php?uID=".$selecteduserID."''"?>><?php echo $seller_first." ".$seller_last; ?> </p></a>
 
                                                         <ul class="list-group list-group-flush">
                                                             <li class="list-group-item">
@@ -364,7 +374,7 @@ There will be a link to the item's auction is chosen from a list (Bid for items 
 
                         <?php
 
-                    }}}
+                    }}}}
 
 
 
