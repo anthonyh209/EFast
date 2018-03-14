@@ -47,8 +47,8 @@ The system should confirm to both the winner and seller of an auction its outcom
 
 
         <div class="card">
-            <div class="card-header">
-                Auction details
+            <div class="card-header" id="seller_profile">
+                Auctioned by:
             </div>
             <div class="card-body">
                 <div class="row">
@@ -155,6 +155,7 @@ The system should confirm to both the winner and seller of an auction its outcom
                 var start_date = new Date(response[0].START_TIMESTAMP*1000);
                 start_date = start_date.toUTCString();
                 document.getElementById("starting_bid").innerHTML += "£" + response[0].START_PRICE + " on " + start_date;
+                document.getElementById("seller_profile").innerHTML += "<a href='profile-other.php?uID=" + response[0].ID_SELLER +  "'> " + response[0].FNAME + " " + response[0].LNAME + "</a>";
                 var expirationtime = response[0].EXPIRATION_TIME;
 
                 setInterval(function(){

@@ -59,10 +59,23 @@ try{
 //INNER JOIN state sta ON ite.ID_STATE = sta.ID_STATE)
 //WHERE auc.ID_AUCTION = \'' .$id_auction. '\'');
 
-    $query2 = 'SELECT ite.PIC, ite.TITLE, ite.DESCRIPTION, auc.START_PRICE, UNIX_TIMESTAMP(auc.START_TIMESTAMP) AS START_TIMESTAMP, UNIX_TIMESTAMP(auc.EXPIRATION_TIME) AS EXPIRATION_TIME, cat.CATEGORY, sta.STATE FROM (((item ite
-INNER JOIN auction auc ON auc.ID_ITEM = ite.ID_ITEM)
-INNER JOIN category cat ON ite.ID_CATEGORY = cat.ID_CATEGORY)
-INNER JOIN state sta ON ite.ID_STATE = sta.ID_STATE)
+    $query2 = 'SELECT
+  ite.PIC,
+  ite.TITLE,
+  ite.DESCRIPTION,
+  auc.START_PRICE,
+  UNIX_TIMESTAMP(auc.START_TIMESTAMP) AS START_TIMESTAMP,
+  UNIX_TIMESTAMP(auc.EXPIRATION_TIME) AS EXPIRATION_TIME,
+  cat.CATEGORY,
+  sta.STATE,
+  auc.ID_SELLER,
+  acc.FNAME,
+  acc.LNAME
+FROM ((((item ite
+  INNER JOIN auction auc ON auc.ID_ITEM = ite.ID_ITEM)
+  INNER JOIN category cat ON ite.ID_CATEGORY = cat.ID_CATEGORY)
+  INNER JOIN state sta ON ite.ID_STATE = sta.ID_STATE)
+  INNER JOIN user acc ON acc.ID_USER = auc.ID_SELLER)
 WHERE auc.ID_AUCTION = ?';
     $stmt2 = $pdo->prepare($query2);
     $stmt2->bindParam(1,$id_auction, PDO::PARAM_STR);
