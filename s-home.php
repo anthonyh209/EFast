@@ -59,11 +59,7 @@ session_start();
 <div class="container">
 
 <h1>Seller Hub</h1>
-    <p>Create an auction on an item, see your statistics or view your profile.</p>
 </div>
-
-
-<br>
 <br>
 
 <!--MAIN BODY OF THE PAGE-->
@@ -75,10 +71,11 @@ session_start();
         <div class="card-body">
             <h5 class="card-title">CREATE AN AUCTION</h5>
             <p class="card-text">Create an auction based on an item to list it!</p>
-            <a href="createAuction.php" class="btn btn-primary">Go to create an auction page</a>
+            <a href="createAuction.php" class="btn btn-primary">Create a new auction</a>
             <img src="https://media.giphy.com/media/E9k0HTREY1qJW/giphy.gif" alt="" style="width:48px;height:48px;">
         </div>
     </div>
+        <div id="spacer" style="height: 10px;"> </div>
 
         <div class="card">
             <div class="card-body">

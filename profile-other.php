@@ -1,6 +1,6 @@
 <?php
 "clicked on user id" = $other_profileID;
-
+$auctionID = $_GET['aID'];
 $sql = "SELECT ID_ROLE, FNAME, LNAME FROM user WHERE ID_USER = '$other_profileID'";
 $result =$conn->query($sql);
 $row = $result->fetch_assoc();
@@ -286,169 +286,13 @@ if ($row["ID_ROLE"] == "ROLE_01") {
         -->
 
 
-        <!-- Bid history -->
-
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-        <script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>
-
-        <div class="container">
-            <div class="row">
-
-
-                <div class="col-md-12">
-                    <h2>Bid History</h2>
-                    <hr/>
-                    <div class="table-responsive">
-
-
-                        <table id="mytable" class="table table-bordred table-striped">
-
-                            <thead>
-
-
-                            <th>Item Name</th>
-                            <th>Item Seller</th>
-                            <th>Item Description</th>
-                            <th>Your Bid</th>
-                            <th>Auction Time Remaining</th>
-                            <th>Bid Status</th>
-                            <th>Delete</th>
-                            </thead>
-                            <tbody>
-
-                            <?php $sql10 = "SELECT PRICE, ID_AUCTION FROM bid WHERE ID_BUYER = '$userID'";
-                            $result10 = $conn->query($sql10);
-                            if(!$result10) {throw new Exception("Database Error5");}
-                            while($row10 = $result10->fetch_assoc()){
-                                $currentauctionID = $row10['ID_AUCTION'];
-                                $bidamount = $row10['PRICE'];
-                                $sql11 = "SELECT TITLE, DESCRIPTION, EXPIRATION_TIME, FNAME, LNAME FROM auction a INNER JOIN item i ON a.ID_ITEM = i.ID_ITEM
-                                      INNER JOIN user u ON u.ID_USER = a.ID_SELLER WHERE ID_AUCTION = '$currentauctionID' ORDER BY EXPIRATION_TIME DESC";
-                                $result11 = $conn->query($sql11);
-                                if(!$result11) {throw new Exception("Database Error6");}
-                                $row11 = $result11->fetch_assoc();
-                                $now = date('Y-m-d H:i:s');
-                                $expiration_datetime = $row11["EXPIRATION_TIME"];
-                                $diff=strtotime($expiration_datetime)-strtotime($now);
-
-                                if($diff>0) {
-
-                                    //  convert to days
-                                    $temp = $diff / 86400; // 86400 secs in a day
-
-                                    // days
-                                    $days = floor($temp);
-                                    $temp = 24 * ($temp - $days);
-                                    // hours
-                                    $hours = floor($temp);
-                                    $temp = 60 * ($temp - $hours);
-                                    // minutes
-                                    $minutes = floor($temp);
-                                    $temp = 60 * ($temp - $minutes);
-                                    // seconds
-                                    $seconds = floor($temp);
-
-                                    if ($days > 0) {
-                                        $timeremaining = "{$days} days {$hours} hours";
-                                    } elseif (hours > 0) {
-                                        $timeremaining = "{$hours} hours {$minutes}";
-                                    } elseif (minutes > 0) {
-                                        $timeremaining = "{$minutes} minutes {$seconds} seconds";
-                                    } elseif (seconds > 0) {
-                                        $timeremaining = "{$seconds} seconds";
-                                    }
-                                }
-                                else {$timeremaining = "Auction Complete";}
-
-
-                                $sql12 = "SELECT PRICE FROM bid WHERE ID_AUCTION = '$currentauctionID' ORDER BY PRICE DESC LIMIT 1";
-                                $result12 = $conn->query($sql12);
-                                $row12 = $result12->fetch_assoc();
-                                $highestbid = $row12['PRICE'];
-                                if ($highestbid > $bidamount){$bidstatus = 'Outbid';}
-                                elseif ($highestbid = $bidamount && $timeremaining == "Auction Complete") {$bidstatus = 'Bid Successful';}
-                                elseif ($highestbid = $bidamount && $timeremaining != "Auction Complete") {$bidstatus = 'Highest Bid';}
-                                $m=1;
-                                ?>
-
-                                <tr>
-                                    <td><?php echo $row11["TITLE"]?></td>
-                                    <td><?php echo $row11["FNAME"]; echo " ";echo $row11["LNAME"]?></td>
-                                    <td><?php echo $row11["DESCRIPTION"]?></td>
-                                    <td><?php echo $bidamount?></td>
-                                    <td><?php echo $timeremaining ?></td>
-                                    <td><?php echo $bidstatus?></td>
-                                    <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" <?php echo "data-target='#delete".$m."'"?>><span class="glyphicon glyphicon-trash"></span></button></p></td>
-                                </tr>
-
-                                <div class="modal fade" <?php echo "id='delete".$m."'" ?> tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
-                                    <php if $
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-                                                <h4 class="modal-title custom_align" id="Heading">Delete this entry</h4>
-                                            </div>
-                                            <div class="modal-body">
-
-                                                <div class="alert alert-danger"><span class="glyphicon glyphicon-warning-sign"></span> Are you sure you want to delete this bid?</div>
-
-                                            </div>
-                                            <div class="modal-footer ">
-                                                <button type="button" class="btn btn-success" ><span class="glyphicon glyphicon-ok-sign"></span> Yes</button>
-                                                <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> No</button>
-                                            </div>
-                                        </div>
-                                        <!-- /.modal-content -->
-                                    </div>
-                                    <!-- /.modal-dialog -->
-                                </div>
-                            <?php }  ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- This section is the delete auction confirmation - but this isn't in the required features -->
-
-        <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
-            <php if $
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-                        <h4 class="modal-title custom_align" id="Heading">Delete this entry</h4>
-                    </div>
-                    <div class="modal-body">
-
-                        <div class="alert alert-danger"><span class="glyphicon glyphicon-warning-sign"></span> Are you sure you want to delete this bid?</div>
-
-                    </div>
-                    <div class="modal-footer ">
-                        <button type="button" class="btn btn-success" ><span class="glyphicon glyphicon-ok-sign"></span> Yes</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> No</button>
-                    </div>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-
-
+    </div>
     </body>
-
-    </html>
-
 
 
 
 
 <?php }
-
-
-
 
 
 
@@ -459,3 +303,6 @@ elseif($row["ID_ROLE"] == "ROLE_02") { ?>
 
 
 <?php } ?>
+
+
+</html>
