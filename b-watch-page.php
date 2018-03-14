@@ -175,7 +175,7 @@ on those items including notifications when they are outbid.-->
 $userID = $_SESSION['userID'];
 
 $sql = "SELECT DISTINCT PIC, TITLE, DESCRIPTION, w.ID_AUCTION, EXPIRATION_TIME, FNAME, LNAME, w.ID FROM item i INNER JOIN auction a ON i.ID_ITEM = a.ID_ITEM 
-              INNER JOIN user u ON u.ID_USER = a.ID_SELLER INNER JOIN watchlist w ON w.ID_AUCTION = a.ID_AUCTION WHERE w.ID_USER = '$userID'";
+              INNER JOIN user u ON u.ID_USER = a.ID_SELLER INNER JOIN watchlist w ON w.ID_AUCTION = a.ID_AUCTION WHERE w.ID_USER = '$userID' ORDER BY EXPIRATION_TIME ASC";
 
 $result = $conn->query($sql);
 // if there are no watched auctions:
@@ -253,7 +253,7 @@ if(!$result){$title = "";
                         <td><?php echo $highestbid?></td>
                         <td><?php echo $timeremaining?> </td>
                         <td> <?php echo $fname; echo " "; echo $lname?> </td>
-                        <td> <a class="btn" href="deletewatched.php?ID=<?php echo $currentauctionID;?>"<button class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash"></span></button></td>
+                        <td> <a class="btn" href="deletewatched.php?ID=<?php echo $ID;?>"<button class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash"></span></button></td>
                     </tr>
 
 <?php }} ?>

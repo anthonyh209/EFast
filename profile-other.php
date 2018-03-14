@@ -80,7 +80,34 @@ if ($_SESSION['role'] == 'ROLE_01') {
     $homelink = "b-home.php";}
 if ($_SESSION['role'] == 'ROLE_02') {
     $homelink = "s-home.php";}
-if ($row["ID_ROLE"] == "ROLE_01") {
+if ($_SESSION['role'] == 'ROLE_03') {
+    $homelink = "a-home.php";
+}
+?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><?php echo "$first_name $last_name's Profile"?></title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/profile.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .checked {
+            color: orange;
+        }
+    </style>
+</head>
+
+
+<?php if ($row["ID_ROLE"] == "ROLE_01") {
 
 // calculating average score
     $sql2 = "SELECT AVG(RATING_SCORE) FROM rating r INNER JOIN criteria_buyer c
@@ -95,32 +122,11 @@ if ($row["ID_ROLE"] == "ROLE_01") {
 
     ?>
 
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title><?php echo "$first_name $last_name's Profile"?></title>
-        <link href="css/bootstrap.min.css" rel="stylesheet">
-        <link href="css/profile.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <style>
-            .checked {
-                color: orange;
-            }
-        </style>
-    </head>
-
     <body>
-
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
 
-        <a class="navbar-brand" href="s-home.php">
+        <a class="navbar-brand" <?php echo "href='".$homelink."''"?>>
             <img width="100" src="efast.png">
         </a>
 
@@ -128,18 +134,40 @@ if ($row["ID_ROLE"] == "ROLE_01") {
             <button style="margin-left: 10px" type="button" onclick="window.location='logout.php';" class="btn btn-outline-danger btn-sm ">Logout</button>
         </ul>
 
-
     </nav>
 
-
-
-
-    <!-- Profile form -->
+<!-- profile form -->
 
     <div class="container">
         <h1 class="display-3"> &nbsp <?php echo "$first_name $last_name's Profile"?> </h1>
         <div class="row">
+            <div class="col-sm-6">
+                <div class="panel panel-default panel-info Profile">
+                    <div class="panel-body">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">First Name:</label>
+                                <div class="col-sm-9">
+                                    <h5> <?php echo $first_name;?> </h5>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Last Name:</label>
+                                <div class="col-sm-9">
+                                    <h5> <?php echo $last_name;?> </h5>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Email:</label>
+                                <div class="col-sm-9">
+                                    <h5> <?php echo $email;?> </h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>  <!-- end form-horizontal -->
+                </div> <!-- end panel-body -->
 
+            </div> <!-- end panel -->
 
 
             <!-- Ratings section-->
@@ -200,7 +228,7 @@ if ($row["ID_ROLE"] == "ROLE_01") {
 
         <?php
 
-        $sql6 = "SELECT FNAME, LNAME, TIME_STAMP, COMMENT_HEADLINE, COMMENT, RATING_SCORE
+        $sql6 = "SELECT u.ID_USER, FNAME, LNAME, TIME_STAMP, COMMENT_HEADLINE, COMMENT, RATING_SCORE
               FROM rating r INNER JOIN criteria_buyer c ON r.ID_CRITERIA = c.ID_CRITERIA
               INNER JOIN user u ON u.ID_USER = r.ID_reviewer WHERE  r.ID_REVIEWEE = '$other_profileID' ORDER BY TIME_STAMP DESC";
         $rs_result = $conn->query($sql6);
@@ -216,11 +244,15 @@ if ($row["ID_ROLE"] == "ROLE_01") {
                     while($row = $rs_result->fetch_assoc()) {
                     $review_timestamp = $row["TIME_STAMP"];
                     $review_timestamp = date("j F Y", strtotime($review_timestamp));
+                    $selecteduserID = $row['ID_USER'];
                     ?>
+
                     <hr/>
                     <div class="row">
                         <div class="col-sm-3">
-                            <div class="review-block-name"><a><?php echo $row['FNAME']; echo " "; echo $row["LNAME"]?></a></div>
+                            <div class="review-block-name"><a <?php if ( $selecteduserID == $_SESSION['userID'] && $_SESSION['role'] == 'ROLE_01') {echo "href='b-myprofile.php'";}
+                                elseif ( $selecteduserID == $_SESSION['userID'] && $_SESSION['role'] == 'ROLE_02') {echo "href='s-myprofile.php'";}
+                                else {echo "href='profile-other.php?uID=".$selecteduserID."'";} ?>><?php echo $row['FNAME']; echo " "; echo $row["LNAME"]?></a></div>
                             <div class="review-block-date"><?php echo $review_timestamp?></div>
                         </div>
                         <div class="col-sm-5">
@@ -260,25 +292,8 @@ if ($row["ID_ROLE"] == "ROLE_01") {
 
         </div>
 
-        <!-- Example numbered list:
-
-                <div class="clearfix"></div>
-                <ul class="pagination pull-right">
-                    <li class="disabled"><a href="#"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
-                    <li class="active"><a href="#">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">4</a></li>
-                    <li><a href="#">5</a></li>
-                    <li><a href="#"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
-                </ul>
-
-        -->
-
-
     </div>
-    </body>
-
+    </div>
 
 
 
@@ -337,35 +352,6 @@ elseif($row["ID_ROLE"] == "ROLE_02") { ?>
 
     ?>
 
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Seller MyProfile</title>
-        <link href="css/bootstrap.min.css" rel="stylesheet">
-        <link href="css/profile.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <style>
-            .checked {
-                color: orange;
-            }
-            .button2 {
-                background-color: #4CAF50;
-                align-self: center;
-            }
-            .button3 {
-                background-color: #D3D3D3;
-                align-self: center;
-            }
-        </style>
-    </head>
-
-
     <body>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -378,10 +364,7 @@ elseif($row["ID_ROLE"] == "ROLE_02") { ?>
             <button style="margin-left: 10px" type="button" onclick="window.location='logout.php';" class="btn btn-outline-danger btn-sm ">Logout</button>
         </ul>
 
-
     </nav>
-
-
 
 
 
@@ -610,7 +593,7 @@ elseif($row["ID_ROLE"] == "ROLE_02") { ?>
         <!-- This is the review history.-->
         <?php
 
-        $sql6 = "SELECT FNAME, LNAME, TIME_STAMP, COMMENT_HEADLINE, COMMENT, AUTHENTICITY, RESPONSIVENESS, DISPATCH_TIME, DISPATCH_FEE
+        $sql6 = "SELECT u.ID_USER, FNAME, LNAME, TIME_STAMP, COMMENT_HEADLINE, COMMENT, AUTHENTICITY, RESPONSIVENESS, DISPATCH_TIME, DISPATCH_FEE
               FROM rating r INNER JOIN criteria_seller c ON r.ID_CRITERIA = c.ID_CRITERIA
               INNER JOIN user u ON u.ID_USER = r.ID_reviewer WHERE  r.ID_REVIEWEE = '$other_profileID' ORDER BY TIME_STAMP DESC";
         $rs_result = $conn->query($sql6);
@@ -626,11 +609,14 @@ elseif($row["ID_ROLE"] == "ROLE_02") { ?>
                     while($row = $rs_result->fetch_assoc()) {
                     $review_timestamp = $row["TIME_STAMP"];
                     $review_timestamp = date("j F Y", strtotime($review_timestamp));
+                    $selecteduserID = $row['ID_USER'];
                     ?>
                     <hr/>
                     <div class="row">
                         <div class="col-sm-3">
-                            <div class="review-block-name"><a><?php echo $row['FNAME']; echo " "; echo $row["LNAME"]?></a></div>
+                            <div class="review-block-name"><a <?php if ( $selecteduserID == $_SESSION['userID'] && $_SESSION['role'] == 'ROLE_01') {echo "href='b-myprofile.php'";}
+                                elseif ( $selecteduserID == $_SESSION['userID'] && $_SESSION['role'] == 'ROLE_02') {echo "href='s-myprofile.php'";}
+                                else {echo "href='profile-other.php?uID=".$selecteduserID."'";} ?>><?php echo $row['FNAME']; echo " "; echo $row["LNAME"]?></a></div>
                             <div class="review-block-date"><?php echo $review_timestamp?></div>
                         </div>
                         <div class="col-sm-6">
@@ -653,5 +639,7 @@ elseif($row["ID_ROLE"] == "ROLE_02") { ?>
 
         <?php } ?>
 
-
+        </div>
+    </div>
+    </body>
 </html>

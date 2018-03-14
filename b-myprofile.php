@@ -258,7 +258,7 @@ $averagerating = round($averagerating,1);
 
     if (isset($_GET["page"])) { $page  = $_GET["page"]; } else { $page=1; };
     $start_from = ($page-1) * $results_per_page;
-    $sql6 = "SELECT FNAME, LNAME, TIME_STAMP, COMMENT_HEADLINE, COMMENT, RATING_SCORE
+    $sql6 = "SELECT u.ID_USER, FNAME, LNAME, TIME_STAMP, COMMENT_HEADLINE, COMMENT, RATING_SCORE
               FROM rating r INNER JOIN criteria_buyer c ON r.ID_CRITERIA = c.ID_CRITERIA
               INNER JOIN user u ON u.ID_USER = r.ID_reviewer WHERE  r.ID_REVIEWEE = '$userID' ORDER BY TIME_STAMP DESC LIMIT $start_from, $results_per_page";
     $rs_result = $conn->query($sql6);
@@ -274,11 +274,14 @@ $averagerating = round($averagerating,1);
                 while($row = $rs_result->fetch_assoc()) {
                 $review_timestamp = $row["TIME_STAMP"];
                 $review_timestamp = date("j F Y", strtotime($review_timestamp));
+                $selecteduserID = $row['ID_USER'];
                 ?>
                 <hr/>
                 <div class="row">
                     <div class="col-sm-3">
-                        <div class="review-block-name"><a><?php echo $row['FNAME']; echo " "; echo $row["LNAME"]?></a></div>
+                        <div class="review-block-name"><a <?php if ($selecteduserID == $_SESSION['userID'] && $_SESSION['role'] == 'ROLE_01') {echo "href='b-myprofile.php'";}
+                            elseif ( $selecteduserID == $_SESSION['userID'] && $_SESSION['role'] == 'ROLE_02') {echo "href='s-myprofile.php'";}
+                            else {echo "href='profile-other.php?uID=".$selecteduserID."'";} ?> ><?php echo $row['FNAME']; echo " "; echo $row["LNAME"]?></a></div>
                         <div class="review-block-date"><?php echo $review_timestamp?></div>
                     </div>
                     <div class="col-sm-5">
@@ -384,14 +387,15 @@ $averagerating = round($averagerating,1);
                         </thead>
                         <tbody>
 
-                        <?php $sql10 = "SELECT PRICE, ID_AUCTION FROM bid WHERE ID_BUYER = '$userID'";
+
+                        <?php $sql10 = "SELECT PRICE, ID_AUCTION FROM bid WHERE ID_BUYER = '$userID' ORDER BY TIME DESC";
                         $result10 = $conn->query($sql10);
                         if(!$result10) {throw new Exception("Database Error5");}
                         while($row10 = $result10->fetch_assoc()){
                             $currentauctionID = $row10['ID_AUCTION'];
                             $bidamount = $row10['PRICE'];
                             $sql11 = "SELECT TITLE, DESCRIPTION, EXPIRATION_TIME, FNAME, LNAME, FEEDBACK_S, ID_USER FROM auction a INNER JOIN item i ON a.ID_ITEM = i.ID_ITEM
-                                      INNER JOIN user u ON u.ID_USER = a.ID_SELLER WHERE ID_AUCTION = '$currentauctionID' ORDER BY EXPIRATION_TIME DESC";
+                                      INNER JOIN user u ON u.ID_USER = a.ID_SELLER WHERE ID_AUCTION = '$currentauctionID'";
                             $result11 = $conn->query($sql11);
                             if(!$result11) {throw new Exception("Database Error6");}
                             $row11 = $result11->fetch_assoc();

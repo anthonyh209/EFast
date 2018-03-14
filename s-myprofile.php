@@ -409,7 +409,7 @@ $dispatchfeescore = round($dispatchfeescore,1);
 
     if (isset($_GET["page"])) { $page  = $_GET["page"]; } else { $page=1; };
     $start_from = ($page-1) * $results_per_page;
-    $sql6 = "SELECT FNAME, LNAME, TIME_STAMP, COMMENT_HEADLINE, COMMENT, AUTHENTICITY, RESPONSIVENESS, DISPATCH_TIME, DISPATCH_FEE
+    $sql6 = "SELECT u.ID_USER, FNAME, LNAME, TIME_STAMP, COMMENT_HEADLINE, COMMENT, AUTHENTICITY, RESPONSIVENESS, DISPATCH_TIME, DISPATCH_FEE
               FROM rating r INNER JOIN criteria_seller c ON r.ID_CRITERIA = c.ID_CRITERIA
               INNER JOIN user u ON u.ID_USER = r.ID_reviewer WHERE  r.ID_REVIEWEE = '$userID' ORDER BY TIME_STAMP DESC LIMIT $start_from, $results_per_page";
     $rs_result = $conn->query($sql6);
@@ -425,11 +425,14 @@ $dispatchfeescore = round($dispatchfeescore,1);
         while($row = $rs_result->fetch_assoc()) {
             $review_timestamp = $row["TIME_STAMP"];
             $review_timestamp = date("j F Y", strtotime($review_timestamp));
+            $selecteduserID = $row['ID_USER'];
             ?>
             <hr/>
             <div class="row">
                 <div class="col-sm-3">
-                    <div class="review-block-name"><a><?php echo $row['FNAME']; echo " "; echo $row["LNAME"]?></a></div>
+                    <div class="review-block-name"><a <?php if ( $selecteduserID == $_SESSION['userID'] && $_SESSION['role'] == 'ROLE_01') {echo "href='b-myprofile.php'";}
+                        elseif ( $selecteduserID == $_SESSION['userID'] && $_SESSION['role'] == 'ROLE_02') {echo "href='s-myprofile.php'";}
+                        else {echo "href='profile-other.php?uID=".$selecteduserID."'";} ?>><?php echo $row['FNAME']; echo " "; echo $row["LNAME"]?></a></div>
                     <div class="review-block-date"><?php echo $review_timestamp?></div>
                 </div>
                 <div class="col-sm-6">
@@ -602,7 +605,8 @@ $sql = "SELECT COUNT(*) AS total FROM rating r INNER JOIN user u ON r.ID_REVIEWE
 
 
 
-<?php $sql7 = "SELECT TITLE, DESCRIPTION, EXPIRATION_TIME, ID_AUCTION, FEEDBACK_B FROM auction a INNER JOIN item i ON a.ID_ITEM = i.ID_ITEM WHERE a.ID_SELLER = '$userID'";
+<?php $sql7 = "SELECT TITLE, DESCRIPTION, EXPIRATION_TIME, ID_AUCTION, FEEDBACK_B FROM auction a INNER JOIN item i ON a.ID_ITEM = i.ID_ITEM WHERE a.ID_SELLER = '$userID'
+                ORDER BY EXPIRATION_TIME ASC";
 $result7 = $conn->query($sql7);
 if (!$result7) {
     throw new Exception("Database Error4");
