@@ -158,14 +158,15 @@ The system should confirm to both the winner and seller of an auction its outcom
                 document.getElementById("seller_profile").innerHTML += "<a href='profile-other.php?uID=" + response[0].ID_SELLER +  "'> " + response[0].FNAME + " " + response[0].LNAME + "</a>";
                 var expirationtime = response[0].EXPIRATION_TIME;
 
+
                 setInterval(function(){
                     var remainingEpoch = expirationtime - (Date.now()/1000);
                     var remainingDays = Math.floor(remainingEpoch/86400);
                     var remainingHours = Math.floor((remainingEpoch % 86400)/3600);
-                    var remainingMinutes = Math.floor(((remainingEpoch & 86400) % 3600)/60);
-                    var remainingSeconds = (((remainingEpoch & 86400) % 3600)%60);
+                    var remainingMinutes = Math.floor(((remainingEpoch % 86400) % 3600)/60);
+                    var remainingSeconds = Math.floor(((remainingEpoch % 86400) % 3600)%60);
                     document.getElementById("remaining_time").innerHTML = "Remaining Time: " + remainingDays + " Days " + remainingHours + " Hours " + remainingMinutes + " Minutes " + remainingSeconds + " Seconds";
-                },1000);
+                },100);
 
             }
         };
