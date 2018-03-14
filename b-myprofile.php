@@ -442,7 +442,7 @@ $averagerating = round($averagerating,1);
                         ?>
 
                             <tr>
-                                <td> <a <?php echo "href='b-bidpage.html?auctionIDP=".$currentauctionID."'"?>><?php echo $row11["TITLE"]?></a></td>
+                                <td> <a <?php echo "href='intermediate.php?auctionIDP=".$currentauctionID."'"?>><?php echo $row11["TITLE"]?></a></td>
                                 <td><a <?php echo "href='profile-other.php?uID=".$selecteduserID."'"?></a><?php echo $row11["FNAME"]; echo " ";echo $row11["LNAME"]?></td>
                                 <td><?php echo $row11["DESCRIPTION"]?></td>
                                 <td><?php echo $bidamount?></td>
