@@ -4,10 +4,13 @@ session_start();
 require_once("config.php");
 
 //buyer giving seller a rating
-//$reviewer = $_SESSION['userID'];
-$reviewer = "ID_001034";
-//$auctionID = $_GET['aID'];
-$auctionID = "AU_000057";
+$reviewer = $_SESSION['userID'];
+
+//$reviewer = "ID_001032";
+$auctionID = $_GET['aID'];
+//$auctionID = "AU_000065";
+
+//echo $reviewer2; echo $auctionID2; echo $reviewer; echo $auctionID;
 
 // getting the seller details
 $sql = "SELECT ID_SELLER, FNAME, LNAME, FEEDBACK_S, EXPIRATION_TIME FROM auction INNER JOIN user ON ID_SELLER = ID_USER WHERE ID_AUCTION = '$auctionID'";
@@ -21,9 +24,10 @@ while ($row = $result->fetch_assoc()) {
 
 }
 
+$verification = 0;
 $now = date('Y-m-d H:i:s'); //getting current time
 $diff = strtotime($expiration_datetime) - strtotime($now);
-echo $diff;
+
 
 // why are you checking expired?
 if ($diff <= 0) {
@@ -40,7 +44,7 @@ $ID_BUYER = $row2['ID_BUYER'];
 if ($ID_BUYER == $reviewer) {
     $verification = 1;
 }
-
+echo $verification;
 
 if ($FEEDBACK_S == 0 && $expired == 1 && $verification == 1) {
 
@@ -76,7 +80,7 @@ if ($FEEDBACK_S == 0 && $expired == 1 && $verification == 1) {
             $auctionSTMT->execute();
         }
 
-        $sql3 = "UPDATE auction SET  FEEDBACK_B = 1 WHERE ID_AUCTION = '$auctionID'";
+        $sql3 = "UPDATE auction SET  FEEDBACK_S = 1 WHERE ID_AUCTION = '$auctionID'";
         if ($conn->query($sql3) === TRUE) {
             echo "Record updated successfully";
         } else {
@@ -174,7 +178,7 @@ if ($FEEDBACK_S == 0 && $expired == 1 && $verification == 1) {
         <!-- Custom information -->
         <div class="about" style="height:auto; width:auto;">
             <h3>Provide feedback for <?php echo "$FNAME $LNAME" ?> </h3>
-            <form action="seller-rating.php" role="form" method="post" enctype="multipart/form-data">
+            <form action="<?php echo "seller-rating.php?aID=".$auctionID.""?>" role="form" method="post" enctype="multipart/form-data">
                 <div class="spacer" style="height:20px"></div>
                 <center>
                     <h7>Authenticity</h7>
