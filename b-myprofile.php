@@ -135,17 +135,17 @@ $averagerating = round($averagerating,1);
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
 
-            <a class="navbar-brand" href="b-home.php">
-                <img width="100" src="efast.png">
-            </a>
+    <a class="navbar-brand" href="b-home.php">
+        <img width="100" src="efast.png">
+    </a>
 
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+            aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-            <div class="col-md-auto">
-            </div>
+    <div class="col-md-auto">
+    </div>
 
     <div class="collapse navbar-collapse">
         <ul class="nav navbar-nav navbar-right">
@@ -153,7 +153,7 @@ $averagerating = round($averagerating,1);
         </ul>
     </div>
 
-    
+
 
 
 </nav>
@@ -244,8 +244,8 @@ $averagerating = round($averagerating,1);
                     <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                 </button> <?php } ?>
 
+            </div>
         </div>
-    </div>
     </div>
 
     <!-- potentially include review breakdown from the html file if there's time -->
@@ -398,51 +398,58 @@ $averagerating = round($averagerating,1);
                             $feedbackgiven = $row11["FEEDBACK_S"];
                             $selecteduserID = $row11["ID_USER"];
                             $now = date('Y-m-d H:i:s');
-                        $expiration_datetime = $row11["EXPIRATION_TIME"];
-                        $diff=strtotime($expiration_datetime)-strtotime($now);
+                            $expiration_datetime = $row11["EXPIRATION_TIME"];
+                            $diff=strtotime($expiration_datetime)-strtotime($now);
 
-                        if($diff>0) {
+                            if($diff>0) {
 
-                            //  convert to days
-                            $temp = $diff / 86400; // 86400 secs in a day
+                                //  convert to days
+                                $temp = $diff / 86400; // 86400 secs in a day
 
-                            // days
-                            $days = floor($temp);
-                            $temp = 24 * ($temp - $days);
-                            // hours
-                            $hours = floor($temp);
-                            $temp = 60 * ($temp - $hours);
-                            // minutes
-                            $minutes = floor($temp);
-                            $temp = 60 * ($temp - $minutes);
-                            // seconds
-                            $seconds = floor($temp);
+                                // days
+                                $days = floor($temp);
+                                $temp = 24 * ($temp - $days);
+                                // hours
+                                $hours = floor($temp);
+                                $temp = 60 * ($temp - $hours);
+                                // minutes
+                                $minutes = floor($temp);
+                                $temp = 60 * ($temp - $minutes);
+                                // seconds
+                                $seconds = floor($temp);
 
-                            if ($days > 0) {
-                                $timeremaining = "{$days} days {$hours} hours";
-                            } elseif ($hours > 0) {
-                                $timeremaining = "{$hours} hours {$minutes} minutes";
-                            } elseif ($minutes > 0) {
-                                $timeremaining = "{$minutes} minutes {$seconds} seconds";
-                            } elseif ($seconds > 0) {
-                                $timeremaining = "{$seconds} seconds";
+                                if ($days > 0) {
+                                    $timeremaining = "{$days} days {$hours} hours";
+                                } elseif ($hours > 0) {
+                                    $timeremaining = "{$hours} hours {$minutes} minutes";
+                                } elseif ($minutes > 0) {
+                                    $timeremaining = "{$minutes} minutes {$seconds} seconds";
+                                } elseif ($seconds > 0) {
+                                    $timeremaining = "{$seconds} seconds";
+                                }
                             }
-                        }
-                        else {$timeremaining = "Auction Complete";}
+                            else {$timeremaining = "Auction Complete";}
 
 
-                        $sql12 = "SELECT PRICE FROM bid WHERE ID_AUCTION = '$currentauctionID' ORDER BY PRICE DESC LIMIT 1";
-                        $result12 = $conn->query($sql12);
-                        $row12 = $result12->fetch_assoc();
-                        $highestbid = $row12['PRICE'];
-                        if ($highestbid > $bidamount){$bidstatus = 'Outbid';}
-                        elseif ($highestbid = $bidamount && $timeremaining == "Auction Complete") {$bidstatus = 'Bid Successful';}
-                        elseif ($highestbid = $bidamount && $timeremaining != "Auction Complete") {$bidstatus = 'Highest Bid';}
-                        $m=1;
-                        ?>
+                            $sql12 = "SELECT PRICE FROM bid WHERE ID_AUCTION = '$currentauctionID' ORDER BY PRICE DESC LIMIT 1";
+                            $result12 = $conn->query($sql12);
+                            $row12 = $result12->fetch_assoc();
+                            $highestbid = $row12['PRICE'];
+                            if ($highestbid > $bidamount){$bidstatus = 'Outbid';}
+                            elseif ($highestbid = $bidamount && $timeremaining == "Auction Complete") {$bidstatus = 'Bid Successful';}
+                            elseif ($highestbid = $bidamount && $timeremaining != "Auction Complete") {$bidstatus = 'Highest Bid';}
+                            $m=1;
+                            ?>
+
+                            <script>
+                                function gotoBidpage(){
+
+                                }
+
+                            </script>
 
                             <tr>
-                                <td> <a <?php echo "href='b-bidpage.html?auctionID=".$currentauctionID."?a=register'"?>><?php echo $row11["TITLE"]?></a></td>
+                                <td> <a id="bid_card" onclick = "gotoBidpage(<?php echo $currentauctionID?>)" <?php echo "href='b-bidpage.html?auctionIDP=".$_SESSION['auctionID']."'"?>><?php echo $row11["TITLE"] . "and" . $_SESSION['auctionID']?></a></td>
                                 <td><a <?php echo "href='profile-other.php?uID=".$selecteduserID."'"?></a><?php echo $row11["FNAME"]; echo " ";echo $row11["LNAME"]?></td>
                                 <td><?php echo $row11["DESCRIPTION"]?></td>
                                 <td><?php echo $bidamount?></td>
@@ -452,13 +459,13 @@ $averagerating = round($averagerating,1);
                                     <centre> <a> &nbsp&nbsp;</a>
                                         <?php if ($feedbackgiven == 0 && $bidstatus == 'Bid Successful') { ?>
                                         <a <?php echo "href='seller-rating.php?aID=".$currentauctionID."'"?>> <button class = "btn button3 btn-xs">
-                                            <span class ="glyphicon glyphicon-pencil" background-color="#FF0000"></span></button>
+                                                <span class ="glyphicon glyphicon-pencil" background-color="#FF0000"></span></button>
 
-                                        <?php }
-                                        else if ($feedbackgiven == 1 ) { ?>
-                                        <a class="button2"></a> <button class = "btn button2 btn-xs">
-                                            <span class="glyphicon glyphicon-ok" background-color="#4CAF50"></span></button>
-                                    <?php } ?>
+                                            <?php }
+                                            else if ($feedbackgiven == 1 ) { ?>
+                                                <a class="button2"></a> <button class = "btn button2 btn-xs">
+                                                    <span class="glyphicon glyphicon-ok" background-color="#4CAF50"></span></button>
+                                            <?php } ?>
                                     </centre>
                                 </td>
                             </tr>

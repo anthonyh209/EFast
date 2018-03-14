@@ -14,10 +14,6 @@ session_start();
 $id_user = $_SESSION['userID'];
 $id_auction=$_SESSION["auctionID"];
 
-if (isset($_REQUEST['auctionID'])) {
-    $id_auction = $_REQUEST['auctionID'];
-    echo $id_auction;
-}
 
 //picking up parameters from post
 //$id_auction=$_REQUEST["id_auction"];
