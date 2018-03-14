@@ -190,35 +190,24 @@ $dispatchfeescore = round($dispatchfeescore,1);
             <div class="panel panel-default panel-info Profile">
                 <div class="panel-body">
                     <div class="form-horizontal">
-                        <form>
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">First Name</label>
+                                <label class="col-sm-3 control-label">First Name:</label>
                                 <div class="col-sm-9">
-                                    <input class="form-control" type="text" name="firstName"
-                                           placeholder="<?php echo $first_name; ?>">
+                                    <h5> <?php echo $first_name;?> </h5>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">Last Name</label>
+                                <label class="col-sm-3 control-label">Last Name:</label>
                                 <div class="col-sm-9">
-                                    <input class="form-control" type="text" name="lastName"
-                                           placeholder="<?php echo $last_name; ?>">
+                                    <h5> <?php echo $last_name;?> </h5>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">Email</label>
+                                <label class="col-sm-3 control-label">Email:</label>
                                 <div class="col-sm-9">
-                                    <input class="form-control" type="text" name="email"
-                                           placeholder="<?php echo $email;?>">
+                                   <h5> <?php echo $email;?> </h5>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="col-sm-offset-5">
-                                    <button class="btn btn-primary" href="update-profile-info.php?userID=<?php echo $userID;?>"> Update </button>
-                                </div>
-                            </div>
-                        </form>
-
                     </div>
                 </div>  <!-- end form-horizontal -->
             </div> <!-- end panel-body -->
@@ -607,14 +596,13 @@ $sql = "SELECT COUNT(*) AS total FROM rating r INNER JOIN user u ON r.ID_REVIEWE
                         <th>Time Remaining</th>
                         <th>Most Recent Bid</th>
                         <th>Views</th>
-                        <th>Cancel Auction</th>
                         <th>Feedback</th>
                         </thead>
                         <tbody>
 
 
 
-<?php $sql7 = "SELECT TITLE, DESCRIPTION, EXPIRATION_TIME, ID_AUCTION, FEEDBACK_S FROM auction a INNER JOIN item i ON a.ID_ITEM = i.ID_ITEM WHERE a.ID_SELLER = '$userID'";
+<?php $sql7 = "SELECT TITLE, DESCRIPTION, EXPIRATION_TIME, ID_AUCTION, FEEDBACK_B FROM auction a INNER JOIN item i ON a.ID_ITEM = i.ID_ITEM WHERE a.ID_SELLER = '$userID'";
 $result7 = $conn->query($sql7);
 if (!$result7) {
     throw new Exception("Database Error4");
@@ -622,7 +610,7 @@ if (!$result7) {
 
 while($row7 = $result7->fetch_assoc()){
     $currentauction = $row7["ID_AUCTION"];
-    $feedbackgiven = $row7["FEEDBACK_S"];
+    $feedbackgiven = $row7["FEEDBACK_B"];
     $sql8 = "SELECT COUNT(*) AS total FROM traffic WHERE ID_AUCTION = '$currentauction'";
 $result8 = $conn->query($sql8);
 $row8 = $result8->fetch_assoc();
@@ -676,12 +664,11 @@ $expiration_datetime = $row7["EXPIRATION_TIME"];
                         <td><?php echo $timeremaining?></td>
                         <td><?php echo $most_recent_bid?></td>
                         <td><?php echo $total_views?></td>
-                        <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
                         <td> <?php ?>
                             <centre> <a> &nbsp&nbsp;</a>
                                 <?php if ($feedbackgiven == 0 && $timeremaining == 'Auction Complete' && $most_recent_bid != "No bids") { ?>
                                 <a <?php echo "href='buyer-rating.php?aID=".$currentauction."'"?>> <button class = "btn button3 btn-xs">
-                                        <span class ="glyphicon glyphicon-remove" background-color="#A9A9A9"></span></button>
+                                        <span class ="glyphicon glyphicon-pencil" background-color="#A9A9A9"></span></button>
 
                                     <?php }
                                     else if ($feedbackgiven == 1 ) { ?>
@@ -706,30 +693,6 @@ $expiration_datetime = $row7["EXPIRATION_TIME"];
 
         </div>
     </div>
-</div>
-
-<!-- This section is the delete auction confirmation - but this isn't in the required features -->
-
-<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-                <h4 class="modal-title custom_align" id="Heading">Delete this entry</h4>
-            </div>
-            <div class="modal-body">
-
-                <div class="alert alert-danger"><span class="glyphicon glyphicon-warning-sign"></span> Are you sure you want to cancel this auction?</div>
-
-            </div>
-            <div class="modal-footer ">
-                <button type="button" class="btn btn-success" ><span class="glyphicon glyphicon-ok-sign"></span> Yes</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> No</button>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
 </div>
 
 

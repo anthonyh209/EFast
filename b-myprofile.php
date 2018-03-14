@@ -169,35 +169,24 @@ $averagerating = round($averagerating,1);
             <div class="panel panel-default panel-info Profile">
                 <div class="panel-body">
                     <div class="form-horizontal">
-                        <form>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">First Name</label>
-                                <div class="col-sm-9">
-                                    <input class="form-control" type="text" name="firstName"
-                                           placeholder="<?php echo $first_name; ?>">
-                                </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">First Name:</label>
+                            <div class="col-sm-9">
+                                <h5> <?php echo $first_name;?> </h5>
                             </div>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">Last Name</label>
-                                <div class="col-sm-9">
-                                    <input class="form-control" type="text" name="lastName"
-                                           placeholder="<?php echo $last_name; ?>">
-                                </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Last Name:</label>
+                            <div class="col-sm-9">
+                                <h5> <?php echo $last_name;?> </h5>
                             </div>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">Email</label>
-                                <div class="col-sm-9">
-                                    <input class="form-control" type="text" name="email"
-                                           placeholder="<?php echo $email;?>">
-                                </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Email:</label>
+                            <div class="col-sm-9">
+                                <h5> <?php echo $email;?> </h5>
                             </div>
-                            <div class="form-group">
-                                <div class="col-sm-offset-5">
-                                    <button class="btn btn-primary" ng-click="updateMe()">Update</button>
-                                </div>
-                            </div>
-                        </form>
-
+                        </div>
                     </div>
                 </div>  <!-- end form-horizontal -->
             </div> <!-- end panel-body -->
@@ -399,12 +388,12 @@ $averagerating = round($averagerating,1);
                         while($row10 = $result10->fetch_assoc()){
                             $currentauctionID = $row10['ID_AUCTION'];
                             $bidamount = $row10['PRICE'];
-                            $sql11 = "SELECT TITLE, DESCRIPTION, EXPIRATION_TIME, FNAME, LNAME, FEEDBACK_B FROM auction a INNER JOIN item i ON a.ID_ITEM = i.ID_ITEM
+                            $sql11 = "SELECT TITLE, DESCRIPTION, EXPIRATION_TIME, FNAME, LNAME, FEEDBACK_S FROM auction a INNER JOIN item i ON a.ID_ITEM = i.ID_ITEM
                                       INNER JOIN user u ON u.ID_USER = a.ID_SELLER WHERE ID_AUCTION = '$currentauctionID' ORDER BY EXPIRATION_TIME DESC";
                             $result11 = $conn->query($sql11);
                             if(!$result11) {throw new Exception("Database Error6");}
                             $row11 = $result11->fetch_assoc();
-                            $feedbackgiven = $row11["FEEDBACK_B"];
+                            $feedbackgiven = $row11["FEEDBACK_S"];
                         $now = date('Y-m-d H:i:s');
                         $expiration_datetime = $row11["EXPIRATION_TIME"];
                         $diff=strtotime($expiration_datetime)-strtotime($now);
@@ -460,7 +449,7 @@ $averagerating = round($averagerating,1);
                                     <centre> <a> &nbsp&nbsp;</a>
                                         <?php if ($feedbackgiven == 0 && $bidstatus == 'Bid Successful') { ?>
                                         <a <?php echo "href='seller-rating.php?aID=".$currentauctionID."'"?>> <button class = "btn button3 btn-xs">
-                                            <span class ="glyphicon glyphicon-remove" background-color="#FF0000"></span></button>
+                                            <span class ="glyphicon glyphicon-pencil" background-color="#FF0000"></span></button>
 
                                         <?php }
                                         else if ($feedbackgiven == 1 ) { ?>

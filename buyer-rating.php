@@ -18,7 +18,7 @@ $diff=strtotime($expiration_datetime)-strtotime($now);
 if($diff<=0) { $expired = 1; }
 else {$expired = 0;}
 
-$sql2 = "SELECT ID_BUYER, FNAME, LNAME FROM bid INNER JOIN user WHERE ID_AUCTION = '$auctionID' ORDER BY PRICE DESC LIMIT 1";
+$sql2 = "SELECT ID_BUYER, FNAME, LNAME FROM bid B INNER JOIN user U ON U.ID_USER=B.ID_BUYER WHERE ID_AUCTION = '$auctionID' ORDER BY PRICE DESC LIMIT 1";
 $result2 = $conn->query($sql2);
 if (!$result2) {$nobids = 1;}
 else {
@@ -65,7 +65,12 @@ if (isset($_POST['submit'])) {
         $auctionSTMT->bind_param("ssssss", $reviewer, $reviewee, $textdesc, $rating_criteria, $title, $start);
         $auctionSTMT->execute();
     }
-    header('Location: /Ebay-System/s-myprofile.php');
+    $sql3 = "UPDATE auction SET  FEEDBACK_B = 1 WHERE ID_AUCTION = '$auctionID'";
+    if ($conn->query($sql3) === TRUE) {
+        echo "Record updated successfully";
+    } else {
+        echo "Error updating record: " . $conn->error;
+    }
 }
 
 ?>
@@ -149,7 +154,7 @@ if (isset($_POST['submit'])) {
         <!-- Custom information -->
         <div class="about" style="height:auto; width:auto;">
             <h3>Provide feedback for <?php echo "$FNAME $LNAME" ?></h3>
-            <form action="buyer-rating.php" role="form" method="post" enctype="multipart/form-data">
+            <form action="<?php echo "buyer-rating.php?aID=".$auctionID.""?>" role="form" method="post" enctype="multipart/form-data">
                 <div class="spacer" style="height:20px"></div>
                 <center>
                     <h7>Rating Score</h7>
