@@ -263,13 +263,11 @@ $result = mysqli_query($conn,$sql);
 
   <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sortExpTime" onchange="showUser()">
   <option  value=" "> Filter by expiry of item </option>
-  <option  value="ORDER BY EXPIRATION_TIME DESC"> See the lastest auctioned items </option>
-  <option  value="ORDER BY EXPIRATION_TIME ASC"> Auctions about to expire </option>
+  <option  value="ORDER BY EXPIRATION_TIME DESC"> Sort by newest auctions </option>
+  <option  value="ORDER BY EXPIRATION_TIME ASC"> Sort by auctions about to expire </option>
   </select>
 
 </form>
-
-
 
 
 
