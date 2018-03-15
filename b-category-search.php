@@ -167,27 +167,14 @@
 
 
 
-
-
 <script>
-function showUser(str) {
-
-    if (str == "") {
-        document.getElementById("txtHint").innerHTML = "";
-        return;
-    } else {
-
-
+function showUser() {
+                
+        var str = document.getElementById("changeByCategory").value;
+        
 
         var xhttp;
         xhttp = new XMLHttpRequest();
-
-
-
-
-        //sorting price parameters
-//        var e = document.getElementById("sortprice");
-//        var sortprice = e.options[e.selectedIndex].value;
 
         //changing of state 
         var w = document.getElementById("changeOfState");
@@ -201,23 +188,19 @@ function showUser(str) {
         xhttp.open("GET","category-results.php?"+parameters,true);
         xhttp.send();
 
-
-
-
-
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 document.getElementById("txtHint").innerHTML = this.responseText;
             }
         };
-
-
-       
-
-    }
 }
 
 </script>
+
+
+
+
+
 
 
 
@@ -231,7 +214,7 @@ function showUser(str) {
 
 
 
-<select class="custom-select mb-2 mr-sm-2 mb-sm-0" name="users" onchange="showUser(this.value)">
+<select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="changeByCategory" onchange="showUser()">
   <option value="">Filter via category</option>
 
   <?php
@@ -263,23 +246,11 @@ $result = mysqli_query($conn,$sql);
   </select>
 
 
-<!---->
-<!--  <br>-->
-<!--  <br>-->
-<!---->
-
-<!--  <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sortprice" >-->
-<!--  <option  value=" ">Filter by current bid price</option>-->
-<!--  <option  value="ORDER BY PRICE ASC">Highest bid</option>-->
-<!--  <option  value="ORDER BY PRICE DESC">Lowest bid</option>-->
-<!--  </select>-->
-
-
     <br>
   <br>
 
 
-  <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="changeOfState" >
+  <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="changeOfState" onchange="showUser()" >
   <option  value=" "> Filter by current state of item </option>
   <option  value="AND ID_STATE = 'STATE_01'"> NEW WITH SEALED BOX </option>
   <option  value="AND ID_STATE = 'STATE_02'"> NEW WITH OPENED BOX </option>
@@ -290,13 +261,15 @@ $result = mysqli_query($conn,$sql);
     <br>
   <br>
 
-  <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sortExpTime" >
+  <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sortExpTime" onchange="showUser()">
   <option  value=" "> Filter by expiry of item </option>
   <option  value="ORDER BY EXPIRATION_TIME DESC"> See the lastest auctioned items </option>
   <option  value="ORDER BY EXPIRATION_TIME ASC"> Auctions about to expire </option>
   </select>
 
 </form>
+
+
 
 
 

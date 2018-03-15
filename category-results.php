@@ -25,7 +25,9 @@ th {text-align: left;}
     <?php
 
     	session_start();
-    date_default_timezone_set("Europe/London");
+        
+        date_default_timezone_set("Europe/London");
+
         $q = ($_GET['q']);
 //        $sortprice = ($_GET['price']);
         $changeState = ($_GET['changestate']);
