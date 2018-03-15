@@ -63,6 +63,7 @@ if (isset($_POST['submit'])) {
     $sql3 = "UPDATE auction SET  FEEDBACK_B = 1 WHERE ID_AUCTION = '$auctionID'";
     if ($conn->query($sql3) === TRUE) {
         echo "Record updated successfully";
+        echo "<script> location.href='s-myprofile.php'; </script>";
     } else {
         echo "Error updating record: " . $conn->error;
     }

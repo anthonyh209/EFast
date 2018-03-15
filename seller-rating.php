@@ -78,7 +78,8 @@ if ($ID_BUYER == $reviewer) {
 
         $sql3 = "UPDATE auction SET  FEEDBACK_S = 1 WHERE ID_AUCTION = '$auctionID'";
         if ($conn->query($sql3) === TRUE) {
-            echo "Record updated successfully";;
+            echo "Record updated successfully";
+            echo "<script> location.href='b-myprofile.php'; </script>";
         } else {
             echo "Error updating record: " . $conn->error;;
         }
