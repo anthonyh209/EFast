@@ -44,7 +44,6 @@ $ID_BUYER = $row2['ID_BUYER'];
 if ($ID_BUYER == $reviewer) {
     $verification = 1;
 }
-echo $verification;
 
 if ($FEEDBACK_S == 0 && $expired == 1 && $verification == 1) {
 
@@ -68,7 +67,6 @@ if ($FEEDBACK_S == 0 && $expired == 1 && $verification == 1) {
 
 
         $id = mysqli_insert_id($conn); //retrieves just inserted new item
-        echo $id;
         $Item_Query = "SELECT * FROM criteria_seller WHERE ID = '$id'";
         $ExecQuery2 = MySQLi_query($conn, $Item_Query);
         while ($row = mysqli_fetch_array($ExecQuery2)) {
@@ -83,10 +81,11 @@ if ($FEEDBACK_S == 0 && $expired == 1 && $verification == 1) {
         $sql3 = "UPDATE auction SET  FEEDBACK_S = 1 WHERE ID_AUCTION = '$auctionID'";
         if ($conn->query($sql3) === TRUE) {
             echo "Record updated successfully";
+            header('Location: /Ebay-System/b-myprofile.php');
         } else {
             echo "Error updating record: " . $conn->error;
+            header('Location: /Ebay-System/b-myprofile.php');
         }
-        header('Location: /Ebay-System/b-myprofile.php');
 
     }
 } elseif ($row['FEEDBACK_S'] == 1 && $expired == 1 && verification == 1) {
