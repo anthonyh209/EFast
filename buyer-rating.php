@@ -32,11 +32,6 @@ $row2 = $result2->fetch_assoc();
 if ($userID == $reviewer) {$verification = 1;}
 
 
-if($FEEDBACK_B == 0 && $expired == 1 && $verification ==1 && $nobids != 1) {
-
-
-
-
 
 if (isset($_POST['submit'])) {
 
@@ -200,12 +195,6 @@ if (isset($_POST['submit'])) {
     </div>
 </div>
 
-<?php }
-
-elseif($FEEDBACK_B == 1 && $expired == 1 && $verification ==1) {
-    echo "Feedback already given.";
-}
-else { echo "You're not allowed to give feedback."; } ?>
 
 
 </body>

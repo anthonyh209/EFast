@@ -45,8 +45,6 @@ if ($ID_BUYER == $reviewer) {
     $verification = 1;
 }
 
-if ($FEEDBACK_S == 0 && $expired == 1 && $verification == 1) {
-
     if (isset($_POST['submit'])) {
 
         $authen = $_POST['rating-authen'];
@@ -86,12 +84,6 @@ if ($FEEDBACK_S == 0 && $expired == 1 && $verification == 1) {
         }
 
     }
-} elseif ($row['FEEDBACK_S'] == 1 && $expired == 1 && $verification == 1) {
-    echo "Feedback already given.";
-} else {
-    echo "You're not allowed to give feedback.";
-}
-
 
 
 ?>
