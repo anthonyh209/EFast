@@ -2,7 +2,7 @@
 
 session_start();
 require_once("config.php");
-
+date_default_timezone_set("Europe/London");
 $auctionID = $_GET['aID'];
 $userID = $_SESSION['userID'];
 
