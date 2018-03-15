@@ -80,11 +80,9 @@ if ($FEEDBACK_S == 0 && $expired == 1 && $verification == 1) {
 
         $sql3 = "UPDATE auction SET  FEEDBACK_S = 1 WHERE ID_AUCTION = '$auctionID'";
         if ($conn->query($sql3) === TRUE) {
-            echo "Record updated successfully";
-            header('Location: /Ebay-System/b-myprofile.php');
+            echo "Record updated successfully";;
         } else {
-            echo "Error updating record: " . $conn->error;
-            header('Location: /Ebay-System/b-myprofile.php');
+            echo "Error updating record: " . $conn->error;;
         }
 
     }
