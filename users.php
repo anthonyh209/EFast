@@ -73,7 +73,7 @@ $old_error_handler = set_error_handler("ErrorHandler");
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Buyer MyProfile</title>
+    <title>All Users</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/profile.css" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -142,7 +142,7 @@ $old_error_handler = set_error_handler("ErrorHandler");
                             ?>
 
                             <tr>
-                                <td><?php echo $currentuser?></td>
+                                <td><?php echo "<a href='profile-other.php?uID=".$currentuser."'>"; echo $currentuser?></td>
                                 <td><?php echo $fname?></td>
                                 <td><?php echo $lname ?></td>
                                 <td><?php echo $count ?></td>
@@ -186,7 +186,7 @@ $old_error_handler = set_error_handler("ErrorHandler");
                         $scount = $row14['HI'];
                         ?>
                         <tr>
-                            <td><?php echo $userID ?></td>
+                            <td><?php echo "<a href='profile-other.php?uID=".$userID."'>"; echo $userID ?></td>
                             <td><?php echo $fname ?></td>
                             <td><?php echo $lname ?></td>
                             <td><?php echo $scount ?></td>

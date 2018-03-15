@@ -81,7 +81,7 @@ if ($_SESSION['role'] == 'ROLE_01') {
 if ($_SESSION['role'] == 'ROLE_02') {
     $homelink = "s-home.php";}
 if ($_SESSION['role'] == 'ROLE_03') {
-    $homelink = "a-home.php";
+    $homelink = "admin-home.php";
 }
 ?>
 

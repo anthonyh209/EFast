@@ -73,7 +73,7 @@ $old_error_handler = set_error_handler("ErrorHandler");
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Buyer MyProfile</title>
+    <title>Auction List</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/profile.css" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -124,18 +124,19 @@ $old_error_handler = set_error_handler("ErrorHandler");
                         <th>Item Name</th>
                         <th>Item Seller</th>
                         <th>Item Description</th>
-                        <th>Max Bid</th>
+                        <th>Highest Bid</th>
                         <th>Auction Time Remaining</th>
                         </thead>
                         <tbody>
 
                         <?php
-                        $sql11 = "SELECT ID_AUCTION, ID_SELLER, TITLE, DESCRIPTION, EXPIRATION_TIME FROM auction a INNER JOIN item i ON a.ID_ITEM = i.ID_ITEM
-                                      ORDER BY EXPIRATION_TIME DESC";
+                        $sql11 = "SELECT ID_AUCTION, ID_SELLER, FNAME, LNAME, TITLE, DESCRIPTION, EXPIRATION_TIME FROM auction a INNER JOIN item i ON a.ID_ITEM = i.ID_ITEM
+                                     INNER JOIN user u ON a.ID_SELLER = u.ID_USER ORDER BY EXPIRATION_TIME DESC";
                         $result11 = $conn->query($sql11);
                         if(!$result11) {throw new Exception("Database Error6");}
                         $row11 = $result11->fetch_assoc();
                         while($row11 = $result11->fetch_assoc()){
+                            $selecteduser = $row11['ID_SELLER'];
                             $currentauctionID = $row11['ID_AUCTION'];
                             $now = date('Y-m-d H:i:s');
                             $expiration_datetime = $row11["EXPIRATION_TIME"];
@@ -177,7 +178,7 @@ $old_error_handler = set_error_handler("ErrorHandler");
                         $row12 = $result12->fetch_assoc();
                         $maxbid = $row12['HELLO'];
                         if ($maxbid == NULL){
-                            $maxbid = "No bid yet";
+                            $maxbid = "No bids";
                         }
 
 
@@ -185,34 +186,12 @@ $old_error_handler = set_error_handler("ErrorHandler");
 
                             <tr>
                                 <td><?php echo $row11["TITLE"]?></td>
-                                <td><?php echo $row11["ID_SELLER"]?></td>
+                                <td><?php echo $row11["FNAME"]; echo " "; echo $row11['LNAME'];?></td>
                                 <td><?php echo $description ?></td>
                                 <td><?php echo $maxbid?></td>
                                 <td><?php echo $timeremaining ?></td>
                             </tr>
 
-                            <div class="modal fade" <?php echo "id='delete".$m."'" ?> tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
-                                <php if $
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-                                            <h4 class="modal-title custom_align" id="Heading">Delete this entry</h4>
-                                        </div>
-                                        <div class="modal-body">
-
-                                            <div class="alert alert-danger"><span class="glyphicon glyphicon-warning-sign"></span> Are you sure you want to delete this bid?</div>
-
-                                        </div>
-                                        <div class="modal-footer ">
-                                            <button type="button" class="btn btn-success" ><span class="glyphicon glyphicon-ok-sign"></span> Yes</button>
-                                            <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> No</button>
-                                        </div>
-                                    </div>
-                                    <!-- /.modal-content -->
-                                </div>
-                                <!-- /.modal-dialog -->
-                            </div>
                         <?php }  ?>
                         </tbody>
                     </table>
@@ -220,32 +199,6 @@ $old_error_handler = set_error_handler("ErrorHandler");
             </div>
         </div>
     </div>
-
-    <!-- This section is the delete auction confirmation - but this isn't in the required features -->
-
-    <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
-        <php if $
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-                    <h4 class="modal-title custom_align" id="Heading">Delete this entry</h4>
-                </div>
-                <div class="modal-body">
-
-                    <div class="alert alert-danger"><span class="glyphicon glyphicon-warning-sign"></span> Are you sure you want to delete this bid?</div>
-
-                </div>
-                <div class="modal-footer ">
-                    <button type="button" class="btn btn-success" ><span class="glyphicon glyphicon-ok-sign"></span> Yes</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> No</button>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
-
 
 </body>
 

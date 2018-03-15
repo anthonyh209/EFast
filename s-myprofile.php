@@ -472,113 +472,6 @@ $sql = "SELECT COUNT(*) AS total FROM rating r INNER JOIN user u ON r.ID_REVIEWE
             </div>
         </div>
 
-    <!-- could also use stars for the ratings: see below-->
-
-<?php /* <div class="review-criteria1"><a> Authenticity: &nbsp; <?php
-                        if($row["AUTHENTICITY"] >= 0.5){ ?>
-                            <span class="fa fa-star checked"></span>
-                        <?php }
-                        else { ?> <span class="fa fa-star"></span> <?php } ?>
-                        <?php if($row["AUTHENTICITY"] >= 1.5){ ?>
-                            <span class="fa fa-star checked"></span>
-                        <?php }
-                        else { ?> <span class="fa fa-star"></span> <?php } ?>
-                        <?php if($row["AUTHENTICITY"] >= 2.5){ ?>
-                            <span class="fa fa-star checked"></span>
-                        <?php }
-                        else { ?> <span class="fa fa-star"></span> <?php } ?>
-                        <?php if($row["AUTHENTICITY"] >= 3.5){ ?>
-                            <span class="fa fa-star checked"></span>
-                        <?php }
-                        else { ?> <span class="fa fa-star"></span> <?php } ?>
-                        <?php if($row["AUTHENTICITY"] >= 4.5){ ?>
-                            <span class="fa fa-star checked"></span>
-                        <?php }
-                        else { ?> <span class="fa fa-star"></span> <?php } ?>
-                    </a></div>
-                <div class="review-criteria2"><a>Responsiveness:  <?php
-                        if($row["RESPONSIVENESS"] >= 0.5){ ?>
-                            <span class="fa fa-star checked"></span>
-                        <?php }
-                        else { ?> <span class="fa fa-star"></span> <?php } ?>
-                        <?php if($row["RESPONSIVENESS"] >= 1.5){ ?>
-                            <span class="fa fa-star checked"></span>
-                        <?php }
-                        else { ?> <span class="fa fa-star"></span> <?php } ?>
-                        <?php if($row["RESPONSIVENESS"] >= 2.5){ ?>
-                            <span class="fa fa-star checked"></span>
-                        <?php }
-                        else { ?> <span class="fa fa-star"></span> <?php } ?>
-                        <?php if($row["RESPONSIVENESS"] >= 3.5){ ?>
-                            <span class="fa fa-star checked"></span>
-                        <?php }
-                        else { ?> <span class="fa fa-star"></span> <?php } ?>
-                        <?php if($row["RESPONSIVENESS"] >= 4.5){ ?>
-                            <span class="fa fa-star checked"></span>
-                        <?php }
-                        else { ?> <span class="fa fa-star"></span> <?php } ?></a></div>
-
-                <div class="review-criteria3"><a>Dispatch Time:  <?php
-                        if($row["DISPATCH_TIME"] >= 0.5){ ?>
-                            <span class="fa fa-star checked"></span>
-                        <?php }
-                        else { ?> <span class="fa fa-star"></span> <?php } ?>
-                        <?php if($row["DISPATCH_TIME"] >= 1.5){ ?>
-                            <span class="fa fa-star checked"></span>
-                        <?php }
-                        else { ?> <span class="fa fa-star"></span> <?php } ?>
-                        <?php if($row["DISPATCH_TIME"] >= 2.5){ ?>
-                            <span class="fa fa-star checked"></span>
-                        <?php }
-                        else { ?> <span class="fa fa-star"></span> <?php } ?>
-                        <?php if($row["DISPATCH_TIME"] >= 3.5){ ?>
-                            <span class="fa fa-star checked"></span>
-                        <?php }
-                        else { ?> <span class="fa fa-star"></span> <?php } ?>
-                        <?php if($row["DISPATCH_TIME"] >= 4.5){ ?>
-                            <span class="fa fa-star checked"></span>
-                        <?php }
-                        else { ?> <span class="fa fa-star"></span> <?php } ?></a></div>
-
-                <div class="review-criteria4"><a>Dispatch Fees:  <?php
-                        if($row["DISPATCH_FEE"] >= 0.5){ ?>
-                            <span class="fa fa-star checked"></span>
-                        <?php }
-                        else { ?> <span class="fa fa-star"></span> <?php } ?>
-                        <?php if($row["DISPATCH_FEE"] >= 1.5){ ?>
-                            <span class="fa fa-star checked"></span>
-                        <?php }
-                        else { ?> <span class="fa fa-star"></span> <?php } ?>
-                        <?php if($row["DISPATCH_FEE"] >= 2.5){ ?>
-                            <span class="fa fa-star checked"></span>
-                        <?php }
-                        else { ?> <span class="fa fa-star"></span> <?php } ?>
-                        <?php if($row["DISPATCH_FEE"] >= 3.5){ ?>
-                            <span class="fa fa-star checked"></span>
-                        <?php }
-                        else { ?> <span class="fa fa-star"></span> <?php } ?>
-                        <?php if($row["DISPATCH_FEE"] >= 4.5){ ?>
-                            <span class="fa fa-star checked"></span>
-                        <?php }
-                        else { ?> <span class="fa fa-star"></span> <?php } ?></a></div>
-                </div>
- */ ?>
-
-
-<!-- Example numbered list:
-
-        <div class="clearfix"></div>
-        <ul class="pagination pull-right">
-            <li class="disabled"><a href="#"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
-            <li class="active"><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
-            <li><a href="#"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
-        </ul>
-
--->
 
 <!-- /container -->
 
@@ -621,12 +514,15 @@ while($row7 = $result7->fetch_assoc()){
 $result8 = $conn->query($sql8);
 $row8 = $result8->fetch_assoc();
 $total_views = $row8['total'];
-$sql9 = "SELECT PRICE FROM bid WHERE ID_AUCTION= '$currentauction' ORDER BY TIME LIMIT 1";
+$sql9 = "SELECT PRICE, FNAME, LNAME, ID_USER FROM bid b INNER JOIN user u ON b.ID_BUYER = u.ID_USER WHERE ID_AUCTION= '$currentauction' ORDER BY TIME LIMIT 1";
 $result9 = $conn->query($sql9);
 $row9 = $result9->fetch_assoc();
 if(!$row9) {$most_recent_bid = "No bids";}
 else{
 $most_recent_bid = $row9['PRICE'];}
+$fname = $row9['FNAME'];
+$lname = $row9['LNAME'];
+$selecteduser = $row9['ID_USER'];
 $now = date('Y-m-d H:i:s');
 $expiration_datetime = $row7["EXPIRATION_TIME"];
 
@@ -660,14 +556,15 @@ $expiration_datetime = $row7["EXPIRATION_TIME"];
     }
     else {$timeremaining = "Auction Complete";}
 
-
 ?>
 
 
                     <tr>
                         <td><?php echo $row7["TITLE"]?></td>
                         <td><?php echo $row7["DESCRIPTION"]?></td>
-                        <td><?php echo $timeremaining?></td>
+                        <td><?php if ($timeremaining == "Auction Complete" && $most_recent_bid != "No bids" && $reserve_price <= $most_recent_bid) {
+                            echo "Complete. Won by"; echo "<a href='profile-other.php?uID=".$selecteduser."'> $fname $lname";}
+                            else echo $timeremaining;?></td>
                         <td><?php echo $most_recent_bid?></td>
                         <td><?php echo $reserve_price?></td>
                         <td><?php echo $total_views?></td>
