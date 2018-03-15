@@ -12,5 +12,5 @@ else {
     echo "Error deleting record: " . $conn->error;
 }
 
-header('Location: /Ebay-System/b-watch-page.php');
+header('Location: /b-watch-page.php');
 ?>
