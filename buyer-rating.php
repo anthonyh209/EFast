@@ -149,6 +149,20 @@ if (isset($_POST['submit'])) {
 
 
 <body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+    <a class="navbar-brand" href="s-home.php">
+        <img width="100" src="efast.png">
+    </a>
+
+    <ul class="navbar-nav ml-auto">
+        <button style="margin-left: 10px" type="button" onclick="window.location='logout.php';" class="btn btn-outline-danger btn-sm ">Logout</button>
+    </ul>
+
+
+</nav>
+
+
 <div class="card" style="height:auto; width:auto;">
     <div class="col-sm-12" style="height:auto; width:auto;">
         <!-- Custom information -->

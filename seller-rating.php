@@ -170,6 +170,31 @@ if ($FEEDBACK_S == 0 && $expired == 1 && $verification == 1) {
 
 
 <body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+    <a class="navbar-brand" href="b-home.php">
+        <img width="100" src="efast.png">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+            aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="col-md-auto">
+    </div>
+
+    <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+            <button style="margin-left: 10px" type="button" onclick="window.location='logout.php';" class="btn btn-outline-danger btn-sm ">Logout</button>
+        </ul>
+    </div>
+
+
+
+
+</nav>
 <div class="card" style="height:auto; width:auto;">
     <div class="col-sm-12" style="height:auto; width:auto;">
         <!-- Custom information -->
