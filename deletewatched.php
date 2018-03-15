@@ -11,6 +11,5 @@ if ($conn->query($sql) === TRUE) {}
 else {
     echo "Error deleting record: " . $conn->error;
 }
-
-header('Location: /b-watch-page.php');
 ?>
+<script> location.href='b-watch-page.php'; </script> ?
