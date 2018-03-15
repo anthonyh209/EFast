@@ -134,7 +134,6 @@ $old_error_handler = set_error_handler("ErrorHandler");
                                      INNER JOIN user u ON a.ID_SELLER = u.ID_USER ORDER BY EXPIRATION_TIME DESC";
                         $result11 = $conn->query($sql11);
                         if(!$result11) {throw new Exception("Database Error6");}
-                        $row11 = $result11->fetch_assoc();
                         while($row11 = $result11->fetch_assoc()){
                             $selecteduser = $row11['ID_SELLER'];
                             $currentauctionID = $row11['ID_AUCTION'];
@@ -180,9 +179,7 @@ $old_error_handler = set_error_handler("ErrorHandler");
                         if ($maxbid == NULL){
                             $maxbid = "No bids";
                         }
-
-
-                            ?>
+                        ?>
 
                             <tr>
                                 <td><?php echo $row11["TITLE"]?></td>
