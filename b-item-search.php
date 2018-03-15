@@ -169,7 +169,7 @@ There will be a link to the item's auction is chosen from a list (Bid for items 
             </div>
 
             <?php
-                exit($status);
+                exit();
         }
 
     $itemToSearch = "%" . $itemToSearch . "%";
