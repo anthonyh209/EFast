@@ -15,8 +15,7 @@ if ($conn->connect_error) {
 
 if (isset($_POST['submit'])) {
 
-
-
+    $length = $_POST['duration-length'];
 
     if (!is_numeric($length)) {
         echo "Please provide numerical values for your duration";
@@ -24,9 +23,7 @@ if (isset($_POST['submit'])) {
         if ($length < 0) {
             echo "Your duration must be positive";
         } else {
-            echo "Your price values are negative";
-            $length = $_POST["duration-length"];
-            echo $length;
+            echo "Succesfully added new duration to the system";
             $sql = 'INSERT INTO duration (id_duration, duration) VALUES (NULL, ?)';
             $itemSTMT = $conn->prepare($sql);
             $itemSTMT->bind_param("i", $length);
