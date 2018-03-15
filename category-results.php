@@ -102,11 +102,6 @@ th {text-align: left;}
 
                         <div class="row">
 
-                            <?php echo $sortprice; ?>
-                            <?php echo $changeState; ?>
-                            <?php echo $expSort; ?>
-
-
                             <div class="col-md-12">
 
                                 <div class="card">
