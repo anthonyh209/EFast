@@ -132,36 +132,10 @@
 </script>
 
 
-
-<script>
-function showUser(str) {
-    if (str == "") {
-        document.getElementById("txtHint").innerHTML = "";
-        return;
-    } else { 
-        if (window.XMLHttpRequest) {
-            // code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            // code for IE6, IE5
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                document.getElementById("txtHint").innerHTML = this.responseText;
-            }
-        };
-        xmlhttp.open("GET","category-results.php?q="+str,true);
-        xmlhttp.send();
-    }
-}
-</script>
-
-
 <script type="text/javascript">
     function addToWatchlist() {
 
-        var auction_id = document.getElementById("watchlistbtn").value;   
+       var auction_id = document.getElementById("watchlistbtn").value;   
 
        var xhttp;
         xhttp = new XMLHttpRequest();
@@ -175,6 +149,8 @@ function showUser(str) {
                 
             }
         };
+
+
         var parameters = "auctionID="+auction_id;
         xhttp.open("POST", "add-watchlist.php/?"+parameters, true);
         xhttp.send();
@@ -186,11 +162,75 @@ function showUser(str) {
 
 
 
+
+
+
+
+
+
+
+<script>
+function showUser(str) {
+
+    if (str == "") {
+        document.getElementById("txtHint").innerHTML = "";
+        return;
+    } else {
+
+
+
+        var xhttp;
+        xhttp = new XMLHttpRequest();
+
+
+
+
+        //sorting price parameters
+//        var e = document.getElementById("sortprice");
+//        var sortprice = e.options[e.selectedIndex].value;
+
+        //changing of state 
+        var w = document.getElementById("changeOfState");
+        var changeState = w.options[w.selectedIndex].value;
+
+        //exptime
+        var r = document.getElementById("sortExpTime");
+        var sortExp = r.options[r.selectedIndex].value;
+
+        var parameters = "q="+str+"&changestate="+changeState+"&sortexp="+sortExp;
+        xhttp.open("GET","category-results.php?"+parameters,true);
+        xhttp.send();
+
+
+
+
+
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("txtHint").innerHTML = this.responseText;
+            }
+        };
+
+
+       
+
+    }
+}
+
+</script>
+
+
+
+
 <div class="container">
     <br>
     <br>
 
 <form >
+
+
+
+
 <select class="custom-select mb-2 mr-sm-2 mb-sm-0" name="users" onchange="showUser(this.value)">
   <option value="">Filter via category</option>
 
@@ -221,11 +261,63 @@ $result = mysqli_query($conn,$sql);
   ?>
   
   </select>
+
+
+<!---->
+<!--  <br>-->
+<!--  <br>-->
+<!---->
+
+<!--  <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sortprice" >-->
+<!--  <option  value=" ">Filter by current bid price</option>-->
+<!--  <option  value="ORDER BY PRICE ASC">Highest bid</option>-->
+<!--  <option  value="ORDER BY PRICE DESC">Lowest bid</option>-->
+<!--  </select>-->
+
+
+    <br>
+  <br>
+
+
+  <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="changeOfState" >
+  <option  value=" "> Filter by current state of item </option>
+  <option  value="AND ID_STATE = 'STATE_01'"> NEW WITH SEALED BOX </option>
+  <option  value="AND ID_STATE = 'STATE_02'"> NEW WITH OPENED BOX </option>
+  <option  value="AND ID_STATE = 'STATE_03'"> NEW WITH DEFECTS </option>
+  <option  value="AND ID_STATE = 'STATE_04'"> USED </option>
+  </select>
+
+    <br>
+  <br>
+
+  <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sortExpTime" >
+  <option  value=" "> Filter by expiry of item </option>
+  <option  value="ORDER BY EXPIRATION_TIME DESC"> See the lastest auctioned items </option>
+  <option  value="ORDER BY EXPIRATION_TIME ASC"> Auctions about to expire </option>
+  </select>
+
 </form>
+
+
+
+
+
+
+
 </div>
 
 
+
+
+
+
 <br>
+
+
+
+
+
+
 
 <div class="container">
 <div id="txtHint">

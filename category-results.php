@@ -17,36 +17,6 @@ th {text-align: left;}
 </head>
 <body>
 
-<?php
-
-// session_start();
-
-
-// $q = ($_GET['q']);
-
-// $conn=mysqli_connect("efastdbs.mysql.database.azure.com", "efast@efastdbs", "Gv3-LST-nZU-JyP", "efast_main");
-
-// $sql="SELECT * FROM item WHERE ID_CATEGORY = '".$q."'";
-// $result = mysqli_query($conn,$sql);
-
-// echo "<table>
-// <tr>
-// <th>Firstname</th>
-// <th>Lastname</th>
-// </tr>";
-
-// while($row = mysqli_fetch_array($result)) {
-//     echo "<tr>";
-//     echo "<td>" . $row['TITLE'] . "</td>";
-//     echo "<td>" . $row['DESCRIPTION'] . "</td>";
-//     echo "</tr>";
-
-// }
-// echo "</table>";
-// mysqli_close($con);
-
-?>
-
 
 
 
@@ -56,16 +26,20 @@ th {text-align: left;}
 
     	session_start();
 
-
         $q = ($_GET['q']);
+//        $sortprice = ($_GET['price']);
+        $changeState = ($_GET['changestate']);
+        $expSort = ($_GET['sortexp']);
 
-		//$conn=mysqli_connect("efastdbs.mysql.database.azure.com", "efast@efastdbs", "Gv3-LST-nZU-JyP", "efast_main");
 
-		//$sql='SELECT * FROM item WHERE ID_CATEGORY = '".$q."' AND ID_ITEM IN (SELECT ID_ITEM FROM auction WHERE EXPIRATION_TIME > NOW() ) ';
-        $sql='SELECT COUNT(*) AS CON FROM item WHERE ID_CATEGORY = ? AND ID_ITEM IN (SELECT ID_ITEM FROM auction WHERE EXPIRATION_TIME > NOW() ) ';
+
+
+
+        $sql="SELECT COUNT(*) AS CON FROM auction WHERE EXPIRATION_TIME > NOW() AND ID_ITEM IN ( SELECT ID_ITEM FROM item WHERE ID_CATEGORY = ? ".$changeState." ) ".$expSort." ";
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(1,$q, PDO::PARAM_STR);
         $stmt->execute();
+
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($row['CON'] > 0){
             echo "<br>
@@ -74,12 +48,24 @@ th {text-align: left;}
                                </div>
                                <br>";
 
-            $sql1='SELECT * FROM item WHERE ID_CATEGORY = ? AND ID_ITEM IN (SELECT ID_ITEM FROM auction WHERE EXPIRATION_TIME > NOW() ) ';
+
+            $sql1=" SELECT ID_ITEM FROM auction WHERE EXPIRATION_TIME > NOW() AND ID_ITEM IN ( SELECT ID_ITEM FROM item WHERE ID_CATEGORY = ? ".$changeState." ) ".$expSort." ";
             $stmt1 = $pdo->prepare($sql1);
             $stmt1->bindParam(1,$q, PDO::PARAM_STR);
             $stmt1->execute();
 
+
             while ($row = $stmt1->fetch(PDO::FETCH_ASSOC)) {
+
+                $itemID = $row['ID_ITEM'];
+
+
+                $sqlint=" SELECT * FROM item WHERE ID_ITEM = ? ";
+                $stmtint = $pdo->prepare($sqlint);
+                $stmtint->bindParam(1,$itemID, PDO::PARAM_STR);
+                $stmtint->execute();
+
+                while ($row = $stmtint->fetch(PDO::FETCH_ASSOC)) {
 
                 $image = $row['PIC'];
                 $itemID = $row['ID_ITEM'];
@@ -88,13 +74,15 @@ th {text-align: left;}
                 $catagoryID = $row['ID_CATEGORY'];
                 $state = $row['ID_STATE'];
 
+
                 //$Query2 = "SELECT * FROM auction WHERE ID_ITEM = '$itemID' ";
-                $Query2 = 'SELECT * FROM auction WHERE ID_ITEM = ? ';
+                $Query2 = "SELECT * FROM auction WHERE ID_ITEM = ? ";
                 $stmt2 = $pdo->prepare($Query2);
                 $stmt2->bindParam(1,$itemID, PDO::PARAM_STR);
                 $stmt2->execute();
 
                 while ($row = $stmt2->fetch(PDO::FETCH_ASSOC)) {
+
                     $exptime = $row['EXPIRATION_TIME'];
                     $idauction = $row['ID_AUCTION'];
                     $startprice = $row['START_PRICE'];
@@ -113,6 +101,11 @@ th {text-align: left;}
 
 
                         <div class="row">
+
+                            <?php echo $sortprice; ?>
+                            <?php echo $changeState; ?>
+                            <?php echo $expSort; ?>
+
 
                             <div class="col-md-12">
 
@@ -253,7 +246,7 @@ th {text-align: left;}
 
                         <?php
 
-                    }}}
+                    }}}}
 
 
         } else {
