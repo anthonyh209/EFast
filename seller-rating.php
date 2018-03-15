@@ -86,7 +86,7 @@ if ($FEEDBACK_S == 0 && $expired == 1 && $verification == 1) {
         }
 
     }
-} elseif ($row['FEEDBACK_S'] == 1 && $expired == 1 && verification == 1) {
+} elseif ($row['FEEDBACK_S'] == 1 && $expired == 1 && $verification == 1) {
     echo "Feedback already given.";
 } else {
     echo "You're not allowed to give feedback.";
